@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="login_request.h" />
     <ClInclude Include="login_response.h" />
     <ClInclude Include="signup_request.h" />
