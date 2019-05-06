@@ -11,6 +11,6 @@ void to_json(json& j, const SignupResponse& res) {
 	j = json{ {"status", res.status} };
 }
 
-void from_json(json& j, SignupResponse& res) {
+void from_json(const json& j, SignupResponse& res) {
 	j.at("status").get_to(res.status);
 }

@@ -14,7 +14,7 @@ void to_json(json& j, const SignupRequest& req) {
 	j = json{ {"username", req.username}, {"password", req.password}, {"email", req.email} };
 }
 
-void from_json(json& j, SignupRequest& req) {
+void from_json(const json& j, SignupRequest& req) {
 	j.at("username").get_to(req.username);
 	j.at("password").get_to(req.password);
 	j.at("email").get_to(req.email);
