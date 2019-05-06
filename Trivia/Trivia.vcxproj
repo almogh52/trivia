@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="database_interface.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
     <ClInclude Include="json_response_packet_serializer.hpp" />
