@@ -126,10 +126,14 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
     <ClInclude Include="json_response_packet_serializer.hpp" />
+    <ClInclude Include="login_manager.h" />
     <ClInclude Include="login_request.h" />
     <ClInclude Include="login_response.h" />
     <ClInclude Include="signup_request.h" />
     <ClInclude Include="signup_response.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="login_manager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -36,5 +36,13 @@
     <ClInclude Include="json_request_packet_deserializer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="login_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="login_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
