@@ -133,6 +133,10 @@
     <ClInclude Include="login_manager.h" />
     <ClInclude Include="login_request.h" />
     <ClInclude Include="login_response.h" />
+    <ClInclude Include="request.h" />
+    <ClInclude Include="request_handler_interface.h" />
+    <ClInclude Include="request_id.h" />
+    <ClInclude Include="request_result.h" />
     <ClInclude Include="signup_request.h" />
     <ClInclude Include="signup_response.h" />
     <ClInclude Include="sqlite3.h" />

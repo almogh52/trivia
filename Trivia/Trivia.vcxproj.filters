@@ -36,6 +36,18 @@
     <ClInclude Include="json_request_packet_deserializer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="request_result.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request_handler_interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="request_id.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="login_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -68,5 +80,6 @@
     <ClCompile Include="sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+>>>>>>> Trivia/Trivia.vcxproj.filters
   </ItemGroup>
 </Project>
