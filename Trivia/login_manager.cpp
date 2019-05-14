@@ -12,4 +12,14 @@ bool LoginManager::login(std::string username, std::string password)
 
 void LoginManager::logout(std::string username)
 {
+    // Search for the logged user
+    for (auto userIterator = m_loggedUsers.begin(); userIterator != m_loggedUsers.end(); userIterator++)
+    {
+	if (userIterator->getUsername() == username)
+	{
+	    // Remove the user from the logged users vector
+	    m_loggedUsers.erase(userIterator);
+	    break;
+	}
+    }
 }
