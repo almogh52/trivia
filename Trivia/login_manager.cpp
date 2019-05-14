@@ -2,17 +2,14 @@
 
 bool LoginManager::signup(std::string username, std::string password, std::string email)
 {
-
-
-
-	return false;
+    return false;
 }
 
 bool LoginManager::login(std::string username, std::string password)
 {
-	return false;
+    return false;
 }
 
-void LoginManager::logout()
+void LoginManager::logout(std::string username)
 {
 }
