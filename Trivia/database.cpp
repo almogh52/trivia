@@ -72,7 +72,7 @@ int exist_callback(void *data, int argc, char **argv, char **colNames)
 
 int string_callback(void *data, int argc, char **argv, char **colNames)
 {
-    std::string *str = (std::string *)str;
+    std::string *str = (std::string *)data;
 
     // Get the string value of the first res
     *str = argv[0];
