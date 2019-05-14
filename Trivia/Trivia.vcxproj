@@ -123,9 +123,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="database.h" />
+    <ClInclude Include="database_interface.h" />
+    <ClInclude Include="exception.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
     <ClInclude Include="json_response_packet_serializer.hpp" />
+    <ClInclude Include="logged_user.h" />
+    <ClInclude Include="login_manager.h" />
     <ClInclude Include="login_request.h" />
     <ClInclude Include="login_response.h" />
     <ClInclude Include="request.h" />
@@ -134,6 +139,15 @@
     <ClInclude Include="request_result.h" />
     <ClInclude Include="signup_request.h" />
     <ClInclude Include="signup_response.h" />
+    <ClInclude Include="sqlite3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="database.cpp" />
+    <ClCompile Include="sqlite3.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="logged_user.cpp" />
+    <ClCompile Include="login_manager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
