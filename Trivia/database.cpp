@@ -70,6 +70,16 @@ int exist_callback(void *data, int argc, char **argv, char **colNames)
 	return 0;
 }
 
+int string_callback(void *data, int argc, char **argv, char **colNames)
+{
+    std::string *str = (std::string *)str;
+
+    // Get the string value of the first res
+    *str = argv[0];
+
+    return 0;
+}
+
 bool Database::doesUserExist(std::string username)
 {
 	int res = 0;
@@ -116,5 +126,27 @@ void Database::signUpUser(std::string username, std::string password, std::strin
 
 bool Database::authUser(std::string username, std::string password)
 {
-	
+    std::string userPasswordQuery = "SELECT password FROM users WHERE username = ':username';";
+
+    int res = 0;
+    std::string userPassword;
+
+    // If the user doesn't exists, throw error
+    if (!doesUserExist(username))
+    {
+	throw Exception("The user " + username + " doesn't exists!");
+    }
+
+    // Bind parameters
+    userPasswordQuery = std::regex_replace(userPasswordQuery, std::regex(":username"), username);
+
+    // Try to execute the user password query
+    res = sqlite3_exec(m_db, userPasswordQuery.c_str(), string_callback, &password, nullptr);
+    if (res != SQLITE_OK)
+    {
+	throw Exception("Unable to sign up the user!");
+    }
+
+    // Check if entered correct password
+    return password == userPassword;
 }
