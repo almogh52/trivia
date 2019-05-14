@@ -36,6 +36,12 @@
     <ClInclude Include="json_request_packet_deserializer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="login_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="logged_user.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="database_interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -50,6 +56,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="login_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="logged_user.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="database.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
