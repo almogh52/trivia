@@ -18,6 +18,8 @@ public:
 	virtual void closeDatabase();
 
 	virtual bool doesUserExist(std::string username);
+	virtual void signUpUser(std::string username, std::string password, std::string email);
+	virtual bool authUser(std::string username, std::string password);
 
 private:
 	sqlite3* m_db;

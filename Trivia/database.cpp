@@ -1,6 +1,7 @@
 #include "database.h"
 
 #include <io.h>
+#include <string>
 #include <regex>
 
 #include "exception.h"
@@ -61,10 +62,12 @@ void Database::closeDatabase()
 
 int exist_callback(void *data, int argc, char **argv, char **colNames)
 {
-	bool *exists = (bool *)exists;
+	bool *exists = (bool *)data;
 
 	// Check if it exists
-	*exists - std::stoi(argv[0]);
+	*exists = std::stoi(argv[0]);
+
+	return 0;
 }
 
 bool Database::doesUserExist(std::string username)
@@ -84,4 +87,34 @@ bool Database::doesUserExist(std::string username)
 	}
 
 	return exists;
+}
+
+void Database::signUpUser(std::string username, std::string password, std::string email)
+{
+	std::string userInsertQuery = "INSERT INTO users(username, password, email) VALUES(':username', ':password', ':email');";
+
+	int res = 0;
+
+	// If the user already exists, throw error
+	if (doesUserExist(username))
+	{
+		throw Exception("The user " + username + " already exists!");
+	}
+
+	// Bind parameters
+	userInsertQuery = std::regex_replace(userInsertQuery, std::regex(":username"), username);
+	userInsertQuery = std::regex_replace(userInsertQuery, std::regex(":password"), password);
+	userInsertQuery = std::regex_replace(userInsertQuery, std::regex(":email"), email);
+
+	// Try to execute the user insert query
+	res = sqlite3_exec(m_db, userInsertQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to sign up the user!");
+	}
+}
+
+bool Database::authUser(std::string username, std::string password)
+{
+	
 }
