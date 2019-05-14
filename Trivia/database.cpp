@@ -1,6 +1,7 @@
 #include "database.h"
 
 #include <io.h>
+#include <regex>
 
 #include "exception.h"
 
@@ -56,4 +57,31 @@ void Database::closeDatabase()
 	// Close the SQLite DB
 	sqlite3_close(m_db);
 	m_db = nullptr;
+}
+
+int exist_callback(void *data, int argc, char **argv, char **colNames)
+{
+	bool *exists = (bool *)exists;
+
+	// Check if it exists
+	*exists - std::stoi(argv[0]);
+}
+
+bool Database::doesUserExist(std::string username)
+{
+	int res = 0;
+	bool exists = false;
+	std::string userExistQuery = "SELECT EXISTS(SELECT 1 FROM users WHERE username = ':username');";
+
+	// Bind parameters
+	userExistQuery = std::regex_replace(userExistQuery, std::regex(":username"), username);
+
+	// Check if the row exists
+	res = sqlite3_exec(m_db, userExistQuery.c_str(), exist_callback, &exists, nullptr);
+	if (res != SQLITE_OK)
+	{
+		return false;
+	}
+
+	return exists;
 }

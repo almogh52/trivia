@@ -17,6 +17,8 @@ public:
 	virtual void initDatabase();
 	virtual void closeDatabase();
 
+	virtual bool doesUserExist(std::string username);
+
 private:
 	sqlite3* m_db;
 };
