@@ -1,7 +1,7 @@
 #pragma once
 #include "request.h"
-#include "request_result.h"
 
+struct RequestResult;
 class IRequestHandler {
 public:
 	virtual ~IRequestHandler() {}

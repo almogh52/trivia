@@ -21,7 +21,7 @@ inline std::vector<char> JsonResponsePacketSerializer::SerializePacket(T & packe
     json j = packet;
 
     // Convert the json to string
-    jsonStr = std:j.dump();
+    jsonStr = j.dump();
 
     // Convert to vector of byte
     return std::vector<char>(jsonStr.begin(), jsonStr.end());
