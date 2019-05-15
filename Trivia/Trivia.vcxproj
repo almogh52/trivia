@@ -144,6 +144,7 @@
     <ClInclude Include="signup_request.h" />
     <ClInclude Include="signup_response.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="communicator.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="request_handler_factory.cpp" />
     <ClCompile Include="sqlite3.c" />
+    <ClCompile Include="WSAInitializer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="logged_user.cpp" />
