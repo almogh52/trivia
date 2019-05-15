@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 #include "json.hpp"
 using nlohmann::json;
@@ -8,15 +9,20 @@ class JsonResponsePacketSerializer
 {
 public:
 	template <typename T>
-	static std::string SerializePacket(T& packet);
+	static std::vector<char> SerializePacket(T& packet);
 };
 
 template<typename T>
-inline std::string JsonResponsePacketSerializer::SerializePacket(T & packet)
+inline std::vector<char> JsonResponsePacketSerializer::SerializePacket(T & packet)
 {
-	// Convert the packet to json using the to_json function
-	json j = packet;
+    std::string jsonStr;
 
-	// Convert the json to string
-	return j.dump();
+    // Convert the packet to json using the to_json function
+    json j = packet;
+
+    // Convert the json to string
+    jsonStr = std:j.dump();
+
+    // Convert to vector of byte
+    return std::vector<char>(jsonStr.begin(), jsonStr.end());
 }
