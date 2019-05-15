@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="communicator.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="database_interface.h" />
     <ClInclude Include="exception.h" />
@@ -145,6 +146,7 @@
     <ClInclude Include="sqlite3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="communicator.cpp" />
     <ClCompile Include="database.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="request_handler_factory.cpp" />

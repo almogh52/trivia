@@ -75,6 +75,9 @@
     <ClInclude Include="request_handler_factory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="communicator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
@@ -93,6 +96,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="request_handler_factory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="communicator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
