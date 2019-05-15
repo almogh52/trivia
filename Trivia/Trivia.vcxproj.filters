@@ -80,6 +80,5 @@
     <ClCompile Include="sqlite3.c">
       <Filter>Source Files</Filter>
     </ClCompile>
->>>>>>> Trivia/Trivia.vcxproj.filters
   </ItemGroup>
 </Project>
