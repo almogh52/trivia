@@ -8,11 +8,11 @@ class JsonRequestPacketDeserializer
 {
 public:
 	template <typename T>
-	static T DeserializePacket(std::string& buf);
+	static T DeserializePacket(const std::vector<char>& buf);
 };
 
 template<typename T>
-inline T JsonRequestPacketDeserializer::DeserializePacket(std::string& buf)
+inline T JsonRequestPacketDeserializer::DeserializePacket(const std::vector<char>& buf)
 {
 	// Parse the json
 	json j = json::parse(buf);
