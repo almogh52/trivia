@@ -135,6 +135,7 @@
     <ClInclude Include="login_request_handler.h" />
     <ClInclude Include="login_response.h" />
     <ClInclude Include="request.h" />
+    <ClInclude Include="request_handler_factory.h" />
     <ClInclude Include="request_handler_interface.h" />
     <ClInclude Include="request_id.h" />
     <ClInclude Include="request_result.h" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="database.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
+    <ClCompile Include="request_handler_factory.cpp" />
     <ClCompile Include="sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
