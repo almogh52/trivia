@@ -1,6 +1,6 @@
 #include "request_handler_factory.h"
 
-RequestHandlerFactory::RequestHandlerFactory(std::shared_ptr<LoginManager> loginManager) : m_loginManager(loginManager)
+RequestHandlerFactory::RequestHandlerFactory(std::shared_ptr<IDatabase> database) : m_loginManager(new LoginManager(database))
 {
 }
 

@@ -2,11 +2,12 @@
 
 #include "login_manager.h"
 #include "login_request_handler.h"
+#include "database_interface.h"
 
 class RequestHandlerFactory
 {
 public:
-    RequestHandlerFactory(std::shared_ptr<LoginManager> loginManager);
+    RequestHandlerFactory(std::shared_ptr<IDatabase> database);
 
     std::shared_ptr<LoginRequestHandler> createLoginRequestHandler();
 
