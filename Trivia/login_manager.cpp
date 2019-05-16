@@ -1,5 +1,9 @@
 #include "login_manager.h"
 
+LoginManager::LoginManager(std::shared_ptr<IDatabase> database) : m_database(database)
+{
+}
+
 bool LoginManager::signup(std::string username, std::string password, std::string email)
 {
     try {
