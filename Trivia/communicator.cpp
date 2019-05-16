@@ -10,12 +10,6 @@
 
 Communicator::Communicator(std::shared_ptr<RequestHandlerFactory> handlerFactory) : m_handleFactory(handlerFactory)
 {
-    // this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
-    // if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
-    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-    if (_socket == INVALID_SOCKET)
-	throw std::exception(__FUNCTION__ " - socket");
 }
 
 Communicator::~Communicator()
@@ -32,6 +26,13 @@ Communicator::~Communicator()
 void Communicator::bindAndListen()
 {
     struct sockaddr_in sa = { 0 };
+
+    // this server use TCP. that why SOCK_STREAM & IPPROTO_TCP
+    // if the server use UDP we will use: SOCK_DGRAM & IPPROTO_UDP
+    _socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+    if (_socket == INVALID_SOCKET)
+	throw std::exception(__FUNCTION__ " - socket");
 
     sa.sin_port = htons(LISTEN_PORT); // port that server will listen for
     sa.sin_family = AF_INET;   // must be AF_INET
