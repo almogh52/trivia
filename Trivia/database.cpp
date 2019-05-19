@@ -18,7 +18,7 @@ Database::~Database()
 
 void Database::initDatabase()
 {
-	const char* usersTableQuery = "CREATE TABLE users (username PRIMARY KEY TEXT NOT NULL, password TEXT NOT NULL, email TEXT NOT NULL);";
+	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY, password TEXT NOT NULL, email TEXT NOT NULL);";
 
 	int res = 0;
 
@@ -141,7 +141,7 @@ bool Database::authUser(std::string username, std::string password)
     userPasswordQuery = std::regex_replace(userPasswordQuery, std::regex(":username"), username);
 
     // Try to execute the user password query
-    res = sqlite3_exec(m_db, userPasswordQuery.c_str(), string_callback, &password, nullptr);
+    res = sqlite3_exec(m_db, userPasswordQuery.c_str(), string_callback, &userPassword, nullptr);
     if (res != SQLITE_OK)
     {
 	throw Exception("Unable to sign up the user!");
