@@ -82,24 +82,44 @@ void Communicator::startThreadForNewClient(SOCKET clientSocket)
 
 void Communicator::clientHandler(SOCKET clientSocket)
 {
-    unsigned int bufferSize;
+    uint32_t bytesRecv = 0;
+    uint32_t err = 0;
+    uint32_t bufferSize = 0;
 
     // While the socket isn't invalid
-    while (clientSocket != INVALID_SOCKET)
+    while (clientSocket != INVALID_SOCKET && err != SOCKET_ERROR)
     {
 	Request req;
 	RequestResult res;
 	std::shared_ptr<char> buffer;
 
 	// Get the request id which is 1 byte
-	recv(clientSocket, (char *)&(req.id), 1, 0);
+	bytesRecv = recv(clientSocket, (char *)&(req.id), 1, 0);
+	if (bytesRecv <= 0)
+	{
+	    break;
+	}
 
 	// Get the message size
-	recv(clientSocket, (char *)&bufferSize, 4, 0);
+	bytesRecv = recv(clientSocket, (char *)&bufferSize, 4, 0);
+	if (bytesRecv <= 0)
+	{
+	    break;
+	}
 
 	// Get the message
-	buffer = std::shared_ptr<char>(new char[bufferSize]);
-	recv(clientSocket, buffer.get(), bufferSize, 0);
+	buffer = std::shared_ptr<char>(new char[bufferSize + 1]);
+	bytesRecv = recv(clientSocket, buffer.get(), bufferSize, 0);
+	if (bytesRecv <= 0)
+	{
+	    break;
+	}
+
+	// Set EOF
+	buffer.get()[bufferSize] = 0;
+
+	// Copy buffer contents to the request vector buffer
+	req.buffer.assign(buffer.get(), buffer.get() + bufferSize + 1);
 
 	// Check if the request is relevant to the current request handler
 	if (m_clients[clientSocket]->isRequestRelevant(req))
@@ -108,7 +128,14 @@ void Communicator::clientHandler(SOCKET clientSocket)
 	    res = m_clients[clientSocket]->handleRequest(req);
 
 	    // Send the response to the client
-	    send(clientSocket, (char *)(res.response.front()), res.response.size(), 0);
+	    err = send(clientSocket, res.response.data(), (int)res.response.size(), 0);
+	    if (err == SOCKET_ERROR)
+	    {
+		break;
+	    }
 	}
     }
+
+    // Remove the client from the client list
+    m_clients.erase(m_clients.find(clientSocket));
 }

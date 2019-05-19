@@ -1,7 +1,8 @@
 #pragma once
+#include <exception>
 #include <string>
 
-class Exception
+class Exception : std::exception
 {
 public:
 	Exception(const std::string& message) : m_message(message) {}

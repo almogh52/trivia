@@ -10,6 +10,9 @@ Server::Server() :  m_database(new Database()),
 
 void Server::run()
 {
+    // Initialize database
+    m_database->initDatabase();
+
     // Bind and start listening and handle requests
     m_communicator->bindAndListen();
     m_communicator->handleRequests();
