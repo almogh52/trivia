@@ -4,3 +4,6 @@ Release
 
 # Ignore vs folder
 .vs
+
+# Ignore the database
+trivia.sqlite
