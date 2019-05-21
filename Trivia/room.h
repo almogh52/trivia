@@ -10,6 +10,8 @@ public:
     Room(RoomData& metadata);
 
     std::vector<LoggedUser> getAllUsers();
+    bool addUser(LoggedUser &user);
+    bool removeUser(LoggedUser &user);
 
 private:
     std::vector<LoggedUser> m_users;
