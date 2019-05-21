@@ -7,9 +7,9 @@ using nlohmann::json;
 struct RoomData {
     unsigned int id;
     std::string name;
-    std::string maxPlayers;
+    unsigned int maxPlayers;
     unsigned int timePerQuestion;
-    unsigned int isActive;
+    bool isActive;
 };
 
 void to_json(json& j, const RoomData& roomData) {
