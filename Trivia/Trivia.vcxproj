@@ -124,9 +124,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="communicator.h" />
+    <ClInclude Include="create_room_response.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="database_interface.h" />
+    <ClInclude Include="error_response.h" />
     <ClInclude Include="exception.h" />
+    <ClInclude Include="join_room_response.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
     <ClInclude Include="json_response_packet_serializer.hpp" />

@@ -90,6 +90,15 @@
     <ClInclude Include="logout_response.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="create_room_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="join_room_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="error_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
