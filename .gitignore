@@ -7,3 +7,6 @@ Release
 
 # Ignore the database
 trivia.sqlite
+
+# Ignore the packages folder
+packages
