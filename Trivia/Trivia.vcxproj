@@ -129,6 +129,7 @@
     <ClInclude Include="database_interface.h" />
     <ClInclude Include="error_response.h" />
     <ClInclude Include="exception.h" />
+    <ClInclude Include="get_rooms_response.h" />
     <ClInclude Include="join_room_response.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="login_request_handler.h" />
     <ClInclude Include="login_response.h" />
     <ClInclude Include="logout_response.h" />
+    <ClInclude Include="room_data.h" />
     <ClInclude Include="status_response.h" />
     <ClInclude Include="request.h" />
     <ClInclude Include="request_handler_factory.h" />

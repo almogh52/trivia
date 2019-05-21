@@ -8,10 +8,10 @@ struct ErrorResponse {
     std::string message;
 };
 
-void to_json(json& j, const ErrorResponse& req) {
-    j = json{ {"message", req.message} };
+void to_json(json& j, const ErrorResponse& res) {
+    j = json{ {"message", res.message} };
 }
 
-void from_json(const json& j, ErrorResponse& req) {
-    j.at("message").get_to(req.message);
+void from_json(const json& j, ErrorResponse& res) {
+    j.at("message").get_to(res.message);
 }

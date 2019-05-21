@@ -99,6 +99,12 @@
     <ClInclude Include="error_response.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="get_rooms_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="room_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
