@@ -27,3 +27,14 @@ void RoomManager::createRoom(LoggedUser & user, std::string roomName, unsigned i
     // Save the new room in the map of rooms
     m_rooms[roomMetadata.id] = Room(roomMetadata);
 }
+
+bool RoomManager::deleteRoom(unsigned int roomId)
+{
+    // Try to delete the room
+    if (!m_rooms.erase(roomId))
+    {
+	return false;
+    }
+
+    return true;
+}
