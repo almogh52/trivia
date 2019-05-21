@@ -84,6 +84,9 @@
     <ClInclude Include="server.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="status_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="logout_response.h">
       <Filter>Header Files</Filter>
     </ClInclude>

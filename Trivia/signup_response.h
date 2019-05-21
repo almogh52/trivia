@@ -1,16 +1,5 @@
 #pragma once
 
-#include "json.hpp"
-using nlohmann::json;
+#include "status_response.h"
 
-struct SignupResponse {
-	unsigned int status;
-};
-
-void to_json(json& j, const SignupResponse& res) {
-	j = json{ {"status", res.status} };
-}
-
-void from_json(const json& j, SignupResponse& res) {
-	j.at("status").get_to(res.status);
-}
+typedef StatusResponse SignupResponse;
