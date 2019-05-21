@@ -114,6 +114,15 @@
     <ClInclude Include="highscore_response.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="get_players_in_room_request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="join_room_request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="create_room_reqeust.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
