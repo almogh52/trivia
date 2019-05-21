@@ -1,0 +1,21 @@
+#pragma once
+#include <vector>
+
+#include "json.hpp"
+using nlohmann::json;
+
+#include "highscore.h"
+
+struct HighscoreResponse {
+    unsigned int status;
+    std::vector<Highscore> highscores;
+};
+
+void to_json(json& j, const HighscoreResponse& res) {
+    j = json{ {"status", res.status}, {"rooms", res.highscores} };
+}
+
+void from_json(const json& j, HighscoreResponse& res) {
+    j.at("status").get_to(res.status);
+    j.at("rooms").get_to(res.highscores);
+}

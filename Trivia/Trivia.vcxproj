@@ -131,6 +131,8 @@
     <ClInclude Include="exception.h" />
     <ClInclude Include="get_players_in_room_response.h" />
     <ClInclude Include="get_rooms_response.h" />
+    <ClInclude Include="highscore.h" />
+    <ClInclude Include="highscore_response.h" />
     <ClInclude Include="join_room_response.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
