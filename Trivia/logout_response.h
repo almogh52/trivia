@@ -2,4 +2,4 @@
 
 #include "status_response.h"
 
-typedef StatusResponse LoginResponse;
+typedef StatusResponse LogoutResponse;
