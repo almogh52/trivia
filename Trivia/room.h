@@ -13,6 +13,8 @@ public:
     bool addUser(LoggedUser &user);
     bool removeUser(LoggedUser &user);
 
+    RoomData getMetadata();
+
 private:
     std::vector<LoggedUser> m_users;
     RoomData m_metadata;

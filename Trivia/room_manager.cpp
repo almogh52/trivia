@@ -1,5 +1,7 @@
 #include "room_manager.h"
 
+#include "exception.h"
+
 void RoomManager::createRoom(LoggedUser & user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion)
 {
     RoomData roomMetadata;
@@ -37,4 +39,28 @@ bool RoomManager::deleteRoom(unsigned int roomId)
     }
 
     return true;
+}
+
+bool RoomManager::getRoomState(unsigned int roomId)
+{
+    try {
+	return m_rooms.at(roomId).getMetadata().isActive;
+    }
+    catch (...) {
+	throw Exception("No room with the id " + std::to_string(roomId));
+    }
+}
+
+std::vector<RoomData> RoomManager::getRooms()
+{
+    std::vector<RoomData> rooms;
+
+    // For each room insert it's room metadata to the rooms vector
+    for (auto& roomPair : m_rooms)
+    {
+	// Get the data of the room and insert it to the list of rooms
+	rooms.push_back(roomPair.second.getMetadata());
+    }
+
+    return rooms;
 }

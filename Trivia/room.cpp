@@ -39,3 +39,8 @@ bool Room::removeUser(LoggedUser & user)
     m_users.erase(userIterator);
     return true;
 }
+
+RoomData Room::getMetadata()
+{
+    return m_metadata;
+}
