@@ -135,6 +135,7 @@
     <ClInclude Include="login_request.h" />
     <ClInclude Include="login_request_handler.h" />
     <ClInclude Include="login_response.h" />
+    <ClInclude Include="logout_response.h" />
     <ClInclude Include="request.h" />
     <ClInclude Include="request_handler_factory.h" />
     <ClInclude Include="request_handler_interface.h" />
