@@ -126,6 +126,9 @@
     <ClInclude Include="room.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="room_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
@@ -159,6 +162,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="room.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="room_manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

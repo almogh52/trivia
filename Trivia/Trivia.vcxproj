@@ -148,6 +148,7 @@
     <ClInclude Include="logout_response.h" />
     <ClInclude Include="room.h" />
     <ClInclude Include="room_data.h" />
+    <ClInclude Include="room_manager.h" />
     <ClInclude Include="status_response.h" />
     <ClInclude Include="request.h" />
     <ClInclude Include="request_handler_factory.h" />
@@ -168,6 +169,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="request_handler_factory.cpp" />
     <ClCompile Include="room.cpp" />
+    <ClCompile Include="room_manager.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="WSAInitializer.cpp" />
