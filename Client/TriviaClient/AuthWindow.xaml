@@ -13,21 +13,23 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Trivia" Height="600" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20*"/>
-            <ColumnDefinition Width="300*"/>
-            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="58*"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="460"/>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="59*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
-            <RowDefinition Height="80*"/>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="15*"/>
-            <RowDefinition Height="250*"/>
+            <RowDefinition Height="350"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
-        <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png"/>
-        <materialDesign:Card Grid.Row="3" Grid.Column="1" VerticalAlignment="Stretch"/>
+        <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png" Grid.ColumnSpan="3"/>
+        <local:LoginForm Grid.Row="3" Grid.Column="2"/>
     </Grid>
 </Window>
