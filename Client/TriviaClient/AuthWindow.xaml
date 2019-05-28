@@ -27,7 +27,7 @@
             <RowDefinition Height="250*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
-        <Label Content="Trivia" Grid.Column="1" FontSize="55" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold" Grid.Row="1"/>
+        <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png"/>
         <materialDesign:Card Grid.Row="3" Grid.Column="1" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
