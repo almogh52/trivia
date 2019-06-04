@@ -29,10 +29,10 @@ namespace TriviaClient
 
         private async void RootDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            ConnectDialogViewModel connectDataContext = new ConnectDialogViewModel();
+            Dialogs.ConnectDialogViewModel connectDataContext = new Dialogs.ConnectDialogViewModel();
 
             // Show the connect dialog
-            ConnectDialog dialog = new ConnectDialog();
+            Dialogs.ConnectDialog dialog = new Dialogs.ConnectDialog();
             {
                 DataContext = connectDataContext;
             };
@@ -44,7 +44,7 @@ namespace TriviaClient
                 eventArgs.Cancel();
 
                 // Set the content of the dialog to loading
-                eventArgs.Session.UpdateContent(new LoadingDialog());
+                eventArgs.Session.UpdateContent(new Dialogs.LoadingDialog());
 
                 try
                 {

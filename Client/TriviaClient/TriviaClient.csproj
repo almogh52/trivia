@@ -76,11 +76,11 @@
       <DependentUpon>AuthWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ConnectDialog.xaml">
+    <Page Include="Dialogs\ConnectDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoadingDialog.xaml">
+    <Page Include="Dialogs\LoadingDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,11 +91,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Client.cs" />
-    <Compile Include="ConnectDialog.xaml.cs">
+    <Compile Include="Dialogs\ConnectDialog.xaml.cs">
       <DependentUpon>ConnectDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConnectDialogViewModel.cs" />
-    <Compile Include="LoadingDialog.xaml.cs">
+    <Compile Include="Dialogs\ConnectDialogViewModel.cs" />
+    <Compile Include="Dialogs\LoadingDialog.xaml.cs">
       <DependentUpon>LoadingDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="LoginForm.xaml.cs">

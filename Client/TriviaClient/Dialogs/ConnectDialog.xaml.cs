@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TriviaClient
+namespace TriviaClient.Dialogs
 {
     /// <summary>
-    /// Interaction logic for LoadingDialog.xaml
+    /// Interaction logic for ConnectDialog.xaml
     /// </summary>
-    public partial class LoadingDialog : UserControl
+    public partial class ConnectDialog : UserControl
     {
-        public LoadingDialog()
+        public ConnectDialog()
         {
             InitializeComponent();
         }
