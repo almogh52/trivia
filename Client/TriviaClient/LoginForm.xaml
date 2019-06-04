@@ -35,9 +35,9 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="35*"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="75"/>
                     <RowDefinition Height="23*"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="75"/>
                     <RowDefinition Height="75*"/>
                     <RowDefinition Height="34"/>
                     <RowDefinition Height="17*"/>
@@ -50,8 +50,8 @@
                     Login
                 </TextBlock>
                 <Separator Grid.Row="1" Style="{StaticResource MaterialDesignLightSeparator}" Margin="0,4,0,0" Height="Auto" Grid.ColumnSpan="11" />
-                <TextBox materialDesign:HintAssist.Hint="Username" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextWrapping="Wrap" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="5"/>
-                <PasswordBox materialDesign:HintAssist.Hint="Password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="5"/>
+                <TextBox materialDesign:HintAssist.Hint="Username" FontSize="20" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextWrapping="Wrap" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="5"/>
+                <PasswordBox materialDesign:HintAssist.Hint="Password" FontSize="20" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="5"/>
                 <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Grid.Row="8" Content="Don't have an account yet?" Height="Auto" Grid.Column="6" Grid.ColumnSpan="4" />
                 <Button Grid.Row="8" Content="Login" Height="Auto" Grid.Column="1" Grid.ColumnSpan="4" />
             </Grid>

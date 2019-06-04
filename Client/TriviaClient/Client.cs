@@ -14,22 +14,14 @@ namespace TriviaClient
         private static TcpClient socket { get; set; }
         private static NetworkStream stream { get; set; }
 
-        public static bool Connect(string serverIP)
+        public async static Task Connect(string serverIP)
         {
-            try
-            {
-                // Create the tcp client to the server
-                socket = new TcpClient(serverIP, SERVER_PORT);
-            }
-            catch
-            {
-                return false;
-            }
+            // Create the tcp client to the server
+            socket = new TcpClient();
+            await socket.ConnectAsync(serverIP, SERVER_PORT);
 
             // Get the stream of the socket
-            NetworkStream stream = socket.GetStream();
-
-            return true;
+            stream = socket.GetStream();
         }
 
         public static void Send(byte messageId, byte[] message)

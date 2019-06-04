@@ -14,22 +14,24 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Trivia" Height="600" Width="1000">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="58*"/>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="460"/>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="59*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="120"/>
-            <RowDefinition Height="15*"/>
-            <RowDefinition Height="350"/>
-            <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>
-        <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png" Grid.ColumnSpan="3"/>
-        <local:LoginForm Grid.Row="3" Grid.Column="2"/>
-    </Grid>
+    <materialDesign:DialogHost x:Name="RootDialog" Loaded="RootDialog_Loaded">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="58*"/>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="460"/>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="59*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="120"/>
+                <RowDefinition Height="15*"/>
+                <RowDefinition Height="350"/>
+                <RowDefinition Height="15*"/>
+            </Grid.RowDefinitions>
+            <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png" Grid.ColumnSpan="3"/>
+            <local:LoginForm Grid.Row="3" Grid.Column="2"/>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>
