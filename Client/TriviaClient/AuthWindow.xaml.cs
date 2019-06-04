@@ -40,6 +40,17 @@ namespace TriviaClient
             {
                 string serverIP = connectDataContext.ServerIP;
 
+                // If the current content is an error message, re-set the connect dialog
+                if (eventArgs.Session.Content.GetType() == typeof(Dialogs.MessageDialog))
+                {
+                    // Cancel the close of the dialog
+                    eventArgs.Cancel();
+
+                    // Set the connect dialog
+                    eventArgs.Session.UpdateContent(dialog);
+                    return;
+                }
+
                 // Cancel the close of the dialog
                 eventArgs.Cancel();
 
@@ -55,8 +66,8 @@ namespace TriviaClient
                     eventArgs.Session.Close();
                 } catch
                 {
-                    // Re-set the dialog as the connect dialog
-                    eventArgs.Session.UpdateContent(dialog);
+                    // Show an error message
+                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog() { Message = "Unable to connect to server, please validate the IP entered!" });
                 }
             });
         }
