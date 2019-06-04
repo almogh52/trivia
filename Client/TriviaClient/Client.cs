@@ -24,7 +24,7 @@ namespace TriviaClient
             stream = socket.GetStream();
         }
 
-        public static void Send(byte messageId, byte[] message)
+        public static async Task Send(byte messageId, byte[] message)
         {
             byte[] buf = new byte[message.Length + HEADER_LEN];
 
@@ -38,10 +38,10 @@ namespace TriviaClient
             Array.Copy(message, 0, buf, HEADER_LEN, message.Length);
 
             // Write to the stream the buffer
-            stream.Write(buf, 0, buf.Length);
+            await stream.WriteAsync(buf, 0, buf.Length);
         }
 
-        public static byte[] Recv()
+        public static async Task<byte[]> Recv()
         {
             byte[] messageSizeBuf = new byte[4];
             int messageSize;
@@ -49,12 +49,12 @@ namespace TriviaClient
             byte[] buf;
 
             // Read the message size
-            stream.Read(messageSizeBuf, 0, 4);
+            await stream.ReadAsync(messageSizeBuf, 0, 4);
             messageSize = BitConverter.ToInt32(messageSizeBuf, 0);
 
             // Read the message
             buf = new byte[messageSize];
-            stream.Read(buf, 0, messageSize);
+            await stream.ReadAsync(buf, 0, messageSize);
 
             return buf;
         }
