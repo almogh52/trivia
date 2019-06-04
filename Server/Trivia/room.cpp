@@ -2,6 +2,10 @@
 
 #include <algorithm>
 
+Room::Room()
+{
+}
+
 Room::Room(RoomData & metadata) : m_metadata(metadata)
 {
 }
