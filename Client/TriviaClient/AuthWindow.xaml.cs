@@ -29,6 +29,8 @@ namespace TriviaClient
 
         private async void RootDialog_Loaded(object sender, RoutedEventArgs e)
         {
+            bool connected = false;
+
             Dialogs.ConnectDialogViewModel connectDataContext = new Dialogs.ConnectDialogViewModel();
 
             // Show the connect dialog
@@ -39,6 +41,12 @@ namespace TriviaClient
             await DialogHost.Show(dialog, async delegate(object s1, DialogClosingEventArgs eventArgs)
             {
                 string serverIP = connectDataContext.ServerIP;
+
+                // If already connected, return
+                if (connected)
+                {
+                    return;
+                }
 
                 // If the current content is an error message, re-set the connect dialog
                 if (eventArgs.Session.Content.GetType() == typeof(Dialogs.MessageDialog))
@@ -61,6 +69,9 @@ namespace TriviaClient
                 {
                     // Try to connect to the server
                     await Client.Connect(serverIP);
+
+                    // Set connected to true
+                    connected = true;
 
                     // If connected, close the dialog
                     eventArgs.Session.Close();
