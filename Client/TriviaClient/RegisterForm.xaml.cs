@@ -48,9 +48,10 @@ namespace TriviaClient
         {
             string username = usernameField.Text;
             string password = passwordField.Password;
+            string email = emailField.Text;
 
-            // Show error if the username or password is missing
-            if (username.Length == 0 || password.Length == 0)
+            // Show error if the username or password or email is missing
+            if (username.Length == 0 || password.Length == 0 || email.Length == 0)
             {
                 await DialogHost.Show(new Dialogs.MessageDialog { Message = "One of the required fields is missing" });
 
@@ -60,28 +61,29 @@ namespace TriviaClient
             // Show the loading dialog
             await DialogHost.Show(new Dialogs.LoadingDialog(), async delegate (object s, DialogOpenedEventArgs eventArgs)
             {
-                LoginResponse res;
+                RegisterResponse res;
                 byte[] resBytes;
 
-                LoginRequest req = new LoginRequest
+                RegisterRequest req = new RegisterRequest
                 {
                     username = username,
-                    password = password
+                    password = password,
+                    email = email
                 };
 
-                // Send the login request
-                await Client.Send(LoginRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req)));
+                // Send the register request
+                await Client.Send(RegisterRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req)));
 
-                // Get the login response
+                // Get the register response
                 resBytes = await Client.Recv();
 
-                // Deserialize the lgin response
-                res = JsonConvert.DeserializeObject<LoginResponse>(Encoding.UTF8.GetString(resBytes));
+                // Deserialize the register response
+                res = JsonConvert.DeserializeObject<RegisterResponse>(Encoding.UTF8.GetString(resBytes));
 
-                // If login failed, show error
+                // If register failed, show error
                 if (res.status == 1)
                 {
-                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "Incorrect username and password entered!" });
+                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "The username is already in use!" });
                 }
             }, null);
         }

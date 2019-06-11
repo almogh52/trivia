@@ -74,7 +74,7 @@ namespace TriviaClient
                 // Get the login response
                 resBytes = await Client.Recv();
 
-                // Deserialize the lgin response
+                // Deserialize the login response
                 res = JsonConvert.DeserializeObject<LoginResponse>(Encoding.UTF8.GetString(resBytes));
 
                 // If login failed, show error
