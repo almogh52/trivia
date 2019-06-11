@@ -146,6 +146,7 @@
     <ClInclude Include="login_request_handler.h" />
     <ClInclude Include="login_response.h" />
     <ClInclude Include="logout_response.h" />
+    <ClInclude Include="menu_request_handler.h" />
     <ClInclude Include="room.h" />
     <ClInclude Include="room_data.h" />
     <ClInclude Include="room_manager.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="database.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu_request_handler.cpp" />
     <ClCompile Include="request_handler_factory.cpp" />
     <ClCompile Include="room.cpp" />
     <ClCompile Include="room_manager.cpp" />

@@ -30,10 +30,12 @@ bool LoginManager::login(std::string username, std::string password)
     return false;
 }
 
-void LoginManager::logout(std::string username)
+bool LoginManager::logout(std::string username)
 {
+    auto userIterator = m_loggedUsers.begin();
+
     // Search for the logged user
-    for (auto userIterator = m_loggedUsers.begin(); userIterator != m_loggedUsers.end(); userIterator++)
+    for (; userIterator != m_loggedUsers.end(); userIterator++)
     {
 	if (userIterator->getUsername() == username)
 	{
@@ -42,4 +44,12 @@ void LoginManager::logout(std::string username)
 	    break;
 	}
     }
+
+    // If the user isn't found in the logged users vector, return false
+    if (userIterator == m_loggedUsers.end())
+    {
+	return false;
+    }
+
+    return true;
 }
