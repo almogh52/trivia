@@ -50,10 +50,10 @@
                     Login
                 </TextBlock>
                 <Separator Grid.Row="1" Style="{StaticResource MaterialDesignLightSeparator}" Margin="0,4,0,0" Height="Auto" Grid.ColumnSpan="11" />
-                <TextBox materialDesign:HintAssist.Hint="Username" FontSize="20" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextWrapping="Wrap" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="5"/>
-                <PasswordBox materialDesign:HintAssist.Hint="Password" FontSize="20" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="5"/>
+                <TextBox x:Name="usernameField" materialDesign:HintAssist.Hint="Username" FontSize="20" Style="{StaticResource MaterialDesignFloatingHintTextBox}" TextWrapping="Wrap" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="5"/>
+                <PasswordBox x:Name="passwordField" materialDesign:HintAssist.Hint="Password" FontSize="20" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" Grid.Row="6" Grid.Column="3" Grid.ColumnSpan="5"/>
                 <Button Style="{StaticResource MaterialDesignRaisedAccentButton}" Grid.Row="8" Content="Don't have an account yet?" Height="Auto" Grid.Column="6" Grid.ColumnSpan="4" />
-                <Button Grid.Row="8" Content="Login" Height="Auto" Grid.Column="1" Grid.ColumnSpan="4" />
+                <Button x:Name="loginBtn" Grid.Row="8" Content="Login" Height="Auto" Grid.Column="1" Grid.ColumnSpan="4" Click="LoginBtn_Click" />
             </Grid>
         </materialDesign:Card>
     </Grid>
