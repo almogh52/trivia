@@ -124,8 +124,18 @@ void Communicator::clientHandler(SOCKET clientSocket)
 	// Check if the request is relevant to the current request handler
 	if (m_clients[clientSocket]->isRequestRelevant(req))
 	{
+	    int resLen;
+
 	    // Handle the request
 	    res = m_clients[clientSocket]->handleRequest(req);
+	    resLen = res.response.size();
+
+	    // Send the response length to the client
+	    err = send(clientSocket, (const char *)&resLen, sizeof(int), 0);
+	    if (err == SOCKET_ERROR)
+	    {
+		break;
+	    }
 
 	    // Send the response to the client
 	    err = send(clientSocket, res.response.data(), (int)res.response.size(), 0);
