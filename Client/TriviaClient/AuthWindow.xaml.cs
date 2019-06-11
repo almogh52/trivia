@@ -25,6 +25,9 @@ namespace TriviaClient
         public MainWindow()
         {
             InitializeComponent();
+
+            loginForm.registerForm = registerForm;
+            registerForm.loginForm = loginForm;
         }
 
         private async void RootDialog_Loaded(object sender, RoutedEventArgs e)

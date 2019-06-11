@@ -31,7 +31,8 @@
                 <RowDefinition Height="15*"/>
             </Grid.RowDefinitions>
             <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png" Grid.ColumnSpan="3"/>
-            <local:LoginForm Grid.Row="3" Grid.Column="2"/>
+            <local:LoginForm x:Name="loginForm" Grid.Row="3" Grid.Column="2"/>
+            <local:RegisterForm x:Name="registerForm" Grid.Row="3" Grid.Column="2" Opacity="0" IsHitTestVisible="False" />
         </Grid>
     </materialDesign:DialogHost>
 </Window>

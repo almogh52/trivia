@@ -18,15 +18,16 @@ using System.Windows.Shapes;
 
 namespace TriviaClient
 {
-    public struct LoginRequest
+    public struct RegisterRequest
     {
-        public const int CODE = 0;
+        public const int CODE = 1;
 
         public string username;
         public string password;
+        public string email;
     }
 
-    public struct LoginResponse
+    public struct RegisterResponse
     {
         public int status;
     }
@@ -34,16 +35,16 @@ namespace TriviaClient
     /// <summary>
     /// Interaction logic for LoginForm.xaml
     /// </summary>
-    public partial class LoginForm : UserControl
+    public partial class RegisterForm : UserControl
     {
-        public RegisterForm registerForm { get; set; }
+        public LoginForm loginForm { get; set; }
 
-        public LoginForm()
+        public RegisterForm()
         {
             InitializeComponent();
         }
 
-        private async void LoginBtn_Click(object sender, RoutedEventArgs e)
+        private async void RegisterBtn_Click(object sender, RoutedEventArgs e)
         {
             string username = usernameField.Text;
             string password = passwordField.Password;
@@ -85,13 +86,13 @@ namespace TriviaClient
             }, null);
         }
 
-        private void RegisterBtn_Click(object sender, RoutedEventArgs e)
+        private void LoginBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Show the register from
+            // Show the login form
             this.Opacity = 0;
             this.IsHitTestVisible = false;
-            this.registerForm.Opacity = 1;
-            this.registerForm.IsHitTestVisible = true;
+            this.loginForm.Opacity = 1;
+            this.loginForm.IsHitTestVisible = true;
         }
     }
 }
