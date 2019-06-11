@@ -11,7 +11,7 @@
 #include "json_request_packet_deserializer.hpp"
 #include "json_response_packet_serializer.hpp"
 
-LoginRequestHandler::LoginRequestHandler(std::shared_ptr<LoginManager> loginManager) : m_loginManager(loginManager)
+LoginRequestHandler::LoginRequestHandler(std::shared_ptr<RequestHandlerFactory> handlerFactory, std::shared_ptr<LoginManager> loginManager) : m_handlerFactory(handlerFactory), m_loginManager(loginManager)
 {
 }
 
