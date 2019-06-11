@@ -12,7 +12,7 @@ public:
 
     bool signup(std::string username, std::string password, std::string email);
     bool login(std::string username, std::string password);
-    void logout(std::string username);
+    bool logout(std::string username);
 
 private:
     std::shared_ptr<IDatabase> m_database;
