@@ -19,8 +19,10 @@ Database::~Database()
 void Database::initDatabase()
 {
 	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY, password TEXT NOT NULL, email TEXT NOT NULL);";
+	const char* questionsTableQuery = "CREATE TABLE questions (question_id INTEGER NOT NULL PRIMARY KEY, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);";
+	const char* answersTableQuery = "CREATE TABLE answers (username TEXT NOT NULL PRIMARY KEY REFERENCES users(username), question_id INTEGER NOT NULL PRIMARY KEY REFERENCES questions(question_id), answer INTEGER NOT NULL);";
 
-	int res = 0;
+	int res = 0;	
 
 	// Check if the database already exists
 	int databaseExists = _access(DB_FILENAME, 0);
@@ -49,6 +51,22 @@ void Database::initDatabase()
 		{
 			closeDatabase();
 			throw Exception("Unable to create users table!");
+		}
+
+		// Create the questions table
+		res = sqlite3_exec(m_db, questionsTableQuery, nullptr, nullptr, nullptr);
+		if (res != SQLITE_OK)
+		{
+			closeDatabase();
+			throw Exception("Unable to create questions table!");
+		}
+
+		// Create the answers table
+		res = sqlite3_exec(m_db, answersTableQuery, nullptr, nullptr, nullptr);
+		if (res != SQLITE_OK)
+		{
+			closeDatabase();
+			throw Exception("Unable to create answers table!");
 		}
 	}
 }
