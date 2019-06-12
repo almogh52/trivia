@@ -1,12 +1,28 @@
 #include "login_manager.h"
 
+#include <regex>
+
 LoginManager::LoginManager(std::shared_ptr<IDatabase> database) : m_database(database)
 {
+}
+
+bool LoginManager::isValidEmail(std::string email) const
+{
+    const std::regex emailPattern("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)");
+
+    // Check if the email matches the regex pattern
+    return std::regex_match(email, emailPattern);
 }
 
 std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::string password, std::string email)
 {
     LoggedUser user(username);
+
+    // If the username, password or email are invalid return null
+    if (username.length == 0 || password.length == 0 || !isValidEmail(email))
+    {
+	return nullptr;
+    }
 
     try {
 	// Try to signup the user
@@ -31,6 +47,12 @@ std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::stri
 std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::string password)
 {
     LoggedUser user(username);
+
+    // If the username or passsword are invalid return null
+    if (username.length == 0 || password.length == 0)
+    {
+	return nullptr;
+    }
 
     try {
 	// Try to login the user

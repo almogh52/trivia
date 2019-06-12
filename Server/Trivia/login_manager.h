@@ -16,6 +16,8 @@ public:
     bool logout(LoggedUser user);
 
 private:
+    bool isValidEmail(std::string email) const;
+
     std::shared_ptr<IDatabase> m_database;
     std::vector<LoggedUser> m_loggedUsers;
     std::mutex usersMutex;
