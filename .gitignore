@@ -10,3 +10,6 @@ trivia.sqlite
 
 # Ignore the packages folder
 packages
+
+# Ignore the database
+trivia_db.sqlite
