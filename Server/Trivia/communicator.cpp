@@ -128,7 +128,7 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 	    // Handle the request
 	    res = m_clients[clientSocket]->handleRequest(req);
-	    resLen = res.response.size();
+	    resLen = (int)res.response.size();
 
 	    // Send the response length to the client
 	    err = send(clientSocket, (const char *)&resLen, sizeof(int), 0);

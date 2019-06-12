@@ -13,7 +13,8 @@ public:
 
     std::shared_ptr<LoginRequestHandler> createLoginRequestHandler();
     std::shared_ptr<MenuRequestHandler> createMenuRequestHandler(LoggedUser& user);
-
+    
+    std::shared_ptr<LoginManager> getLoginManager();
 private:
     std::shared_ptr<LoginManager> m_loginManager;
     std::shared_ptr<RoomManager> m_roomManager;
