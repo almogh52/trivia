@@ -10,6 +10,7 @@
 #include "response_status.h"
 #include "json_request_packet_deserializer.hpp"
 #include "json_response_packet_serializer.hpp"
+#include "request_handler_factory.h"
 
 LoginRequestHandler::LoginRequestHandler(std::shared_ptr<RequestHandlerFactory> handlerFactory, std::shared_ptr<LoginManager> loginManager) : m_handlerFactory(handlerFactory), m_loginManager(loginManager)
 {
@@ -38,12 +39,13 @@ RequestResult LoginRequestHandler::handleRequest(const Request & req) const
 
 RequestResult LoginRequestHandler::login(const Request & req) const
 {
+    std::shared_ptr<LoggedUser> user;
     LoginRequest loginReq = JsonRequestPacketDeserializer::DeserializePacket<LoginRequest>(req.buffer);
     LoginResponse loginRes;
     RequestResult res;
 
     // Try to login the user
-    if (m_loginManager->login(loginReq.username, loginReq.password))
+    if ((user = m_loginManager->login(loginReq.username, loginReq.password)) != nullptr)
     {
 	loginRes.status = SUCCESS;
     }
@@ -52,7 +54,7 @@ RequestResult LoginRequestHandler::login(const Request & req) const
     }
 
     // Serialize the new packet and set the next handler
-    res.newHandler = nullptr;
+    res.newHandler = m_handlerFactory->createMenuRequestHandler(*user);
     res.response = JsonResponsePacketSerializer::SerializePacket(loginRes);
 
     return res;

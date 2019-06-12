@@ -10,8 +10,8 @@ class LoginManager
 public:
     LoginManager(std::shared_ptr<IDatabase> database);
 
-    bool signup(std::string username, std::string password, std::string email);
-    bool login(std::string username, std::string password);
+    std::shared_ptr<LoggedUser> signup(std::string username, std::string password, std::string email);
+    std::shared_ptr<LoggedUser> login(std::string username, std::string password);
     bool logout(std::string username);
 
 private:

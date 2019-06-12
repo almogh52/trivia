@@ -5,7 +5,8 @@
 
 #include "login_manager.h"
 #include "request_result.h"
-#include "request_handler_factory.h"
+
+class RequestHandlerFactory;
 
 class LoginRequestHandler :
     public IRequestHandler

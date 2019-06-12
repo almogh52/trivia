@@ -8,3 +8,8 @@ std::shared_ptr<LoginRequestHandler> RequestHandlerFactory::createLoginRequestHa
 {
     return std::shared_ptr<LoginRequestHandler>(new LoginRequestHandler((std::shared_ptr<RequestHandlerFactory>)this, m_loginManager));
 }
+
+std::shared_ptr<MenuRequestHandler> RequestHandlerFactory::createMenuRequestHandler(LoggedUser & user)
+{
+    return std::shared_ptr<MenuRequestHandler>(new MenuRequestHandler((std::shared_ptr<LoggedUser>)&user, m_roomManager, m_loginManager, (std::shared_ptr<RequestHandlerFactory>)this));
+}

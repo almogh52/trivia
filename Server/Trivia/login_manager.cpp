@@ -4,30 +4,40 @@ LoginManager::LoginManager(std::shared_ptr<IDatabase> database) : m_database(dat
 {
 }
 
-bool LoginManager::signup(std::string username, std::string password, std::string email)
+std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::string password, std::string email)
 {
+    LoggedUser user(username);
+
     try {
 	// Try to signup the user
 	m_database->signUpUser(username, password, email);
     }
     catch (...) {
-	return false;
+	return nullptr;
     }
+    
+    // Add the user to the logged users list
+    m_loggedUsers.push_back(user);
 
-    return true;
+    return std::shared_ptr<LoggedUser>(new LoggedUser(user));
 }
 
-bool LoginManager::login(std::string username, std::string password)
+std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::string password)
 {
+    LoggedUser user(username);
+
     try {
 	// Try to login the user
-	return m_database->authUser(username, password);
+	m_database->authUser(username, password);
     }
     catch (...) {
-	return false;
+	return nullptr;
     }
 
-    return false;
+    // Add the user to the logged users list
+    m_loggedUsers.push_back(user);
+
+    return std::shared_ptr<LoggedUser>(new LoggedUser(user));
 }
 
 bool LoginManager::logout(std::string username)

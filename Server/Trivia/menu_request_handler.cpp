@@ -3,6 +3,7 @@
 #include "logout_response.h"
 #include "response_status.h"
 #include "json_response_packet_serializer.hpp"
+#include "request_handler_factory.h"
 
 MenuRequestHandler::MenuRequestHandler(std::shared_ptr<LoggedUser> user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<LoginManager> loginManager, std::shared_ptr<RequestHandlerFactory> handlerFactory)
     : m_user(user), m_roomManager(roomManager), m_loginManager(loginManager), m_handlerFactory(handlerFactory)
@@ -23,6 +24,8 @@ RequestResult MenuRequestHandler::handleRequest(const Request & req) const
     case LOGOUT_REQUEST:
 	res = logout(req);
     }
+
+    return res;
 }
 
 RequestResult MenuRequestHandler::logout(const Request & req) const

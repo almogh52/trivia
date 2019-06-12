@@ -3,7 +3,9 @@
 
 #include "logged_user.h"
 #include "room_manager.h"
-#include "request_handler_factory.h"
+#include "login_manager.h"
+
+class RequestHandlerFactory;
 
 class MenuRequestHandler :
     public IRequestHandler
