@@ -92,64 +92,69 @@ void Communicator::clientHandler(SOCKET clientSocket)
     uint32_t err = 0;
     uint32_t bufferSize = 0;
 
-    // While the socket isn't invalid
-    while (clientSocket != INVALID_SOCKET && err != SOCKET_ERROR)
-    {
-	Request req;
-	RequestResult res;
-	std::shared_ptr<char> buffer;
-
-	// Get the request id which is 1 byte
-	bytesRecv = recv(clientSocket, (char *)&(req.id), 1, 0);
-	if (bytesRecv <= 0)
+    try {
+	// While the socket isn't invalid
+	while (clientSocket != INVALID_SOCKET && err != SOCKET_ERROR)
 	{
-	    break;
-	}
+	    Request req;
+	    RequestResult res;
+	    std::shared_ptr<char> buffer;
 
-	// Get the message size
-	bytesRecv = recv(clientSocket, (char *)&bufferSize, 4, 0);
-	if (bytesRecv <= 0)
-	{
-	    break;
-	}
-
-	// Get the message
-	buffer = std::shared_ptr<char>(new char[bufferSize + 1]);
-	bytesRecv = recv(clientSocket, buffer.get(), bufferSize, 0);
-	if (bytesRecv <= 0)
-	{
-	    break;
-	}
-
-	// Set EOF
-	buffer.get()[bufferSize] = 0;
-
-	// Copy buffer contents to the request vector buffer
-	req.buffer.assign(buffer.get(), buffer.get() + bufferSize + 1);
-
-	// Check if the request is relevant to the current request handler
-	if (m_clients[clientSocket]->isRequestRelevant(req))
-	{
-	    int resLen;
-
-	    // Handle the request
-	    res = m_clients[clientSocket]->handleRequest(req);
-	    resLen = (int)res.response.size();
-
-	    // Send the response length to the client
-	    err = send(clientSocket, (const char *)&resLen, sizeof(int), 0);
-	    if (err == SOCKET_ERROR)
+	    // Get the request id which is 1 byte
+	    bytesRecv = recv(clientSocket, (char *)&(req.id), 1, 0);
+	    if (bytesRecv <= 0)
 	    {
 		break;
 	    }
 
-	    // Send the response to the client
-	    err = send(clientSocket, res.response.data(), (int)res.response.size(), 0);
-	    if (err == SOCKET_ERROR)
+	    // Get the message size
+	    bytesRecv = recv(clientSocket, (char *)&bufferSize, 4, 0);
+	    if (bytesRecv <= 0)
 	    {
 		break;
 	    }
+
+	    // Get the message
+	    buffer = std::shared_ptr<char>(new char[bufferSize + 1]);
+	    bytesRecv = recv(clientSocket, buffer.get(), bufferSize, 0);
+	    if (bytesRecv <= 0)
+	    {
+		break;
+	    }
+
+	    // Set EOF
+	    buffer.get()[bufferSize] = 0;
+
+	    // Copy buffer contents to the request vector buffer
+	    req.buffer.assign(buffer.get(), buffer.get() + bufferSize + 1);
+
+	    // Check if the request is relevant to the current request handler
+	    if (m_clients[clientSocket]->isRequestRelevant(req))
+	    {
+		int resLen;
+
+		// Handle the request
+		res = m_clients[clientSocket]->handleRequest(req);
+		resLen = (int)res.response.size();
+
+		// Send the response length to the client
+		err = send(clientSocket, (const char *)&resLen, sizeof(int), 0);
+		if (err == SOCKET_ERROR)
+		{
+		    break;
+		}
+
+		// Send the response to the client
+		err = send(clientSocket, res.response.data(), (int)res.response.size(), 0);
+		if (err == SOCKET_ERROR)
+		{
+		    break;
+		}
+	    }
 	}
+    }
+    catch (std::exception& ex) {
+	std::cout << "An exception was caught in client's thread. Socket: " << clientSocket << ". Error: " << ex.what() << std::endl;
     }
 
     // Lock the clients mutex

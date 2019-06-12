@@ -19,7 +19,7 @@ std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::stri
     LoggedUser user(username);
 
     // If the username, password or email are invalid return null
-    if (username.length == 0 || password.length == 0 || !isValidEmail(email))
+    if (username.length() == 0 || password.length() == 0 || !isValidEmail(email))
     {
 	return nullptr;
     }
@@ -49,7 +49,7 @@ std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::strin
     LoggedUser user(username);
 
     // If the username or passsword are invalid return null
-    if (username.length == 0 || password.length == 0)
+    if (username.length() == 0 || password.length() == 0)
     {
 	return nullptr;
     }
