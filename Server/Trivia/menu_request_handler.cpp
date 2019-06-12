@@ -34,7 +34,7 @@ RequestResult MenuRequestHandler::logout(const Request & req) const
     RequestResult res;
 
     // Try to logout the user
-    if (m_handlerFactory->getLoginManager()->logout(m_user->getUsername()))
+    if (m_handlerFactory->getLoginManager()->logout(*m_user))
     {
 	logoutRes.status = SUCCESS;
     }

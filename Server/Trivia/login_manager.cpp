@@ -16,8 +16,14 @@ std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::stri
 	return nullptr;
     }
     
+    // Lock the users mutex
+    usersMutex.lock();
+
     // Add the user to the logged users list
     m_loggedUsers.push_back(user);
+
+    // Unlock the users mutex
+    usersMutex.unlock();
 
     return std::shared_ptr<LoggedUser>(new LoggedUser(user));
 }
@@ -34,32 +40,31 @@ std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::strin
 	return nullptr;
     }
 
+    // Lock the users mutex
+    usersMutex.lock();
+
     // Add the user to the logged users list
     m_loggedUsers.push_back(user);
+
+    // Unlock the users mutex
+    usersMutex.unlock();
 
     return std::shared_ptr<LoggedUser>(new LoggedUser(user));
 }
 
-bool LoginManager::logout(std::string username)
+bool LoginManager::logout(LoggedUser user)
 {
-    auto userIterator = m_loggedUsers.begin();
-
-    // Search for the logged user
-    for (; userIterator != m_loggedUsers.end(); userIterator++)
-    {
-	if (userIterator->getUsername() == username)
-	{
-	    // Remove the user from the logged users vector
-	    m_loggedUsers.erase(userIterator);
-	    break;
-	}
-    }
+    // Try to find the user in the logged users vector
+    auto userIterator = find(m_loggedUsers.begin(), m_loggedUsers.end(), user);
 
     // If the user isn't found in the logged users vector, return false
     if (userIterator == m_loggedUsers.end())
     {
 	return false;
     }
+
+    // Remove the user from the users vector
+    m_loggedUsers.erase(userIterator);
 
     return true;
 }
