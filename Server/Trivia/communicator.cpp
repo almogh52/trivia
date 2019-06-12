@@ -65,9 +65,15 @@ void Communicator::handleRequests()
 
 	std::cout << "Client accepted. Server and client can speak" << std::endl;
 
+	// Lock the clients mutex
+	clientsMutex.lock();
+
 	// Insert the client to the clients map
 	m_clients[client_socket] = m_handleFactory->createLoginRequestHandler(); // Default start is the login request handler
 	
+	// Unlock the clients mutex
+	clientsMutex.unlock();
+
 	// Start thread for the new client
 	startThreadForNewClient(client_socket);
     }
@@ -146,6 +152,12 @@ void Communicator::clientHandler(SOCKET clientSocket)
 	}
     }
 
+    // Lock the clients mutex
+    clientsMutex.lock();
+
     // Remove the client from the client list
     m_clients.erase(m_clients.find(clientSocket));
+
+    // Unlock the clients mutex
+    clientsMutex.unlock();
 }
