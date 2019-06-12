@@ -27,7 +27,19 @@ namespace TriviaClient
             InitializeComponent();
 
             loginForm.registerForm = registerForm;
+            loginForm.showRoomsWindow = showRoomsWindow;
+
             registerForm.loginForm = loginForm;
+            registerForm.showRoomsWindow = showRoomsWindow;
+        }
+
+        private void showRoomsWindow()
+        {
+            RoomsWindow roomsWindow = new RoomsWindow();
+
+            // Close this window and the rooms window
+            this.Close();
+            roomsWindow.Show();
         }
 
         private async void RootDialog_Loaded(object sender, RoutedEventArgs e)

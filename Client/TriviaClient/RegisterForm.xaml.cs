@@ -38,6 +38,7 @@ namespace TriviaClient
     public partial class RegisterForm : UserControl
     {
         public LoginForm loginForm { get; set; }
+        public Action showRoomsWindow { get; set; }
 
         public RegisterForm()
         {
@@ -84,6 +85,13 @@ namespace TriviaClient
                 if (res.status == 1)
                 {
                     eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "The username is already in use!" });
+                } else
+                {
+                    // Close the dialog
+                    eventArgs.Session.Close();
+
+                    // Show the rooms window
+                    this.showRoomsWindow();
                 }
             }, null);
         }

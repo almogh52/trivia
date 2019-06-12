@@ -37,6 +37,7 @@ namespace TriviaClient
     public partial class LoginForm : UserControl
     {
         public RegisterForm registerForm { get; set; }
+        public Action showRoomsWindow { get; set; }
 
         public LoginForm()
         {
@@ -81,6 +82,13 @@ namespace TriviaClient
                 if (res.status == 1)
                 {
                     eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "Incorrect username and password entered!" });
+                } else
+                {
+                    // Close the dialog
+                    eventArgs.Session.Close();
+
+                    // Show the rooms window
+                    this.showRoomsWindow();
                 }
             }, null);
         }
