@@ -12,7 +12,7 @@
 #include "json_response_packet_serializer.hpp"
 #include "request_handler_factory.h"
 
-LoginRequestHandler::LoginRequestHandler(std::shared_ptr<RequestHandlerFactory> handlerFactory, std::shared_ptr<LoginManager> loginManager) : m_handlerFactory(handlerFactory->getPtr()), m_loginManager(loginManager)
+LoginRequestHandler::LoginRequestHandler(std::shared_ptr<RequestHandlerFactory> handlerFactory, std::shared_ptr<LoginManager> loginManager) : m_handlerFactory(handlerFactory), m_loginManager(loginManager)
 {
 }
 

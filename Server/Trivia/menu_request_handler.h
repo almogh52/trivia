@@ -11,7 +11,7 @@ class MenuRequestHandler :
     public IRequestHandler
 {
 public:
-    MenuRequestHandler(std::shared_ptr<LoggedUser> user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory);
+    MenuRequestHandler(LoggedUser &user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory);
     
     virtual bool isRequestRelevant(const Request& req) const;
     virtual RequestResult handleRequest(const Request& req) const;
@@ -19,7 +19,7 @@ public:
 private:
     RequestResult logout(const Request& req) const;
 
-    std::shared_ptr<LoggedUser> m_user;
+    LoggedUser m_user;
     std::shared_ptr<RoomManager> m_roomManager;
     std::shared_ptr<RequestHandlerFactory> m_handlerFactory;
 };

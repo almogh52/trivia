@@ -5,7 +5,7 @@
 #include "json_response_packet_serializer.hpp"
 #include "request_handler_factory.h"
 
-MenuRequestHandler::MenuRequestHandler(std::shared_ptr<LoggedUser> user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory)
+MenuRequestHandler::MenuRequestHandler(LoggedUser& user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory)
     : m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
 {
 }
@@ -34,7 +34,7 @@ RequestResult MenuRequestHandler::logout(const Request & req) const
     RequestResult res;
 
     // Try to logout the user
-    if (m_handlerFactory->getLoginManager()->logout(*m_user))
+    if (m_handlerFactory->getLoginManager()->logout(m_user))
     {
 	logoutRes.status = SUCCESS;
     }
