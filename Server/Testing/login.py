@@ -24,11 +24,16 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect to the local server
 s.connect(("localhost", 61110))
+print("Connected")
 
 # Send the login packet to the server
 s.send(send_buf)
 s.send(login_packet_serialized)
+print("Sent request")
 
-# Get result from server
-res = s.recv(1024)
+# Get result size from server
+msg_size = int.from_bytes(s.recv(4), byteorder="little")
+
+# Get result
+res = s.recv(msg_size)
 print(res)

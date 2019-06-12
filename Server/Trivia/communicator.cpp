@@ -63,14 +63,14 @@ void Communicator::handleRequests()
 	if (client_socket == INVALID_SOCKET)
 	    std::cout << "Invalid socket. Ignoring.." << std::endl;
 
-	std::cout << "Client accepted. Server and client can speak" << std::endl;
+	std::cout << "Client accepted. Socket: " << client_socket << std::endl;
 
 	// Lock the clients mutex
 	clientsMutex.lock();
 
 	// Insert the client to the clients map
 	m_clients[client_socket] = m_handleFactory->createLoginRequestHandler(); // Default start is the login request handler
-	
+
 	// Unlock the clients mutex
 	clientsMutex.unlock();
 
@@ -157,11 +157,13 @@ void Communicator::clientHandler(SOCKET clientSocket)
 	std::cout << "An exception was caught in client's thread. Socket: " << clientSocket << ". Error: " << ex.what() << std::endl;
     }
 
+    std::cout << "Client disconnected. Socket: " << clientSocket << std::endl;
+
     // Lock the clients mutex
     clientsMutex.lock();
 
     // Remove the client from the client list
-    m_clients.erase(m_clients.find(clientSocket));
+    m_clients.erase(clientSocket);
 
     // Unlock the clients mutex
     clientsMutex.unlock();

@@ -30,6 +30,9 @@ s.connect(("localhost", 61110))
 s.send(send_buf)
 s.send(register_packet_serialized)
 
-# Get result from server
-res = s.recv(1024)
+# Get result size from server
+msg_size = int.from_bytes(s.recv(4), byteorder="little")
+
+# Get result
+res = s.recv(msg_size)
 print(res)
