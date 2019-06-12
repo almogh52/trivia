@@ -10,10 +10,10 @@ struct GetPlayersInRoomResponse {
     std::vector<std::string> rooms;
 };
 
-void to_json(json& j, const GetPlayersInRoomResponse& res) {
+inline void to_json(json& j, const GetPlayersInRoomResponse& res) {
     j = json{ {"rooms", res.rooms} };
 }
 
-void from_json(const json& j, GetPlayersInRoomResponse& res) {
+inline void from_json(const json& j, GetPlayersInRoomResponse& res) {
     j.at("rooms").get_to(res.rooms);
 }
