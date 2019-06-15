@@ -12,11 +12,11 @@ struct RoomData {
     bool isActive;
 };
 
-void to_json(json& j, const RoomData& roomData) {
+inline void to_json(json& j, const RoomData& roomData) {
     j = json{ {"id", roomData.id}, {"name", roomData.name}, {"maxPlayers", roomData.maxPlayers}, {"timePerQuestion", roomData.timePerQuestion}, {"isActive", roomData.isActive} };
 }
 
-void from_json(const json& j, RoomData& roomData) {
+inline void from_json(const json& j, RoomData& roomData) {
     j.at("id").get_to(roomData.id);
     j.at("name").get_to(roomData.name);
     j.at("maxPlayers").get_to(roomData.maxPlayers);

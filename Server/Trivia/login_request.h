@@ -9,11 +9,11 @@ struct LoginRequest {
 	std::string password;
 };
 
-void to_json(json& j, const LoginRequest& req) {
+inline void to_json(json& j, const LoginRequest& req) {
 	j = json{ {"username", req.username}, {"password", req.password} };
 }
 
-void from_json(const json& j, LoginRequest& req) {
+inline void from_json(const json& j, LoginRequest& req) {
 	j.at("username").get_to(req.username);
 	j.at("password").get_to(req.password);
 }

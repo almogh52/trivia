@@ -10,8 +10,9 @@
 #include "response_status.h"
 #include "json_request_packet_deserializer.hpp"
 #include "json_response_packet_serializer.hpp"
+#include "request_handler_factory.h"
 
-LoginRequestHandler::LoginRequestHandler(std::shared_ptr<LoginManager> loginManager) : m_loginManager(loginManager)
+LoginRequestHandler::LoginRequestHandler(std::shared_ptr<RequestHandlerFactory> handlerFactory, std::shared_ptr<LoginManager> loginManager) : m_handlerFactory(handlerFactory), m_loginManager(loginManager)
 {
 }
 
@@ -38,12 +39,13 @@ RequestResult LoginRequestHandler::handleRequest(const Request & req) const
 
 RequestResult LoginRequestHandler::login(const Request & req) const
 {
+    std::shared_ptr<LoggedUser> user;
     LoginRequest loginReq = JsonRequestPacketDeserializer::DeserializePacket<LoginRequest>(req.buffer);
     LoginResponse loginRes;
     RequestResult res;
 
     // Try to login the user
-    if (m_loginManager->login(loginReq.username, loginReq.password))
+    if ((user = m_loginManager->login(loginReq.username, loginReq.password)) != nullptr)
     {
 	loginRes.status = SUCCESS;
     }
@@ -52,7 +54,7 @@ RequestResult LoginRequestHandler::login(const Request & req) const
     }
 
     // Serialize the new packet and set the next handler
-    res.newHandler = nullptr;
+    res.newHandler = loginRes.status == ERROR ? nullptr : m_handlerFactory->createMenuRequestHandler(*user);
     res.response = JsonResponsePacketSerializer::SerializePacket(loginRes);
 
     return res;
@@ -60,12 +62,13 @@ RequestResult LoginRequestHandler::login(const Request & req) const
 
 RequestResult LoginRequestHandler::signup(const Request & req) const
 {
+    std::shared_ptr<LoggedUser> user;
     SignupRequest signupReq = JsonRequestPacketDeserializer::DeserializePacket<SignupRequest>(req.buffer);
     SignupResponse signupRes;
     RequestResult res;
 
     // Try to sign up the user
-    if (m_loginManager->signup(signupReq.username, signupReq.password, signupReq.email))
+    if ((user = m_loginManager->signup(signupReq.username, signupReq.password, signupReq.email)) != nullptr)
     {
 	signupRes.status = SUCCESS;
     }
@@ -74,7 +77,7 @@ RequestResult LoginRequestHandler::signup(const Request & req) const
     }
 
     // Serialize the new packet and set the next handler
-    res.newHandler = nullptr;
+    res.newHandler = signupRes.status == ERROR ? nullptr : m_handlerFactory->createMenuRequestHandler(*user);
     res.response = JsonResponsePacketSerializer::SerializePacket(signupRes);
 
     return res;

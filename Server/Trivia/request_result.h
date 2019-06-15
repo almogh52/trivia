@@ -6,5 +6,5 @@
 
 struct RequestResult {
 	std::vector<char> response;
-	std::unique_ptr<IRequestHandler> newHandler;
+	std::shared_ptr<IRequestHandler> newHandler;
 };

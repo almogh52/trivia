@@ -3,7 +3,7 @@
 #include "database.h"
 
 Server::Server() :  m_database(new Database()), 
-		    m_handlerFactory(new RequestHandlerFactory(m_database)), 
+		    m_handlerFactory(std::make_shared<RequestHandlerFactory>(m_database)), 
 		    m_communicator(new Communicator(m_handlerFactory))
 {
 }

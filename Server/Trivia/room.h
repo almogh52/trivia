@@ -7,6 +7,7 @@
 class Room
 {
 public:
+    Room();
     Room(RoomData& metadata);
 
     std::vector<LoggedUser> getAllUsers();

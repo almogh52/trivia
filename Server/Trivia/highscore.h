@@ -9,11 +9,11 @@ struct Highscore {
     unsigned int score;
 };
 
-void to_json(json& j, const Highscore& highscore) {
+inline void to_json(json& j, const Highscore& highscore) {
     j = json{ {"name", highscore.name}, {"score", highscore.score} };
 }
 
-void from_json(const json& j, Highscore& highscore) {
+inline void from_json(const json& j, Highscore& highscore) {
     j.at("name").get_to(highscore.name);
     j.at("score").get_to(highscore.score);
 }

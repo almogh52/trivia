@@ -11,11 +11,11 @@ struct GetRoomsResponse {
     std::vector<RoomData> rooms;
 };
 
-void to_json(json& j, const GetRoomsResponse& res) {
+inline void to_json(json& j, const GetRoomsResponse& res) {
     j = json{ {"status", res.status}, {"rooms", res.rooms} };
 }
 
-void from_json(const json& j, GetRoomsResponse& res) {
+inline void from_json(const json& j, GetRoomsResponse& res) {
     j.at("status").get_to(res.status);
     j.at("rooms").get_to(res.rooms);
 }
