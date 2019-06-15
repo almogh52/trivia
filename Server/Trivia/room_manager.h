@@ -10,8 +10,10 @@ class RoomManager
 public:
     void createRoom(LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion);
     bool deleteRoom(unsigned int roomId);
-    bool getRoomState(unsigned int roomId);
-    std::vector<RoomData> getRooms();
+    bool getRoomState(unsigned int roomId) const;
+	
+	std::vector<std::string> getPlayersInRoom(unsigned int roomId) const;
+    std::vector<RoomData> getRooms() const;
 
 private:
     std::unordered_map<unsigned int, Room> m_rooms;

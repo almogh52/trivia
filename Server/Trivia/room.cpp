@@ -10,7 +10,7 @@ Room::Room(RoomData & metadata) : m_metadata(metadata)
 {
 }
 
-std::vector<LoggedUser> Room::getAllUsers()
+std::vector<LoggedUser> Room::getAllUsers() const
 {
     return m_users;
 }
@@ -44,7 +44,7 @@ bool Room::removeUser(LoggedUser & user)
     return true;
 }
 
-RoomData Room::getMetadata()
+RoomData Room::getMetadata() const
 {
     return m_metadata;
 }
