@@ -6,6 +6,8 @@
 #include "get_players_in_room_response.h"
 #include "join_room_request.h"
 #include "join_room_response.h"
+#include "create_room_reqeust.h"
+#include "create_room_response.h"
 
 #include "response_status.h"
 #include "json_request_packet_deserializer.hpp"
@@ -127,6 +129,29 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	// Serialize the new packet and set the next handler
 	res.newHandler = nullptr;
 	res.response = JsonResponsePacketSerializer::SerializePacket(joinRes);
+
+	return res;
+}
+
+RequestResult MenuRequestHandler::createRoom(const Request & req) const
+{
+	CreateRoomRequest createReq = JsonRequestPacketDeserializer::DeserializePacket<CreateRoomRequest>(req.buffer);
+	CreateRoomResponse createRes;
+
+	RequestResult res;
+
+	try {
+		// Try to join the room
+		createRes.roomId = m_roomManager->createRoom(m_user, createReq.roomName, createReq.maxPlayers, createReq.answerTimeout, createReq.questionCount);
+		createRes.status = SUCCESS;
+	}
+	catch (...) {
+		createRes.status = ERROR;
+	}
+
+	// Serialize the new packet and set the next handler
+	res.newHandler = nullptr;
+	res.response = JsonResponsePacketSerializer::SerializePacket(createRes);
 
 	return res;
 }

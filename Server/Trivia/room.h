@@ -11,7 +11,7 @@ public:
     Room(RoomData& metadata);
 
     std::vector<LoggedUser> getAllUsers() const;
-    bool addUser(LoggedUser &user);
+    bool addUser(const LoggedUser &user);
     bool removeUser(LoggedUser &user);
 
     RoomData getMetadata() const;

@@ -8,7 +8,7 @@
 class RoomManager
 {
 public:
-    void createRoom(LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion);
+    int createRoom(const LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion, unsigned int questionCount);
     bool deleteRoom(unsigned int roomId);
 	bool joinRoom(const LoggedUser& user, unsigned int roomId);
 

@@ -2,7 +2,7 @@
 
 #include "exception.h"
 
-void RoomManager::createRoom(LoggedUser & user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion)
+int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion, unsigned int questionCount)
 {
     RoomData roomMetadata;
 
@@ -28,6 +28,8 @@ void RoomManager::createRoom(LoggedUser & user, std::string roomName, unsigned i
 
     // Save the new room in the map of rooms
     m_rooms[roomMetadata.id] = Room(roomMetadata);
+
+	return roomMetadata.id;
 }
 
 bool RoomManager::deleteRoom(unsigned int roomId)

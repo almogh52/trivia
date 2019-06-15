@@ -4,8 +4,6 @@
 #include "json.hpp"
 using nlohmann::json;
 
-#include "room_data.h"
-
 struct GetPlayersInRoomResponse {
 	int status;
     std::vector<std::string> players;
