@@ -24,6 +24,7 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
     roomMetadata.name = roomName;
     roomMetadata.maxPlayers = maxPlayers;
     roomMetadata.timePerQuestion = timePerQuestion;
+	roomMetadata.questionCount = questionCount;
     roomMetadata.isActive = true;
 
     // Save the new room in the map of rooms
