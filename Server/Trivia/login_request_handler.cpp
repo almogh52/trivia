@@ -70,10 +70,10 @@ RequestResult LoginRequestHandler::signup(const Request & req) const
     // Try to sign up the user
     if ((user = m_loginManager->signup(signupReq.username, signupReq.password, signupReq.email)) != nullptr)
     {
-	signupRes.status = SUCCESS;
+		signupRes.status = SUCCESS;
     }
     else {
-	signupRes.status = ERROR;
+		signupRes.status = ERROR;
     }
 
     // Serialize the new packet and set the next handler

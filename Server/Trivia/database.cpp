@@ -152,7 +152,7 @@ bool Database::authUser(std::string username, std::string password)
     // If the user doesn't exists, throw error
     if (!doesUserExist(username))
     {
-	throw Exception("The user " + username + " doesn't exists!");
+		throw Exception("The user " + username + " doesn't exists!");
     }
 
     // Bind parameters
@@ -162,7 +162,7 @@ bool Database::authUser(std::string username, std::string password)
     res = sqlite3_exec(m_db, userPasswordQuery.c_str(), string_callback, &userPassword, nullptr);
     if (res != SQLITE_OK)
     {
-	throw Exception("Unable to sign up the user!");
+		throw Exception("Unable to sign up the user!");
     }
 
     // Check if entered correct password

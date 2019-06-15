@@ -36,7 +36,7 @@ bool Room::removeUser(LoggedUser & user)
     // If the user isn't found
     if (userIterator == m_users.end())
     {
-	return false;
+		return false;
     }
 
     // Erase the user from the vector
