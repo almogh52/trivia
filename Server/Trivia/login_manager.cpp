@@ -8,7 +8,7 @@ LoginManager::LoginManager(std::shared_ptr<IDatabase> database) : m_database(dat
 
 bool LoginManager::isValidEmail(std::string email) const
 {
-    const std::regex emailPattern("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)");
+    const std::regex emailPattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
 
     // Check if the email matches the regex pattern
     return std::regex_match(email, emailPattern);
