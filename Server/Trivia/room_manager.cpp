@@ -41,6 +41,16 @@ bool RoomManager::deleteRoom(unsigned int roomId)
     return true;
 }
 
+bool RoomManager::joinRoom(const LoggedUser& user, unsigned int roomId)
+{
+	try {
+		return m_rooms.at(roomId).addUser(user);
+	}
+	catch (...) {
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+}
+
 bool RoomManager::getRoomState(unsigned int roomId) const
 {
     try {

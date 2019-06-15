@@ -20,7 +20,7 @@ bool Room::addUser(LoggedUser & user)
     // Search for the user in the logged users vector, if found, return false
     if (find(m_users.begin(), m_users.end(), user) != m_users.end() || m_users.size() >= m_metadata.maxPlayers)
     {
-	return false;
+		return false;
     }
 
     // Push the user to the vector of users

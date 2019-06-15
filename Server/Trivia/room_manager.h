@@ -10,6 +10,8 @@ class RoomManager
 public:
     void createRoom(LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion);
     bool deleteRoom(unsigned int roomId);
+	bool joinRoom(const LoggedUser& user, unsigned int roomId);
+
     bool getRoomState(unsigned int roomId) const;
 	
 	std::vector<std::string> getPlayersInRoom(unsigned int roomId) const;

@@ -20,6 +20,7 @@ private:
     RequestResult logout(const Request& req) const;
 	RequestResult getRooms(const Request& req) const;
 	RequestResult getPlayersInRoom(const Request& req) const;
+	RequestResult joinRoom(const Request& req) const;
 
     LoggedUser m_user;
     std::shared_ptr<RoomManager> m_roomManager;

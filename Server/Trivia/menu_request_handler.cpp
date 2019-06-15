@@ -4,6 +4,8 @@
 #include "get_rooms_response.h"
 #include "get_players_in_room_request.h"
 #include "get_players_in_room_response.h"
+#include "join_room_request.h"
+#include "join_room_response.h"
 
 #include "response_status.h"
 #include "json_request_packet_deserializer.hpp"
@@ -28,9 +30,19 @@ RequestResult MenuRequestHandler::handleRequest(const Request & req) const
     {
     case LOGOUT_REQUEST:
 		res = logout(req);
+		break;
 
 	case GET_ROOMS_REQUEST:
 		res = getRooms(req);
+		break;
+
+	case GET_PLAYERS_IN_ROOM_REQUEST:
+		res = getPlayersInRoom(req);
+		break;
+
+	case JOIN_ROOM_REQUEST:
+		res = joinRoom(req);
+		break;
     }
 
     return res;
@@ -92,6 +104,29 @@ RequestResult MenuRequestHandler::getPlayersInRoom(const Request & req) const
 	// Serialize the new packet and set the next handler
 	res.newHandler = nullptr;
 	res.response = JsonResponsePacketSerializer::SerializePacket(playersRes);
+
+	return res;
+}
+
+RequestResult MenuRequestHandler::joinRoom(const Request & req) const
+{
+	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::DeserializePacket<JoinRoomRequest>(req.buffer);
+	JoinRoomResponse joinRes;
+
+	RequestResult res;
+
+	try {
+		// Try to join the room
+		m_roomManager->joinRoom(m_user, joinReq.roomId);
+		joinRes.status = SUCCESS;
+	}
+	catch (...) {
+		joinRes.status = ERROR;
+	}
+
+	// Serialize the new packet and set the next handler
+	res.newHandler = nullptr;
+	res.response = JsonResponsePacketSerializer::SerializePacket(joinRes);
 
 	return res;
 }
