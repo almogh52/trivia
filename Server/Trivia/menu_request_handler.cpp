@@ -45,6 +45,10 @@ RequestResult MenuRequestHandler::handleRequest(const Request & req) const
 	case JOIN_ROOM_REQUEST:
 		res = joinRoom(req);
 		break;
+
+	case CREATE_ROOM_REQUEST:
+		res = createRoom(req);
+		break;
     }
 
     return res;
