@@ -56,7 +56,10 @@ std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::strin
 
     try {
 		// Try to login the user
-		m_database->authUser(username, password);
+		if (!m_database->authUser(username, password))
+		{
+			return nullptr;
+		}
     }
     catch (...) {
 		return nullptr;
