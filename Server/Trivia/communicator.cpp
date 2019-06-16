@@ -107,10 +107,13 @@ void Communicator::clientHandler(SOCKET clientSocket)
 		{
 			Request req;
 			RequestResult res;
+
 			std::shared_ptr<char> buffer;
+			std::shared_ptr<IRequestHandler> currentHandler;
 
 			// Get the request id which is 1 byte
 			bytesRecv = recv(clientSocket, (char *)&(req.id), 1, 0);
+			std::cout << req.id << std::endl;
 			if (bytesRecv <= 0)
 			{
 				break;
@@ -118,6 +121,7 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 			// Get the message size
 			bytesRecv = recv(clientSocket, (char *)&bufferSize, 4, 0);
+			std::cout << bufferSize << std::endl;
 			if (bytesRecv <= 0)
 			{
 				break;
@@ -125,25 +129,40 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 			// Get the message
 			buffer = std::shared_ptr<char>(new char[bufferSize + 1]);
-			bytesRecv = recv(clientSocket, buffer.get(), bufferSize, 0);
-			if (bytesRecv <= 0)
+
+			// If the buffer size is 0, dont recv the message from the user
+			if (bufferSize != 0)
 			{
-				break;
+				bytesRecv = recv(clientSocket, buffer.get(), bufferSize, 0);
+				if (bytesRecv <= 0)
+				{
+					break;
+				}
 			}
 
 			// Set EOF
 			buffer.get()[bufferSize] = 0;
+			std::cout << buffer << std::endl;
 
 			// Copy buffer contents to the request vector buffer
 			req.buffer.assign(buffer.get(), buffer.get() + bufferSize + 1);
 
+			// Lock the clients mutex
+			clientsMutex.lock();
+
+			// Get the current handler of the client
+			currentHandler = m_clients[clientSocket];
+
+			// Unlock the clients mutex
+			clientsMutex.unlock();
+
 			// Check if the request is relevant to the current request handler
-			if (m_clients[clientSocket]->isRequestRelevant(req))
+			if (currentHandler->isRequestRelevant(req))
 			{
 				int resLen;
 
 				// Handle the request
-				res = m_clients[clientSocket]->handleRequest(req);
+				res = currentHandler->handleRequest(req);
 				resLen = (int)res.response.size();
 
 				// Send the response length to the client
@@ -159,6 +178,19 @@ void Communicator::clientHandler(SOCKET clientSocket)
 				{
 					break;
 				}
+			}
+
+			// If a new handler was sent, switch the handler
+			if (res.newHandler)
+			{
+				// Lock the clients mutex
+				clientsMutex.lock();
+
+				// Set the new client handler
+				m_clients[clientSocket] = res.newHandler;
+
+				// Unlock the clients mutex
+				clientsMutex.unlock();
 			}
 		}
     }

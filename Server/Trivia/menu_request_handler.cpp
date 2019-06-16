@@ -69,7 +69,7 @@ RequestResult MenuRequestHandler::logout(const Request & req) const
     }
 
     // Serialize the new packet and set the next handler
-    res.newHandler = nullptr;
+    res.newHandler = m_handlerFactory->createLoginRequestHandler();
     res.response = JsonResponsePacketSerializer::SerializePacket(logoutRes);
 
     return res;
