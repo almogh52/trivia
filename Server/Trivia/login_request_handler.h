@@ -17,6 +17,8 @@ public:
     virtual bool isRequestRelevant(const Request& req) const;
     virtual RequestResult handleRequest(const Request& req) const;
 
+	virtual void disconnect() const;
+
 private:
     std::shared_ptr<LoginManager> m_loginManager;
     std::shared_ptr<RequestHandlerFactory> m_handlerFactory;

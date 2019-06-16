@@ -101,6 +101,8 @@ void Communicator::clientHandler(SOCKET clientSocket)
     uint32_t err = 0;
     uint32_t bufferSize = 0;
 
+	std::shared_ptr<IRequestHandler> lastHandler;
+
     try {
 		// While the socket isn't invalid
 		while (clientSocket != INVALID_SOCKET && err != SOCKET_ERROR)
@@ -203,9 +205,15 @@ void Communicator::clientHandler(SOCKET clientSocket)
     // Lock the clients mutex
     clientsMutex.lock();
 
+	// Get the last handler of the client
+	lastHandler = m_clients[clientSocket];
+
     // Remove the client from the client list
     m_clients.erase(clientSocket);
 
     // Unlock the clients mutex
     clientsMutex.unlock();
+
+	// Disconnect the user
+	lastHandler->disconnect();
 }

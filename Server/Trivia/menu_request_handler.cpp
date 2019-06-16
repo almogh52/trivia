@@ -54,6 +54,12 @@ RequestResult MenuRequestHandler::handleRequest(const Request & req) const
     return res;
 }
 
+void MenuRequestHandler::disconnect() const
+{
+	// Try to logout the user
+	m_handlerFactory->getLoginManager()->logout(m_user);
+}
+
 RequestResult MenuRequestHandler::logout(const Request & req) const
 {
     LogoutResponse logoutRes;

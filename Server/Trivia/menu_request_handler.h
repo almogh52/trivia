@@ -16,6 +16,8 @@ public:
     virtual bool isRequestRelevant(const Request& req) const;
     virtual RequestResult handleRequest(const Request& req) const;
 
+	virtual void disconnect() const;
+
 private:
     RequestResult logout(const Request& req) const;
 	RequestResult getRooms(const Request& req) const;

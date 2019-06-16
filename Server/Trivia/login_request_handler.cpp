@@ -37,6 +37,10 @@ RequestResult LoginRequestHandler::handleRequest(const Request & req) const
     return res;
 }
 
+void LoginRequestHandler::disconnect() const
+{
+}
+
 RequestResult LoginRequestHandler::login(const Request & req) const
 {
     std::shared_ptr<LoggedUser> user;
