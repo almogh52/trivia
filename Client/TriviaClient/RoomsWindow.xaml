@@ -13,55 +13,58 @@
         TextOptions.TextRenderingMode="Auto"
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
-        Title="Trivia" Height="600" Width="1000">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="52*"/>
-            <RowDefinition Height="423*"/>
-            <RowDefinition Height="52*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="101*"/>
-            <ColumnDefinition Width="101*"/>
-            <ColumnDefinition Width="790*"/>
-        </Grid.ColumnDefinitions>
-        <materialDesign:Card Grid.Row="1" Grid.ColumnSpan="2" materialDesign:ShadowAssist.ShadowDepth="Depth5" VerticalAlignment="Stretch" Panel.ZIndex="5">
-            <ListBox x:Name="roomsList">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock
-                            FontWeight="Bold"
-                            Text="{Binding Name}" />
-                            <TextBlock
-                            Text="{Binding Id, StringFormat='Room #{0}'}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ListBox>
-        </materialDesign:Card>
-        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth5" Grid.ColumnSpan="2" Grid.Row="0" VerticalAlignment="Stretch">
-            <Image Source="trivia-title.png" Margin="2"/>
-        </materialDesign:Card>
-        <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth5" Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Stretch" Panel.ZIndex="6">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48">
-                    <materialDesign:PackIcon
-                Kind="NewBox"
-                Height="30"
-                Width="30" />
-                </Button>
-                <Button Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1">
-                    <materialDesign:PackIcon
-                Kind="Refresh"
-                Height="30"
-                Width="30" />
-                </Button>
-            </Grid>
-        </materialDesign:Card>
-    </Grid>
+        Title="Trivia" Height="600" Width="1000" Loaded="Window_Loaded">
+    <materialDesign:DialogHost x:Name="RootDialog">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="790*"/>
+            </Grid.ColumnDefinitions>
+            <materialDesign:Card materialDesign:ShadowAssist.ShadowDepth="Depth5" VerticalAlignment="Stretch" Panel.ZIndex="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="52*"/>
+                        <RowDefinition Height="423*"/>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="DarkGray">
+                        <Image Source="trivia-title.png" Margin="4"/>
+                    </Border>
+                    <Border Grid.Row="1" BorderThickness="0,0,0,1" BorderBrush="DarkGray">
+                        <ListBox x:Name="roomsList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock
+                                FontWeight="Bold"
+                                Text="{Binding name}" />
+                                        <TextBlock
+                                Text="{Binding id, StringFormat='Room #{0}'}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ListBox>
+                    </Border>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="createButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Click="createButton_Click">
+                            <materialDesign:PackIcon
+                            Kind="NewBox"
+                            Height="30"
+                            Width="30" />
+                        </Button>
+                        <Button x:Name="refreshButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Click="refreshButton_Click">
+                            <materialDesign:PackIcon
+                            Kind="Refresh"
+                            Height="30"
+                            Width="30" />
+                        </Button>
+                    </Grid>
+                </Grid>
+            </materialDesign:Card>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>
