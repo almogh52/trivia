@@ -20,6 +20,7 @@ public:
 
 private:
 	RequestResult closeRoom(const Request& req) const;
+	RequestResult getRoomState(const Request& req) const;
 
 	Room m_room;
 	LoggedUser m_user;
