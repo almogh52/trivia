@@ -27,6 +27,10 @@ RequestResult RoomAdminRequestHandler::handleRequest(const Request & req) const
 	case CLOSE_ROOM_REQUEST:
 		res = closeRoom(req);
 		break;
+
+	case GET_ROOM_STATE_REQUEST:
+		res = getRoomState(req);
+		break;
 	}
 
 	return res;
