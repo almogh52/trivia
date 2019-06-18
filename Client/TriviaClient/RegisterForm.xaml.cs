@@ -84,7 +84,7 @@ namespace TriviaClient
                 // If register failed, show error
                 if (res.status == 1)
                 {
-                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "The username is already in use!" });
+                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "One of the values entered is invalid or already in use!" });
                 } else
                 {
                     // Close the dialog
