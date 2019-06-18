@@ -10,14 +10,14 @@ int main()
     std::unique_ptr<WSAInitializer> wsaInitializer(new WSAInitializer());
 
     try {
-	// Try to run the server
-	server->run();
+		// Try to run the server
+		server->run();
     }
     catch (std::exception& ex) {
-	std::cout << ex.what() << std::endl;
+		std::cout << ex.what() << std::endl;
     }
     catch (...) {
-	std::cout << "An an unknown error occurred running the server" << std::endl;
+		std::cout << "An an unknown error occurred running the server" << std::endl;
     }
 
     return 0;

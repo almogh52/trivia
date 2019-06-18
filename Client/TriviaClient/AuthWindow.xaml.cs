@@ -20,9 +20,11 @@ namespace TriviaClient
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AuthWindow : Window
     {
-        public MainWindow()
+        public bool Connected { get; set; }
+
+        public AuthWindow()
         {
             InitializeComponent();
 
@@ -44,7 +46,11 @@ namespace TriviaClient
 
         private async void RootDialog_Loaded(object sender, RoutedEventArgs e)
         {
-            bool connected = false;
+            // If already connected, return
+            if (Connected)
+            {
+                return;
+            }
 
             Dialogs.ConnectDialogViewModel connectDataContext = new Dialogs.ConnectDialogViewModel();
 
@@ -58,7 +64,7 @@ namespace TriviaClient
                 string serverIP = connectDataContext.ServerIP;
 
                 // If already connected, return
-                if (connected)
+                if (Connected)
                 {
                     return;
                 }
@@ -86,7 +92,7 @@ namespace TriviaClient
                     await Client.Connect(serverIP);
 
                     // Set connected to true
-                    connected = true;
+                    Connected = true;
 
                     // If connected, close the dialog
                     eventArgs.Session.Close();

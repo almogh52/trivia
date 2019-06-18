@@ -12,10 +12,10 @@ struct HighscoreResponse {
 };
 
 inline void to_json(json& j, const HighscoreResponse& res) {
-    j = json{ {"status", res.status}, {"rooms", res.highscores} };
+    j = json{ {"status", res.status}, {"highscores", res.highscores} };
 }
 
 inline void from_json(const json& j, HighscoreResponse& res) {
     j.at("status").get_to(res.status);
-    j.at("rooms").get_to(res.highscores);
+    j.at("highscores").get_to(res.highscores);
 }

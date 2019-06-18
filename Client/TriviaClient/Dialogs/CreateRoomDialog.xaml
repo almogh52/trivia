@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="TriviaClient.Dialogs.CreateRoomDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TriviaClient"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             Width="300">
+    <Grid Margin="16">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBox materialDesign:HintAssist.Hint="Room Name" Style="{DynamicResource MaterialDesignFloatingHintTextBox}"
+                 Margin="0 6 0 0"
+                 FontSize="18" Grid.Row="0"
+                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"
+                 />
+        <ComboBox
+            x:Name="maxPlayerBox"
+            materialDesign:HintAssist.Hint="Max Players"
+            Margin="0 6 0 0"
+            FontSize="18" Grid.Row="1"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            SelectedItem="{Binding MaxPlayers, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+        <ComboBox
+            x:Name="timePerQuestionBox"
+            materialDesign:HintAssist.Hint="Time Per Question"
+            Margin="0 6 0 0"
+            FontSize="18" Grid.Row="2"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            SelectedItem="{Binding TimePerQuestion, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+        <ComboBox
+            x:Name="questionCountBox"
+            materialDesign:HintAssist.Hint="Question Count"
+            Margin="0 6 0 0"
+            FontSize="18" Grid.Row="3"
+            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+            SelectedItem="{Binding QuestionCount, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
+        <Button Style="{DynamicResource MaterialDesignFlatButton}"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Grid.Row="4" Margin="0 10 0 0">
+            Create
+            <Button.CommandParameter>
+                <system:Boolean>True</system:Boolean>
+            </Button.CommandParameter>
+        </Button>
+        <Button IsDefault="True"
+                    Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Grid.Row="4" Margin="0 10 0 0" Grid.Column="1">
+            Cancel
+            <Button.Style>
+                <Style
+                    TargetType="Button"
+                    BasedOn="{StaticResource MaterialDesignFlatButton}">
+                    <Setter
+                        Property="Foreground"
+                        Value="Red" />
+                </Style>
+            </Button.Style>
+            <Button.CommandParameter>
+                <system:Boolean>False</system:Boolean>
+            </Button.CommandParameter>
+        </Button>
+    </Grid>
+</UserControl>

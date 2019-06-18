@@ -10,7 +10,7 @@ public:
 
     bool operator==(const LoggedUser& user) const
     {
-	return m_username == user.getUsername();
+		return m_username == user.getUsername();
     }
 
 private:

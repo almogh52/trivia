@@ -3,6 +3,7 @@
 #include <io.h>
 #include <string>
 #include <regex>
+#include <iostream>
 
 #include "exception.h"
 
@@ -20,7 +21,7 @@ void Database::initDatabase()
 {
 	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY, password TEXT NOT NULL, email TEXT NOT NULL);";
 	const char* questionsTableQuery = "CREATE TABLE questions (question_id INTEGER NOT NULL PRIMARY KEY, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);";
-	const char* answersTableQuery = "CREATE TABLE answers (username TEXT NOT NULL PRIMARY KEY REFERENCES users(username), question_id INTEGER NOT NULL PRIMARY KEY REFERENCES questions(question_id), answer INTEGER NOT NULL);";
+	const char* answersTableQuery = "CREATE TABLE answers (username TEXT NOT NULL REFERENCES users(username), game_id INTEGER NOT NULL, question_id INTEGER NOT NULL REFERENCES questions(question_id), answer INTEGER NOT NULL, correct_ans INTEGER NOT NULL, PRIMARY KEY(username, game_id, question_id));";
 
 	int res = 0;	
 
@@ -152,7 +153,7 @@ bool Database::authUser(std::string username, std::string password)
     // If the user doesn't exists, throw error
     if (!doesUserExist(username))
     {
-	throw Exception("The user " + username + " doesn't exists!");
+		throw Exception("The user " + username + " doesn't exists!");
     }
 
     // Bind parameters
@@ -162,9 +163,47 @@ bool Database::authUser(std::string username, std::string password)
     res = sqlite3_exec(m_db, userPasswordQuery.c_str(), string_callback, &userPassword, nullptr);
     if (res != SQLITE_OK)
     {
-	throw Exception("Unable to sign up the user!");
+		throw Exception("Unable to sign up the user!");
     }
 
     // Check if entered correct password
     return password == userPassword;
+}
+
+int score_callback(void *data, int argc, char **argv, char **colNames)
+{
+	auto playersGamesScores = (std::unordered_map<std::string, std::unordered_map<int, int>> *)data;
+	
+	std::string username = argv[0];
+	int game_id = std::stoi(argv[1]);
+	bool corrent_ans = std::stoi(argv[2]);
+
+	// If the user was correct, increase the user's score by 1
+	if (corrent_ans)
+	{
+		// Check if the dest cell exists already
+		bool exists = playersGamesScores->count(username) && playersGamesScores->at(username).count(game_id);
+
+		// Update the dest cell by handling if it exists or not
+		(*playersGamesScores)[username][game_id] = exists ? (*playersGamesScores)[username][game_id] + 1 : 1;
+	}
+
+	return 0;
+}
+
+std::unordered_map<std::string, std::unordered_map<int, int>> Database::getAllScores()
+{
+	std::unordered_map<std::string, std::unordered_map<int, int>> playersGamesScores;
+	
+	int res = 0;
+	std::string scoreQuery = "SELECT username, game_id, correct_ans FROM answers";
+
+	// Try to execute the user password query
+	res = sqlite3_exec(m_db, scoreQuery.c_str(), score_callback, &playersGamesScores, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to get the scores!");
+	}
+
+	return playersGamesScores;
 }

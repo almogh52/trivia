@@ -28,13 +28,17 @@ RequestResult LoginRequestHandler::handleRequest(const Request & req) const
     // Handle the request by it's id
     if (req.id == LOGIN_REQUEST)
     {
-	res = login(req);
+		res = login(req);
     }
     else if (req.id == SIGNUP_REQUEST) {
-	res = signup(req);
+		res = signup(req);
     }
 
     return res;
+}
+
+void LoginRequestHandler::disconnect() const
+{
 }
 
 RequestResult LoginRequestHandler::login(const Request & req) const
@@ -47,10 +51,10 @@ RequestResult LoginRequestHandler::login(const Request & req) const
     // Try to login the user
     if ((user = m_loginManager->login(loginReq.username, loginReq.password)) != nullptr)
     {
-	loginRes.status = SUCCESS;
+		loginRes.status = SUCCESS;
     }
     else {
-	loginRes.status = ERROR;
+		loginRes.status = ERROR;
     }
 
     // Serialize the new packet and set the next handler
@@ -70,10 +74,10 @@ RequestResult LoginRequestHandler::signup(const Request & req) const
     // Try to sign up the user
     if ((user = m_loginManager->signup(signupReq.username, signupReq.password, signupReq.email)) != nullptr)
     {
-	signupRes.status = SUCCESS;
+		signupRes.status = SUCCESS;
     }
     else {
-	signupRes.status = ERROR;
+		signupRes.status = ERROR;
     }
 
     // Serialize the new packet and set the next handler

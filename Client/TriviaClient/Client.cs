@@ -14,6 +14,18 @@ namespace TriviaClient
         private static TcpClient socket { get; set; }
         private static NetworkStream stream { get; set; }
 
+        static Client()
+        {
+            // Add destructor
+            AppDomain.CurrentDomain.ProcessExit += Destructor;
+        }
+
+        private static void Destructor(object sender, EventArgs e)
+        {
+            // Close the socket
+            socket.Close();
+        }
+
         public async static Task Connect(string serverIP)
         {
             // Create the tcp client to the server

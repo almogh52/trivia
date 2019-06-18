@@ -5,6 +5,7 @@
 #include "login_request_handler.h"
 #include "menu_request_handler.h"
 #include "database_interface.h"
+#include "highscore_table.h"
 
 #include <memory>
 
@@ -20,6 +21,7 @@ public:
 
     std::shared_ptr<RequestHandlerFactory> getPtr();
 private:
+	std::shared_ptr<HighscoreTable> m_highscoreTable;
     std::shared_ptr<LoginManager> m_loginManager;
     std::shared_ptr<RoomManager> m_roomManager;
 };

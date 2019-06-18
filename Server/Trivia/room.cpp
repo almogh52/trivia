@@ -10,17 +10,17 @@ Room::Room(RoomData & metadata) : m_metadata(metadata)
 {
 }
 
-std::vector<LoggedUser> Room::getAllUsers()
+std::vector<LoggedUser> Room::getAllUsers() const
 {
     return m_users;
 }
 
-bool Room::addUser(LoggedUser & user)
+bool Room::addUser(const LoggedUser & user)
 {
     // Search for the user in the logged users vector, if found, return false
     if (find(m_users.begin(), m_users.end(), user) != m_users.end() || m_users.size() >= m_metadata.maxPlayers)
     {
-	return false;
+		return false;
     }
 
     // Push the user to the vector of users
@@ -36,7 +36,7 @@ bool Room::removeUser(LoggedUser & user)
     // If the user isn't found
     if (userIterator == m_users.end())
     {
-	return false;
+		return false;
     }
 
     // Erase the user from the vector
@@ -44,7 +44,7 @@ bool Room::removeUser(LoggedUser & user)
     return true;
 }
 
-RoomData Room::getMetadata()
+RoomData Room::getMetadata() const
 {
     return m_metadata;
 }

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-RequestHandlerFactory::RequestHandlerFactory(std::shared_ptr<IDatabase> database) : m_loginManager(new LoginManager(database)), m_roomManager(new RoomManager())
+RequestHandlerFactory::RequestHandlerFactory(std::shared_ptr<IDatabase> database) : m_loginManager(new LoginManager(database)), m_roomManager(new RoomManager()), m_highscoreTable(new HighscoreTable(database))
 {
 }
 
@@ -13,7 +13,7 @@ std::shared_ptr<LoginRequestHandler> RequestHandlerFactory::createLoginRequestHa
 
 std::shared_ptr<MenuRequestHandler> RequestHandlerFactory::createMenuRequestHandler(LoggedUser & user)
 {
-    return std::shared_ptr<MenuRequestHandler>(new MenuRequestHandler(user, m_roomManager, shared_from_this()));
+    return std::shared_ptr<MenuRequestHandler>(new MenuRequestHandler(user, m_roomManager, m_highscoreTable, shared_from_this()));
 }
 
 std::shared_ptr<LoginManager> RequestHandlerFactory::getLoginManager()
