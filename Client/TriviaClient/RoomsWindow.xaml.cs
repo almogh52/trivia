@@ -89,6 +89,23 @@ namespace TriviaClient
         public int status;
     }
 
+    public struct Highscore
+    {
+        public string name;
+        public int score;
+    }
+
+    public struct HighscoreRequest
+    {
+        public const int CODE = 5;
+    }
+
+    public struct HighscoreResponse
+    {
+        public int status;
+        public List<Highscore> highscores;
+    }
+
     /// <summary>
     /// Interaction logic for RoomsWindow.xaml
     /// </summary>
@@ -338,6 +355,49 @@ namespace TriviaClient
                 roomPreview.Data = previewData;
                 roomPreview.Update();
             }
+        }
+
+        private async void highscoresButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] buf = null;
+            HighscoreResponse res;
+
+            Dialogs.HighscoresDialog dialog = new Dialogs.HighscoresDialog();
+
+            await DialogHost.Show(new Dialogs.LoadingDialog(), async delegate (object s, DialogOpenedEventArgs eventArgs)
+            {
+                // Send the join room request to the server
+                await Client.Send(HighscoreRequest.CODE, new byte[0]);
+
+                // Get the response from the server and deserialize it
+                buf = await Client.Recv();
+                res = JsonConvert.DeserializeObject<HighscoreResponse>(Encoding.UTF8.GetString(buf));
+
+                Debug.WriteLine(Encoding.UTF8.GetString(buf));
+
+                // If joined room successfully, show it
+                if (res.status == 0)
+                {
+                    if (res.highscores != null)
+                    {
+                        // For each highscore create a highscore preview
+                        foreach (Highscore score in res.highscores)
+                        {
+                            dialog.Highscores.Add(new Dialogs.HighscorePreview { Name = score.name, Score = score.score });
+
+                            Debug.WriteLine(score.name);
+                        }
+                    }
+
+                    // Show the highscores dialog
+                    eventArgs.Session.UpdateContent(dialog);
+                }
+                else
+                {
+                    // Show the error dialog
+                    eventArgs.Session.UpdateContent((new Dialogs.MessageDialog { Message = "Unable to get the highscores table!" }));
+                }
+            });
         }
     }
 }

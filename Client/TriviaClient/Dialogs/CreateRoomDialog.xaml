@@ -46,7 +46,7 @@
             FontSize="18" Grid.Row="3"
             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
             SelectedItem="{Binding QuestionCount, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
-        <Button IsDefault="True" Style="{DynamicResource MaterialDesignFlatButton}"
+        <Button Style="{DynamicResource MaterialDesignFlatButton}"
                     Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Grid.Row="4" Margin="0 10 0 0">
             Create
             <Button.CommandParameter>

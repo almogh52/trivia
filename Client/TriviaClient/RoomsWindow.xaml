@@ -72,7 +72,7 @@
                             Height="30"
                             Width="30" />
                         </Button>
-                        <Button x:Name="highscoresButton" ToolTip="Show Highscores" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="0" Grid.Row="1">
+                        <Button x:Name="highscoresButton" ToolTip="Show Highscores" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="0" Grid.Row="1" Click="highscoresButton_Click">
                             <materialDesign:PackIcon
                             Kind="Stars"
                             Height="30"

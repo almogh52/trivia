@@ -20,6 +20,7 @@ public:
 	virtual bool doesUserExist(std::string username);
 	virtual void signUpUser(std::string username, std::string password, std::string email);
 	virtual bool authUser(std::string username, std::string password);
+	virtual std::unordered_map<std::string, std::unordered_map<int, int>> getAllScores();
 
 private:
 	sqlite3* m_db;

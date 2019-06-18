@@ -49,6 +49,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -71,6 +73,9 @@
       <DependentUpon>CreateRoomDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\CreateRoomDialogViewModel.cs" />
+    <Compile Include="Dialogs\HighscoresDialog.xaml.cs">
+      <DependentUpon>HighscoresDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RoomPreview.xaml.cs">
       <DependentUpon>RoomPreview.xaml</DependentUpon>
     </Compile>
@@ -94,6 +99,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\CreateRoomDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\HighscoresDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

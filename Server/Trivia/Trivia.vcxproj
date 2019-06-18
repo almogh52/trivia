@@ -135,6 +135,7 @@
     <ClInclude Include="get_rooms_response.h" />
     <ClInclude Include="highscore.h" />
     <ClInclude Include="highscore_response.h" />
+    <ClInclude Include="highscore_table.h" />
     <ClInclude Include="join_room_request.h" />
     <ClInclude Include="join_room_response.h" />
     <ClInclude Include="json.hpp" />
@@ -166,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="communicator.cpp" />
     <ClCompile Include="database.cpp" />
+    <ClCompile Include="highscore_table.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_request_handler.cpp" />

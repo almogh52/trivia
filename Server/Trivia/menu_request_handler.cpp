@@ -8,20 +8,21 @@
 #include "join_room_response.h"
 #include "create_room_reqeust.h"
 #include "create_room_response.h"
+#include "highscore_response.h"
 
 #include "response_status.h"
 #include "json_request_packet_deserializer.hpp"
 #include "json_response_packet_serializer.hpp"
 #include "request_handler_factory.h"
 
-MenuRequestHandler::MenuRequestHandler(LoggedUser& user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory)
-    : m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+MenuRequestHandler::MenuRequestHandler(LoggedUser& user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<HighscoreTable> highscoreTable, std::shared_ptr<RequestHandlerFactory> handlerFactory)
+    : m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory), m_highscoreTable(highscoreTable)
 {
 }
 
 bool MenuRequestHandler::isRequestRelevant(const Request & req) const
 {
-    return req.id == LOGOUT_REQUEST || req.id == GET_ROOMS_REQUEST || req.id == GET_PLAYERS_IN_ROOM_REQUEST || req.id == JOIN_ROOM_REQUEST || req.id == CREATE_ROOM_REQUEST;
+    return req.id == LOGOUT_REQUEST || req.id == GET_ROOMS_REQUEST || req.id == GET_PLAYERS_IN_ROOM_REQUEST || req.id == JOIN_ROOM_REQUEST || req.id == CREATE_ROOM_REQUEST || req.id == GET_HIGHSCORES_REQUEST;
 }
 
 RequestResult MenuRequestHandler::handleRequest(const Request & req) const
@@ -48,6 +49,10 @@ RequestResult MenuRequestHandler::handleRequest(const Request & req) const
 
 	case CREATE_ROOM_REQUEST:
 		res = createRoom(req);
+		break;
+
+	case GET_HIGHSCORES_REQUEST:
+		res = getHighscores(req);
 		break;
     }
 
@@ -162,6 +167,28 @@ RequestResult MenuRequestHandler::createRoom(const Request & req) const
 	// Serialize the new packet and set the next handler
 	res.newHandler = nullptr;
 	res.response = JsonResponsePacketSerializer::SerializePacket(createRes);
+
+	return res;
+}
+
+RequestResult MenuRequestHandler::getHighscores(const Request & req) const
+{
+	HighscoreResponse highscoreRes;
+
+	RequestResult res;
+
+	try {
+		// Try to get the highscores
+		highscoreRes.highscores = m_highscoreTable->getHighscores();
+		highscoreRes.status = SUCCESS;
+	}
+	catch (...) {
+		highscoreRes.status = ERROR;
+	}
+
+	// Serialize the new packet and set the next handler
+	res.newHandler = nullptr;
+	res.response = JsonResponsePacketSerializer::SerializePacket(highscoreRes);
 
 	return res;
 }
