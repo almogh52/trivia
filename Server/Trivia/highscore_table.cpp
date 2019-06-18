@@ -1,7 +1,6 @@
 #include "highscore_table.h"
 
 #include <algorithm>
-#include <iostream>
 
 HighscoreTable::HighscoreTable(std::shared_ptr<IDatabase> database) : m_database(database)
 {

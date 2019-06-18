@@ -373,8 +373,6 @@ namespace TriviaClient
                 buf = await Client.Recv();
                 res = JsonConvert.DeserializeObject<HighscoreResponse>(Encoding.UTF8.GetString(buf));
 
-                Debug.WriteLine(Encoding.UTF8.GetString(buf));
-
                 // If joined room successfully, show it
                 if (res.status == 0)
                 {
@@ -384,8 +382,6 @@ namespace TriviaClient
                         foreach (Highscore score in res.highscores)
                         {
                             dialog.Highscores.Add(new Dialogs.HighscorePreview { Name = score.name, Score = score.score });
-
-                            Debug.WriteLine(score.name);
                         }
                     }
 
