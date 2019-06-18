@@ -6,6 +6,9 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 {
     RoomData roomMetadata;
 
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
     for (unsigned int i = 0; i <= m_rooms.size(); i++)
     {	
 		try {
@@ -19,6 +22,9 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 			break;
 		}
     }
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
 
     // Set the room's metadata
     roomMetadata.name = roomName;
@@ -35,46 +41,88 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 
 bool RoomManager::deleteRoom(unsigned int roomId)
 {
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
     // Try to delete the room
     if (!m_rooms.erase(roomId))
     {
 		return false;
     }
 
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
     return true;
 }
 
 bool RoomManager::joinRoom(const LoggedUser& user, unsigned int roomId)
 {
+	bool success;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
 	try {
-		return m_rooms.at(roomId).addUser(user);
+		// Try to add the user to the room
+		success = m_rooms.at(roomId).addUser(user);
 	}
 	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
 		throw Exception("No room with the id " + std::to_string(roomId));
 	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return success;
 }
 
-bool RoomManager::getRoomState(unsigned int roomId) const
+bool RoomManager::getRoomState(unsigned int roomId)
 {
+	bool isActive;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
     try {
-		return m_rooms.at(roomId).getMetadata().isActive;
+		isActive = m_rooms.at(roomId).getMetadata().isActive;
     }
     catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
 		throw Exception("No room with the id " + std::to_string(roomId));
     }
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return isActive;
 }
 
-std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId) const
+std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId)
 {
 	std::vector<std::string> players;
 	std::vector<LoggedUser> users;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
 
 	try {
 		users = m_rooms.at(roomId).getAllUsers();
 	}
 	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
 		throw Exception("No room with the id " + std::to_string(roomId));
 	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
 
 	// For each user get it's name
 	for (LoggedUser& user : users)
@@ -85,9 +133,12 @@ std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId) cons
 	return players;
 }
 
-std::vector<RoomData> RoomManager::getRooms() const
+std::vector<RoomData> RoomManager::getRooms()
 {
     std::vector<RoomData> rooms;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
 
     // For each room insert it's room metadata to the rooms vector
     for (auto& roomPair : m_rooms)
@@ -95,6 +146,9 @@ std::vector<RoomData> RoomManager::getRooms() const
 		// Get the data of the room and insert it to the list of rooms
 		rooms.push_back(roomPair.second.getMetadata());
     }
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
 
     return rooms;
 }
