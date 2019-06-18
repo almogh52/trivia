@@ -36,10 +36,10 @@
                                 <DataTemplate>
                                     <StackPanel>
                                         <TextBlock
-                                FontWeight="Bold"
-                                Text="{Binding name}" />
+                                            FontWeight="Bold"
+                                            Text="{Binding name}" />
                                         <TextBlock
-                                Text="{Binding id, StringFormat='Room #{0}'}" />
+                                            Text="{Binding id, StringFormat='Room #{0}'}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
@@ -54,25 +54,25 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <Button x:Name="createButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Click="createButton_Click">
+                        <Button x:Name="createButton" ToolTip="Create New Room" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Click="createButton_Click">
                             <materialDesign:PackIcon
                             Kind="NewBox"
                             Height="30"
                             Width="30" />
                         </Button>
-                        <Button x:Name="refreshButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Click="refreshButton_Click">
+                        <Button x:Name="refreshButton" ToolTip="Refresh Rooms" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Click="refreshButton_Click">
                             <materialDesign:PackIcon
                             Kind="Refresh"
                             Height="30"
                             Width="30" />
                         </Button>
-                        <Button x:Name="logoutButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Grid.Row="1" Click="logoutButton_Click">
+                        <Button x:Name="logoutButton" ToolTip="Logout" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Grid.Row="1" Click="logoutButton_Click">
                             <materialDesign:PackIcon
                             Kind="Logout"
                             Height="30"
                             Width="30" />
                         </Button>
-                        <Button x:Name="highscoresButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="0" Grid.Row="1">
+                        <Button x:Name="highscoresButton" ToolTip="Show Highscores" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="0" Grid.Row="1">
                             <materialDesign:PackIcon
                             Kind="Stars"
                             Height="30"
