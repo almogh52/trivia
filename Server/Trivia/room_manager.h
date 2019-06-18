@@ -18,6 +18,8 @@ public:
 	std::vector<std::string> getPlayersInRoom(unsigned int roomId);
     std::vector<RoomData> getRooms();
 
+	Room getRoom(unsigned int roomId);
+
 private:
     std::unordered_map<unsigned int, Room> m_rooms;
 	std::mutex roomsMutex;

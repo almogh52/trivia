@@ -147,6 +147,9 @@
     <ClInclude Include="leave_room_response.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="room_admin_request_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
@@ -189,6 +192,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="highscore_table.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="room_admin_request_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

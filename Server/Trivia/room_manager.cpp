@@ -152,3 +152,22 @@ std::vector<RoomData> RoomManager::getRooms()
 
     return rooms;
 }
+
+Room RoomManager::getRoom(unsigned int roomId)
+{
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		return m_rooms.at(roomId);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+}
