@@ -33,6 +33,7 @@ namespace TriviaClient
     public partial class RoomPreview : UserControl
     {
         public RoomPreviewData Data { get; set; }
+        public Action<int> JoinRoom { get; set; }
 
         public RoomPreview()
         {
@@ -44,6 +45,12 @@ namespace TriviaClient
         public void Update()
         {
             this.DataContext = Data;
+        }
+
+        private void joinButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Try to join the room
+            this.JoinRoom(Data.Id);
         }
     }
 }

@@ -77,6 +77,18 @@ namespace TriviaClient
         public List<string> players;
     }
 
+    public struct JoinRoomRequest
+    {
+        public const int CODE = 6;
+
+        public int roomId;
+    }
+
+    public struct JoinRoomResponse
+    {
+        public int status;
+    }
+
     /// <summary>
     /// Interaction logic for RoomsWindow.xaml
     /// </summary>
@@ -87,6 +99,47 @@ namespace TriviaClient
         public RoomsWindow()
         {
             InitializeComponent();
+
+            roomPreview.JoinRoom = JoinRoom;
+        }
+
+        private async void JoinRoom(int roomId)
+        {
+            JoinRoomRequest req = new JoinRoomRequest
+            {
+                roomId = roomId
+            };
+
+            byte[] buf = null;
+            JoinRoomResponse res;
+
+            await DialogHost.Show(new Dialogs.LoadingDialog(), async delegate (object s, DialogOpenedEventArgs eventArgs)
+            {
+                // If already got a result
+                if (buf != null)
+                {
+                    return;
+                }
+
+                // Send the join room request to the server
+                await Client.Send(JoinRoomRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
+
+                // Get the response from the server and deserialize it
+                buf = await Client.Recv();
+                res = JsonConvert.DeserializeObject<JoinRoomResponse>(Encoding.UTF8.GetString(buf));
+
+                // If joined room successfully, show it
+                if (res.status == 0)
+                {
+                    // Close the dialog
+                    eventArgs.Session.Close();
+                }
+                else
+                {
+                    // Show the error dialog
+                    eventArgs.Session.UpdateContent((new Dialogs.MessageDialog { Message = "Unable to join the wanted room!" }));
+                }
+            });
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
