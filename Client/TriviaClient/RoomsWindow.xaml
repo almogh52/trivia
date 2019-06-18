@@ -31,7 +31,7 @@
                         <Image Source="trivia-title.png" Margin="4"/>
                     </Border>
                     <Border Grid.Row="1" BorderThickness="0,0,0,1" BorderBrush="DarkGray">
-                        <ListBox x:Name="roomsList">
+                        <ListBox x:Name="roomsList" SelectionChanged="roomsList_SelectionChanged">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
@@ -81,6 +81,7 @@
                     </Grid>
                 </Grid>
             </materialDesign:Card>
+            <local:RoomPreview x:Name="roomPreview" Grid.Column="1" />
         </Grid>
     </materialDesign:DialogHost>
 </Window>

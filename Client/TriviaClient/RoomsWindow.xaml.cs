@@ -64,6 +64,19 @@ namespace TriviaClient
         public int status;
     }
 
+    public struct GetPlayersInRoomRequest
+    {
+        public const int CODE = 4;
+
+        public int roomId;
+    }
+
+    public struct GetPlayersInRoomResponse
+    {
+        public int status;
+        public List<string> players;
+    }
+
     /// <summary>
     /// Interaction logic for RoomsWindow.xaml
     /// </summary>
@@ -167,8 +180,6 @@ namespace TriviaClient
                 buf = await Client.Recv();
                 createRoomResponse = JsonConvert.DeserializeObject<CreateRoomResponse>(Encoding.UTF8.GetString(buf));
 
-                Debug.WriteLine(Encoding.UTF8.GetString(buf));
-
                 // If the room creation failed, print message
                 if (createRoomResponse.status == 1)
                 {
@@ -223,6 +234,54 @@ namespace TriviaClient
 
             // Close the rooms window
             this.Close();
+        }
+
+        private async void roomsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (roomsList.SelectedItem == null)
+            {
+                return;
+            }
+
+            RoomData roomData = (RoomData)roomsList.SelectedItem;
+            RoomPreviewData previewData = new RoomPreviewData
+            {
+                Name = roomData.name,
+                Id = roomData.id,
+                MaxPlayers = roomData.maxPlayers,
+                TimePerQuestion = roomData.timePerQuestion,
+                QuestionCount = roomData.questionCount,
+                IsActive = roomData.isActive
+            };
+
+            byte[] buf;
+            GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { roomId = roomData.id };
+            GetPlayersInRoomResponse res;
+
+            // Set the get players in room request to the server
+            await Client.Send(GetPlayersInRoomRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
+
+            // Get the response from the server and deserialize it
+            buf = await Client.Recv();
+            res = JsonConvert.DeserializeObject<GetPlayersInRoomResponse>(Encoding.UTF8.GetString(buf));
+
+            // If an error occurred, show error
+            if (res.status == 1)
+            {
+                // Show dialog error
+                await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to get the players in the requested roon" });
+            } else
+            {
+                // Set the players in the room
+                previewData.Players = res.players;
+
+                // Check if the room is joinable
+                previewData.IsJoinable = (previewData.IsActive && res.players.Count < previewData.MaxPlayers);
+
+                // Set the new data of the room preview
+                roomPreview.Data = previewData;
+                roomPreview.Update();
+            }
         }
     }
 }

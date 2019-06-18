@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="TriviaClient.RoomPreview"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TriviaClient"
+             mc:Ignorable="d" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+             TextElement.FontWeight="Regular"
+             TextElement.FontSize="13"
+             TextOptions.TextFormattingMode="Ideal"
+             TextOptions.TextRenderingMode="Auto"
+             Background="{DynamicResource MaterialDesignPaper}"
+             FontFamily="{DynamicResource MaterialDesignFont}"
+             d:DesignHeight="569" d:DesignWidth="792">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="85*"/>
+            <RowDefinition Height="65*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="360*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="20*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200*"/>
+            <ColumnDefinition Width="325*"/>
+            <ColumnDefinition Width="200*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Style="{StaticResource MaterialDesignDisplay1TextBlock}" Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock
+            Grid.Row="2"
+            Grid.Column="1"
+            Style="{StaticResource MaterialDesignTitleTextBlock}" Text="{Binding Id, StringFormat='Room #{0}'}" VerticalAlignment="Center"/>
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="1"
+            Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding MaxPlayers, StringFormat='Max Players: {0}'}" VerticalAlignment="Center"/>
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="1"
+            Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding TimePerQuestion, StringFormat='Time Per Question: {0}'}" VerticalAlignment="Center"/>
+        <TextBlock
+            Grid.Row="5"
+            Grid.Column="1"
+            Style="{StaticResource MaterialDesignSubheadingTextBlock}" Text="{Binding QuestionCount, StringFormat='Amount of Questions: {0}'}" VerticalAlignment="Center"/>
+        <TextBlock
+            Grid.Row="6"
+            Grid.Column="1" VerticalAlignment="Center">
+            <TextBlock.Style>
+                <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource MaterialDesignSubheadingTextBlock}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsActive}" Value="False">
+                            <Setter Property="Text" Value="Status: Game in Progress"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=IsActive}" Value="True">
+                            <Setter Property="Text" Value="Status: Awaiting for Players"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock Grid.Column="1" Grid.Row="8" Style="{StaticResource MaterialDesignBody2TextBlock}">Users:</TextBlock>
+        <materialDesign:Card
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+            materialDesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="1" Grid.Row="9">
+            <ListBox ItemsSource="{Binding Players}"/>
+        </materialDesign:Card>
+        <Button
+            Grid.Column="1"
+            Grid.Row="11"
+            Style="{StaticResource MaterialDesignRaisedDarkButton}"
+            Width="100"
+            IsEnabled="{Binding IsJoinable}">
+            Join
+        </Button>
+    </Grid>
+</UserControl>
