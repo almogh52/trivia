@@ -115,7 +115,6 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 			// Get the request id which is 1 byte
 			bytesRecv = recv(clientSocket, (char *)&(req.id), 1, 0);
-			std::cout << req.id << std::endl;
 			if (bytesRecv <= 0)
 			{
 				break;
@@ -123,7 +122,6 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 			// Get the message size
 			bytesRecv = recv(clientSocket, (char *)&bufferSize, 4, 0);
-			std::cout << bufferSize << std::endl;
 			if (bytesRecv <= 0)
 			{
 				break;
@@ -144,7 +142,6 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 			// Set EOF
 			buffer.get()[bufferSize] = 0;
-			std::cout << buffer << std::endl;
 
 			// Copy buffer contents to the request vector buffer
 			req.buffer.assign(buffer.get(), buffer.get() + bufferSize + 1);

@@ -54,6 +54,16 @@ namespace TriviaClient
         public int roomId;
     }
 
+    public struct LogoutRequest
+    {
+        public const int CODE = 2;
+    }
+
+    public struct LogoutResponse
+    {
+        public int status;
+    }
+
     /// <summary>
     /// Interaction logic for RoomsWindow.xaml
     /// </summary>
@@ -191,6 +201,28 @@ namespace TriviaClient
         private async void refreshButton_Click(object sender, RoutedEventArgs e)
         {
             await UpdateRooms();
+        }
+
+        private async void logoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] buf;
+            LogoutResponse res;
+
+            // Set the logout request to the server
+            await Client.Send(LogoutRequest.CODE, new byte[0]);
+
+            // Get the response from the server and deserialize it
+            buf = await Client.Recv();
+            res = JsonConvert.DeserializeObject<LogoutResponse>(Encoding.UTF8.GetString(buf));
+
+            // Create an auth window and show it
+            new AuthWindow()
+            {
+                Connected = true
+            }.Show();
+
+            // Close the rooms window
+            this.Close();
         }
     }
 }

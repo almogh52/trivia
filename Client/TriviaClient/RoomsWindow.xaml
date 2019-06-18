@@ -25,7 +25,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="52*"/>
                         <RowDefinition Height="423*"/>
-                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="120"/>
                     </Grid.RowDefinitions>
                     <Border BorderThickness="0,0,0,1" BorderBrush="DarkGray">
                         <Image Source="trivia-title.png" Margin="4"/>
@@ -50,6 +50,10 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
                         <Button x:Name="createButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Click="createButton_Click">
                             <materialDesign:PackIcon
                             Kind="NewBox"
@@ -59,6 +63,18 @@
                         <Button x:Name="refreshButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Click="refreshButton_Click">
                             <materialDesign:PackIcon
                             Kind="Refresh"
+                            Height="30"
+                            Width="30" />
+                        </Button>
+                        <Button x:Name="logoutButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="1" Grid.Row="1" Click="logoutButton_Click">
+                            <materialDesign:PackIcon
+                            Kind="Logout"
+                            Height="30"
+                            Width="30" />
+                        </Button>
+                        <Button x:Name="highscoresButton" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}" Height="48" Width="48" Grid.Column="0" Grid.Row="1">
+                            <materialDesign:PackIcon
+                            Kind="Stars"
                             Height="30"
                             Width="30" />
                         </Button>
