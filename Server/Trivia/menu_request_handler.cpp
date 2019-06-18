@@ -131,10 +131,14 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	JoinRoomResponse joinRes;
 
 	RequestResult res;
+	Room room;
 
 	try {
 		// Try to join the room
 		m_roomManager->joinRoom(m_user, joinReq.roomId);
+
+		// Get the room object
+		room = m_roomManager->getRoom(joinReq.roomId);
 		joinRes.status = SUCCESS;
 	}
 	catch (...) {
@@ -142,7 +146,7 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	}
 
 	// Serialize the new packet and set the next handler
-	res.newHandler = nullptr;
+	res.newHandler = m_handlerFactory->createRoomMemberRequestHandler(m_user, room);
 	res.response = JsonResponsePacketSerializer::SerializePacket(joinRes);
 
 	return res;

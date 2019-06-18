@@ -14,6 +14,12 @@ std::shared_ptr<MenuRequestHandler> RequestHandlerFactory::createMenuRequestHand
     return std::shared_ptr<MenuRequestHandler>(new MenuRequestHandler(user, m_roomManager, m_highscoreTable, shared_from_this()));
 }
 
+
+std::shared_ptr<RoomMemberRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(const LoggedUser & user, const Room & room)
+{
+	return std::shared_ptr<RoomMemberRequestHandler>(new RoomMemberRequestHandler(room, user, m_roomManager, shared_from_this()));
+}
+
 std::shared_ptr<RoomAdminRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(const LoggedUser & user, const Room & room)
 {
 	return std::shared_ptr<RoomAdminRequestHandler>(new RoomAdminRequestHandler(room, user, m_roomManager, shared_from_this()));

@@ -3,6 +3,7 @@
 #include "login_request_handler.h"
 #include "menu_request_handler.h"
 #include "room_admin_request_handler.h"
+#include "room_member_request_handler.h"
 
 #include "database_interface.h"
 
@@ -20,6 +21,7 @@ public:
     std::shared_ptr<LoginRequestHandler> createLoginRequestHandler();
     std::shared_ptr<MenuRequestHandler> createMenuRequestHandler(const LoggedUser& user);
 	std::shared_ptr<RoomAdminRequestHandler> createRoomAdminRequestHandler(const LoggedUser& user, const Room& room);
+	std::shared_ptr<RoomMemberRequestHandler> createRoomMemberRequestHandler(const LoggedUser& user, const Room& room);
     
     std::shared_ptr<LoginManager> getLoginManager();
 
