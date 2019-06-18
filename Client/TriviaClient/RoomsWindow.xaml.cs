@@ -139,6 +139,9 @@ namespace TriviaClient
             // Show the create room dialog
             await DialogHost.Show(createRoomDialog, async delegate (object s1, DialogClosingEventArgs eventArgs)
             {
+                // If the dialog is canceled ignore
+                if (eventArgs.Parameter != null && (bool)eventArgs.Parameter == false) return;
+
                 // If the create room failed, return
                 if (createRoomResponse.status == 1)
                 {
