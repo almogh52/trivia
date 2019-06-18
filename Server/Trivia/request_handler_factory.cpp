@@ -15,14 +15,14 @@ std::shared_ptr<MenuRequestHandler> RequestHandlerFactory::createMenuRequestHand
 }
 
 
-std::shared_ptr<RoomMemberRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(const LoggedUser & user, const Room & room)
+std::shared_ptr<RoomMemberRequestHandler> RequestHandlerFactory::createRoomMemberRequestHandler(const LoggedUser & user, const int roomId)
 {
-	return std::shared_ptr<RoomMemberRequestHandler>(new RoomMemberRequestHandler(room, user, m_roomManager, shared_from_this()));
+	return std::shared_ptr<RoomMemberRequestHandler>(new RoomMemberRequestHandler(roomId, user, m_roomManager, shared_from_this()));
 }
 
-std::shared_ptr<RoomAdminRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(const LoggedUser & user, const Room & room)
+std::shared_ptr<RoomAdminRequestHandler> RequestHandlerFactory::createRoomAdminRequestHandler(const LoggedUser & user, const int roomId)
 {
-	return std::shared_ptr<RoomAdminRequestHandler>(new RoomAdminRequestHandler(room, user, m_roomManager, shared_from_this()));
+	return std::shared_ptr<RoomAdminRequestHandler>(new RoomAdminRequestHandler(roomId, user, m_roomManager, shared_from_this()));
 }
 
 std::shared_ptr<LoginManager> RequestHandlerFactory::getLoginManager()

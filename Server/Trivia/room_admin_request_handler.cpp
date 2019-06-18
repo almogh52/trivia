@@ -8,8 +8,8 @@
 
 #include "request_handler_factory.h"
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(const Room & room, const LoggedUser & user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory)
-	: m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+RoomAdminRequestHandler::RoomAdminRequestHandler(const int & roomId, const LoggedUser & user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<RequestHandlerFactory> handlerFactory)
+	: m_roomId(roomId), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
 {
 }
 
@@ -40,7 +40,7 @@ void RoomAdminRequestHandler::disconnect() const
 {
 	try {
 		// Try to delete the room
-		m_roomManager->deleteRoom(m_room.getMetadata().id);
+		m_roomManager->deleteRoom(m_roomId);
 	}
 	catch (...) {}
 }
@@ -53,7 +53,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(const Request & req) const
 
 	try {
 		// Try to delete the room
-		m_roomManager->deleteRoom(m_room.getMetadata().id);
+		m_roomManager->deleteRoom(m_roomId);
 		closeRoomResponse.status = SUCCESS;
 	}
 	catch (...) {
@@ -71,18 +71,22 @@ RequestResult RoomAdminRequestHandler::getRoomState(const Request & req) const
 {
 	RequestResult res;
 
+	RoomData roomData;
 	GetRoomStateResponse getRoomStateResponse;
 
-	// Set the details of the room
-	getRoomStateResponse.answerTimeout = m_room.getMetadata().timePerQuestion;
-	getRoomStateResponse.questionCount = m_room.getMetadata().questionCount;
-
 	try {
+		// Get the details of the room
+		roomData = m_roomManager->getRoomData(m_roomId);
+
+		// Set the details of the room
+		getRoomStateResponse.answerTimeout = roomData.timePerQuestion;
+		getRoomStateResponse.questionCount = roomData.questionCount;
+
 		// Get the players of the room
-		getRoomStateResponse.players = m_roomManager->getPlayersInRoom(m_room.getMetadata().id);
+		getRoomStateResponse.players = m_roomManager->getPlayersInRoom(m_roomId);
 
 		// Check if the game in the room has begun
-		getRoomStateResponse.hasGameBegun = m_roomManager->getRoomState(m_room.getMetadata().id);
+		getRoomStateResponse.hasGameBegun = m_roomManager->getRoomState(m_roomId);
 		getRoomStateResponse.status = SUCCESS;
 	}
 	catch (...) {

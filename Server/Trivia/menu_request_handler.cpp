@@ -131,14 +131,10 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	JoinRoomResponse joinRes;
 
 	RequestResult res;
-	Room room;
 
 	try {
 		// Try to join the room
 		m_roomManager->joinRoom(m_user, joinReq.roomId);
-
-		// Get the room object
-		room = m_roomManager->getRoom(joinReq.roomId);
 		joinRes.status = SUCCESS;
 	}
 	catch (...) {
@@ -146,7 +142,7 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	}
 
 	// Serialize the new packet and set the next handler
-	res.newHandler = m_handlerFactory->createRoomMemberRequestHandler(m_user, room);
+	res.newHandler = m_handlerFactory->createRoomMemberRequestHandler(m_user, joinReq.roomId);
 	res.response = JsonResponsePacketSerializer::SerializePacket(joinRes);
 
 	return res;
@@ -158,14 +154,10 @@ RequestResult MenuRequestHandler::createRoom(const Request & req) const
 	CreateRoomResponse createRes;
 
 	RequestResult res;
-	Room room;
 
 	try {
 		// Try to join the room
 		createRes.roomId = m_roomManager->createRoom(m_user, createReq.roomName, createReq.maxPlayers, createReq.answerTimeout, createReq.questionCount);
-		
-		// Get the room object
-		room = m_roomManager->getRoom(createRes.roomId);
 		createRes.status = SUCCESS;
 	}
 	catch (...) {
@@ -173,7 +165,7 @@ RequestResult MenuRequestHandler::createRoom(const Request & req) const
 	}
 
 	// Serialize the new packet and set the next handler
-	res.newHandler = m_handlerFactory->createRoomAdminRequestHandler(m_user, room);
+	res.newHandler = m_handlerFactory->createRoomAdminRequestHandler(m_user, createRes.roomId);
 	res.response = JsonResponsePacketSerializer::SerializePacket(createRes);
 
 	return res;

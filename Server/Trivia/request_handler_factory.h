@@ -20,8 +20,8 @@ public:
 
     std::shared_ptr<LoginRequestHandler> createLoginRequestHandler();
     std::shared_ptr<MenuRequestHandler> createMenuRequestHandler(const LoggedUser& user);
-	std::shared_ptr<RoomAdminRequestHandler> createRoomAdminRequestHandler(const LoggedUser& user, const Room& room);
-	std::shared_ptr<RoomMemberRequestHandler> createRoomMemberRequestHandler(const LoggedUser& user, const Room& room);
+	std::shared_ptr<RoomAdminRequestHandler> createRoomAdminRequestHandler(const LoggedUser& user, const int roomId);
+	std::shared_ptr<RoomMemberRequestHandler> createRoomMemberRequestHandler(const LoggedUser& user, const int roomId);
     
     std::shared_ptr<LoginManager> getLoginManager();
 
