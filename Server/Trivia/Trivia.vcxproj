@@ -131,6 +131,8 @@
     <ClInclude Include="database_interface.h" />
     <ClInclude Include="error_response.h" />
     <ClInclude Include="exception.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="game_data.h" />
     <ClInclude Include="get_game_results_response.h" />
     <ClInclude Include="get_players_in_room_request.h" />
     <ClInclude Include="get_players_in_room_response.h" />
@@ -154,6 +156,7 @@
     <ClInclude Include="logout_response.h" />
     <ClInclude Include="menu_request_handler.h" />
     <ClInclude Include="player_results.h" />
+    <ClInclude Include="question.h" />
     <ClInclude Include="room.h" />
     <ClInclude Include="room_admin_request_handler.h" />
     <ClInclude Include="room_data.h" />
@@ -178,10 +181,12 @@
   <ItemGroup>
     <ClCompile Include="communicator.cpp" />
     <ClCompile Include="database.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="highscore_table.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu_request_handler.cpp" />
+    <ClCompile Include="question.cpp" />
     <ClCompile Include="request_handler_factory.cpp" />
     <ClCompile Include="room.cpp" />
     <ClCompile Include="room_admin_request_handler.cpp" />
