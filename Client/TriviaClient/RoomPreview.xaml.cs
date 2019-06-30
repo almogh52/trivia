@@ -23,7 +23,8 @@ namespace TriviaClient
         public int TimePerQuestion { get; set; }
         public int QuestionCount { get; set; }
         public bool IsActive { get; set; }
-        public bool IsJoinable { get; set; }
+        public string ActionButtonText { get; set; }
+        public bool ActionButtonEnabled { get; set; }
         public List<string> Players { get; set; }
     }
 
@@ -33,7 +34,7 @@ namespace TriviaClient
     public partial class RoomPreview : UserControl
     {
         public RoomPreviewData Data { get; set; }
-        public Action<int> JoinRoom { get; set; }
+        public Action<int> Action { get; set; }
 
         public RoomPreview()
         {
@@ -44,13 +45,13 @@ namespace TriviaClient
 
         public void Update()
         {
-            this.DataContext = Data;
+            DataContext = Data;
         }
 
-        private void joinButton_Click(object sender, RoutedEventArgs e)
+        private void actionButton_Click(object sender, RoutedEventArgs e)
         {
             // Try to join the room
-            this.JoinRoom(Data.Id);
+            Action(Data.Id);
         }
     }
 }

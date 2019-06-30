@@ -29,7 +29,7 @@ bool Room::addUser(const LoggedUser & user)
     return true;
 }
 
-bool Room::removeUser(LoggedUser & user)
+bool Room::removeUser(const LoggedUser & user)
 {
     auto userIterator = find(m_users.begin(), m_users.end(), user);
 

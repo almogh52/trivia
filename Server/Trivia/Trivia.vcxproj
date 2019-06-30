@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="close_room_response.h" />
     <ClInclude Include="communicator.h" />
     <ClInclude Include="create_room_reqeust.h" />
     <ClInclude Include="create_room_response.h" />
@@ -133,6 +134,7 @@
     <ClInclude Include="get_players_in_room_request.h" />
     <ClInclude Include="get_players_in_room_response.h" />
     <ClInclude Include="get_rooms_response.h" />
+    <ClInclude Include="get_room_state_response.h" />
     <ClInclude Include="highscore.h" />
     <ClInclude Include="highscore_response.h" />
     <ClInclude Include="highscore_table.h" />
@@ -141,6 +143,7 @@
     <ClInclude Include="json.hpp" />
     <ClInclude Include="json_request_packet_deserializer.hpp" />
     <ClInclude Include="json_response_packet_serializer.hpp" />
+    <ClInclude Include="leave_room_response.h" />
     <ClInclude Include="logged_user.h" />
     <ClInclude Include="login_manager.h" />
     <ClInclude Include="login_request.h" />
@@ -149,8 +152,11 @@
     <ClInclude Include="logout_response.h" />
     <ClInclude Include="menu_request_handler.h" />
     <ClInclude Include="room.h" />
+    <ClInclude Include="room_admin_request_handler.h" />
     <ClInclude Include="room_data.h" />
     <ClInclude Include="room_manager.h" />
+    <ClInclude Include="room_member_request_handler.h" />
+    <ClInclude Include="start_game_response.h" />
     <ClInclude Include="status_response.h" />
     <ClInclude Include="request.h" />
     <ClInclude Include="request_handler_factory.h" />
@@ -173,7 +179,9 @@
     <ClCompile Include="menu_request_handler.cpp" />
     <ClCompile Include="request_handler_factory.cpp" />
     <ClCompile Include="room.cpp" />
+    <ClCompile Include="room_admin_request_handler.cpp" />
     <ClCompile Include="room_manager.cpp" />
+    <ClCompile Include="room_member_request_handler.cpp" />
     <ClCompile Include="server.cpp" />
     <ClCompile Include="sqlite3.c" />
     <ClCompile Include="WSAInitializer.cpp" />

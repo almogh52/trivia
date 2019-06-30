@@ -12,7 +12,7 @@ class MenuRequestHandler :
     public IRequestHandler
 {
 public:
-	MenuRequestHandler(LoggedUser &user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<HighscoreTable> highscoreTable, std::shared_ptr<RequestHandlerFactory> handlerFactory);
+	MenuRequestHandler(const LoggedUser &user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<HighscoreTable> highscoreTable, std::shared_ptr<RequestHandlerFactory> handlerFactory);
     
     virtual bool isRequestRelevant(const Request& req) const;
     virtual RequestResult handleRequest(const Request& req) const;

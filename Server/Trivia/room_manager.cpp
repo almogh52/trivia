@@ -23,9 +23,6 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 		}
     }
 
-	// Unlock the room mutex
-	roomsMutex.unlock();
-
     // Set the room's metadata
     roomMetadata.name = roomName;
     roomMetadata.maxPlayers = maxPlayers;
@@ -35,6 +32,12 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 
     // Save the new room in the map of rooms
     m_rooms[roomMetadata.id] = Room(roomMetadata);
+
+	// Add the admin as a user in the room
+	m_rooms[roomMetadata.id].addUser(user);
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
 
 	return roomMetadata.id;
 }
@@ -66,6 +69,30 @@ bool RoomManager::joinRoom(const LoggedUser& user, unsigned int roomId)
 	try {
 		// Try to add the user to the room
 		success = m_rooms.at(roomId).addUser(user);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return success;
+}
+
+bool RoomManager::leaveRoom(const LoggedUser& user, unsigned int roomId)
+{
+	bool success;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		// Try to remove the user to the room
+		success = m_rooms.at(roomId).removeUser(user);
 	}
 	catch (...) {
 		// Unlock the room mutex
@@ -151,4 +178,27 @@ std::vector<RoomData> RoomManager::getRooms()
 	roomsMutex.unlock();
 
     return rooms;
+}
+
+RoomData RoomManager::getRoomData(unsigned int roomId)
+{
+	RoomData roomData;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		roomData = m_rooms.at(roomId).getMetadata();
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return roomData;
 }

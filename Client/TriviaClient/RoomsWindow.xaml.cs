@@ -117,7 +117,7 @@ namespace TriviaClient
         {
             InitializeComponent();
 
-            roomPreview.JoinRoom = JoinRoom;
+            roomPreview.Action = JoinRoom;
         }
 
         private async void JoinRoom(int roomId)
@@ -150,6 +150,13 @@ namespace TriviaClient
                 {
                     // Close the dialog
                     eventArgs.Session.Close();
+
+                    // Close this window and show the room member window
+                    new RoomMemberWindow
+                    {
+                        room = Rooms[roomsList.SelectedIndex]
+                    }.Show();
+                    Close();
                 }
                 else
                 {
@@ -262,24 +269,24 @@ namespace TriviaClient
                     // Set the current dialog as an error dialog
                     eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "An error occurred during creating the room!\nPlease try again later." });
                     return;
+                } else
+                {
+                    RoomData room = new RoomData
+                    {
+                        id = createRoomResponse.roomId,
+                        name = viewModel.Name,
+                        maxPlayers = viewModel.MaxPlayers,
+                        questionCount = viewModel.QuestionCount,
+                        timePerQuestion = viewModel.TimePerQuestion
+                    };
+
+                    // Show the room admin window
+                    new RoomAdminWindow { room = room }.Show();
+
+                    // Close this window
+                    Close();
                 }
             });
-
-            // If no error occurred, add the room to the list of rooms
-            if (createRoomResponse.status == 0)
-            {
-                Rooms.Add(new RoomData
-                {
-                    id = createRoomResponse.roomId,
-                    name = viewModel.Name,
-                    maxPlayers = viewModel.MaxPlayers,
-                    timePerQuestion = viewModel.TimePerQuestion,
-                    questionCount = viewModel.QuestionCount
-                });
-
-                // Re-set the list to apply changes
-                roomsList.ItemsSource = Rooms;
-            }
         }
 
         private async void refreshButton_Click(object sender, RoutedEventArgs e)
@@ -313,6 +320,10 @@ namespace TriviaClient
         {
             if (roomsList.SelectedItem == null)
             {
+                // Set an empty data in the room preview
+                roomPreview.Data = new RoomPreviewData();
+                roomPreview.Update();
+
                 return;
             }
 
@@ -324,7 +335,8 @@ namespace TriviaClient
                 MaxPlayers = roomData.maxPlayers,
                 TimePerQuestion = roomData.timePerQuestion,
                 QuestionCount = roomData.questionCount,
-                IsActive = roomData.isActive
+                IsActive = roomData.isActive,
+                ActionButtonText = "Join Room"
             };
 
             byte[] buf;
@@ -349,7 +361,7 @@ namespace TriviaClient
                 previewData.Players = res.players;
 
                 // Check if the room is joinable
-                previewData.IsJoinable = (previewData.IsActive && res.players.Count < previewData.MaxPlayers);
+                previewData.ActionButtonEnabled = (previewData.IsActive && res.players.Count < previewData.MaxPlayers);
 
                 // Set the new data of the room preview
                 roomPreview.Data = previewData;

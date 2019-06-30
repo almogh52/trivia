@@ -76,11 +76,17 @@
     <Compile Include="Dialogs\HighscoresDialog.xaml.cs">
       <DependentUpon>HighscoresDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RoomMemberWindow.xaml.cs">
+      <DependentUpon>RoomMemberWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RoomPreview.xaml.cs">
       <DependentUpon>RoomPreview.xaml</DependentUpon>
     </Compile>
     <Compile Include="RoomsWindow.xaml.cs">
       <DependentUpon>RoomsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RoomAdminWindow.xaml.cs">
+      <DependentUpon>RoomAdminWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="AuthWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -122,11 +128,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="RoomMemberWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="RoomPreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RoomsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RoomAdminWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

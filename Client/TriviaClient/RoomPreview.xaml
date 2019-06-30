@@ -75,21 +75,19 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <Separator Grid.Column="1" Grid.Row="5" />
-                <TextBlock Grid.Column="1" Grid.Row="6" Style="{StaticResource MaterialDesignBody2TextBlock}">Users:</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="6" Style="{StaticResource MaterialDesignBody2TextBlock}">Players:</TextBlock>
                 <materialDesign:Card
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2" Grid.Column="1" Grid.Row="7">
                     <ListBox ItemsSource="{Binding Players}"/>
                 </materialDesign:Card>
                 <Button
-                    x:Name="joinButton"
+                    x:Name="actionButton"
                     Grid.Column="1"
                     Grid.Row="9"
                     Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                    Width="100"
-                    IsEnabled="{Binding IsJoinable}" Click="joinButton_Click">
-                    Join
-                </Button>
+                    Width="125"
+                    IsEnabled="{Binding ActionButtonEnabled}" Click="actionButton_Click" Content="{Binding ActionButtonText}"/>
             </Grid>
         </GroupBox>
     </Grid>

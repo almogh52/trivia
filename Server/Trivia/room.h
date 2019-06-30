@@ -12,7 +12,7 @@ public:
 
     std::vector<LoggedUser> getAllUsers() const;
     bool addUser(const LoggedUser &user);
-    bool removeUser(LoggedUser &user);
+    bool removeUser(const LoggedUser &user);
 
     RoomData getMetadata() const;
 
