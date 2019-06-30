@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -46,6 +47,8 @@ namespace TriviaClient
     {
         public RoomData room { get; set; }
 
+        private CancellationTokenSource tokenSource = new CancellationTokenSource();
+
         public RoomAdminWindow()
         {
             InitializeComponent();
@@ -70,6 +73,9 @@ namespace TriviaClient
 
             while (true)
             {
+                // Exit if requested
+                if (tokenSource.IsCancellationRequested) return;
+      
                 // Send the get room state request
                 await Client.Send(GetRoomStateRequest.CODE, new byte[0]);
 
@@ -114,6 +120,9 @@ namespace TriviaClient
 
             // Deserialize the response
             res = JsonConvert.DeserializeObject<CloseRoomResponse>(Encoding.UTF8.GetString(buf));
+
+            // Cancel the background action
+            tokenSource.Cancel();
 
             // Close this window and the rooms window
             new RoomsWindow().Show();
