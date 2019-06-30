@@ -54,7 +54,7 @@ namespace TriviaClient
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Set title
-            Title = $"Trivia - ${room.name} - Room #${room.id}";
+            Title = $"Trivia - {room.name} - Room #{room.id}";
 
             // Set the action handler of the room preview
             roomPreview.Action = CloseRoom;
