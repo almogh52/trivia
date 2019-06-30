@@ -15,20 +15,6 @@ using System.Windows.Shapes;
 
 namespace TriviaClient
 {
-    public struct GetRoomStateRequest
-    {
-        public const int CODE = 10;
-    }
-
-    public struct GetRoomStateResponse
-    {
-        public int status;
-        public bool hasGameBegun;
-        public List<string> players;
-        public int questionCount;
-        public int answerTimeout;
-    }
-
     public struct LeaveRoomRequest
     {
         public const int CODE = 11;
