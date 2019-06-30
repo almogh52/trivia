@@ -9,13 +9,13 @@
 #include "create_room_reqeust.h"
 #include "create_room_response.h"
 #include "highscore_response.h"
-
 #include "response_status.h"
+
 #include "json_request_packet_deserializer.hpp"
 #include "json_response_packet_serializer.hpp"
 #include "request_handler_factory.h"
 
-MenuRequestHandler::MenuRequestHandler(LoggedUser& user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<HighscoreTable> highscoreTable, std::shared_ptr<RequestHandlerFactory> handlerFactory)
+MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, std::shared_ptr<RoomManager> roomManager, std::shared_ptr<HighscoreTable> highscoreTable, std::shared_ptr<RequestHandlerFactory> handlerFactory)
     : m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory), m_highscoreTable(highscoreTable)
 {
 }
@@ -142,7 +142,7 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	}
 
 	// Serialize the new packet and set the next handler
-	res.newHandler = nullptr;
+	res.newHandler = m_handlerFactory->createRoomMemberRequestHandler(m_user, joinReq.roomId);
 	res.response = JsonResponsePacketSerializer::SerializePacket(joinRes);
 
 	return res;
@@ -165,7 +165,7 @@ RequestResult MenuRequestHandler::createRoom(const Request & req) const
 	}
 
 	// Serialize the new packet and set the next handler
-	res.newHandler = nullptr;
+	res.newHandler = m_handlerFactory->createRoomAdminRequestHandler(m_user, createRes.roomId);
 	res.response = JsonResponsePacketSerializer::SerializePacket(createRes);
 
 	return res;

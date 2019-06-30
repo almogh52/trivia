@@ -5,7 +5,7 @@
 using nlohmann::json;
 
 struct GetPlayersInRoomResponse {
-	int status;
+	unsigned int status;
     std::vector<std::string> players;
 };
 

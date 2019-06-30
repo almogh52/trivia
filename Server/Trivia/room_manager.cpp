@@ -80,6 +80,30 @@ bool RoomManager::joinRoom(const LoggedUser& user, unsigned int roomId)
 	return success;
 }
 
+bool RoomManager::leaveRoom(const LoggedUser& user, unsigned int roomId)
+{
+	bool success;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		// Try to remove the user to the room
+		success = m_rooms.at(roomId).removeUser(user);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return success;
+}
+
 bool RoomManager::getRoomState(unsigned int roomId)
 {
 	bool isActive;
@@ -151,4 +175,23 @@ std::vector<RoomData> RoomManager::getRooms()
 	roomsMutex.unlock();
 
     return rooms;
+}
+
+RoomData RoomManager::getRoomData(unsigned int roomId)
+{
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		return m_rooms.at(roomId).getMetadata();
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
 }
