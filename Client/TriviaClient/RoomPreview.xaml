@@ -82,14 +82,12 @@
                     <ListBox ItemsSource="{Binding Players}"/>
                 </materialDesign:Card>
                 <Button
-                    x:Name="joinButton"
+                    x:Name="actionButton"
                     Grid.Column="1"
                     Grid.Row="9"
                     Style="{StaticResource MaterialDesignRaisedDarkButton}"
                     Width="100"
-                    IsEnabled="{Binding IsJoinable}" Click="joinButton_Click">
-                    Join
-                </Button>
+                    IsEnabled="{Binding ActionButtonEnabled}" Click="actionButton_Click" Content="{Binding ActionButtonText}"/>
             </Grid>
         </GroupBox>
     </Grid>
