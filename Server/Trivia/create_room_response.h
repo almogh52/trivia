@@ -5,8 +5,8 @@
 using nlohmann::json;
 
 struct CreateRoomResponse {
-	int status;
-	int roomId;
+	unsigned int status;
+	unsigned int roomId;
 };
 
 inline void to_json(json& j, const CreateRoomResponse& res) {

@@ -153,6 +153,21 @@
     <ClInclude Include="room_member_request_handler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="get_question_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="submit_answer_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="player_results.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="get_game_results_response.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="submit_answer_request.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">

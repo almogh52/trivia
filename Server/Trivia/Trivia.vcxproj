@@ -131,8 +131,10 @@
     <ClInclude Include="database_interface.h" />
     <ClInclude Include="error_response.h" />
     <ClInclude Include="exception.h" />
+    <ClInclude Include="get_game_results_response.h" />
     <ClInclude Include="get_players_in_room_request.h" />
     <ClInclude Include="get_players_in_room_response.h" />
+    <ClInclude Include="get_question_response.h" />
     <ClInclude Include="get_rooms_response.h" />
     <ClInclude Include="get_room_state_response.h" />
     <ClInclude Include="highscore.h" />
@@ -151,6 +153,7 @@
     <ClInclude Include="login_response.h" />
     <ClInclude Include="logout_response.h" />
     <ClInclude Include="menu_request_handler.h" />
+    <ClInclude Include="player_results.h" />
     <ClInclude Include="room.h" />
     <ClInclude Include="room_admin_request_handler.h" />
     <ClInclude Include="room_data.h" />
@@ -168,6 +171,8 @@
     <ClInclude Include="signup_request.h" />
     <ClInclude Include="signup_response.h" />
     <ClInclude Include="sqlite3.h" />
+    <ClInclude Include="submit_answer_request.h" />
+    <ClInclude Include="submit_answer_response.h" />
     <ClInclude Include="WSAInitializer.h" />
   </ItemGroup>
   <ItemGroup>
