@@ -150,6 +150,13 @@ namespace TriviaClient
                 {
                     // Close the dialog
                     eventArgs.Session.Close();
+
+                    // Close this window and show the room member window
+                    new RoomMemberWindow
+                    {
+                        room = Rooms[roomsList.SelectedIndex]
+                    }.Show();
+                    Close();
                 }
                 else
                 {

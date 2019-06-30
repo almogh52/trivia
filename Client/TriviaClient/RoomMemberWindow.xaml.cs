@@ -16,9 +16,9 @@ using System.Windows.Shapes;
 namespace TriviaClient
 {
     /// <summary>
-    /// Interaction logic for RoomAdminWindow.xaml
+    /// Interaction logic for RoomMemberWindow.xaml
     /// </summary>
-    public partial class RoomAdminWindow : Window
+    public partial class RoomMemberWindow : Window
     {
         public RoomData room { get; set; }
 
@@ -36,17 +36,17 @@ namespace TriviaClient
             public int answerTimeout;
         }
 
-        public struct CloseRoomRequest
+        public struct LeaveRoomRequest
         {
-            public const int CODE = 8;
+            public const int CODE = 11;
         }
 
-        public struct CloseRoomResponse
+        public struct LeaveRoomResponse
         {
             public int status;
         }
 
-        public RoomAdminWindow()
+        public RoomMemberWindow()
         {
             InitializeComponent();
         }
@@ -57,7 +57,7 @@ namespace TriviaClient
             Title = $"Trivia - ${room.name} - Room #${room.id}";
 
             // Set the action handler of the room preview
-            roomPreview.Action = CloseRoom;
+            roomPreview.Action = LeaveRoom;
 
             // Run the action in the background
             Task.Run(new Action(RefreshRoomData));
@@ -88,7 +88,7 @@ namespace TriviaClient
                     TimePerQuestion = res.answerTimeout,
                     QuestionCount = res.questionCount,
                     IsActive = res.hasGameBegun,
-                    ActionButtonText = "Close Room",
+                    ActionButtonText = "Leave Room",
                     ActionButtonEnabled = true,
                     Players = res.players
                 };
@@ -101,19 +101,19 @@ namespace TriviaClient
             }
         }
 
-        private async void CloseRoom(int roomId)
+        private async void LeaveRoom(int roomId)
         {
-            CloseRoomResponse res;
+            LeaveRoomResponse res;
             byte[] buf;
 
-            // Send the close room request
-            await Client.Send(CloseRoomRequest.CODE, new byte[0]);
+            // Send the leave room request
+            await Client.Send(LeaveRoomRequest.CODE, new byte[0]);
 
             // Get from the server the response
             buf = await Client.Recv();
 
             // Deserialize the response
-            res = JsonConvert.DeserializeObject<CloseRoomResponse>(Encoding.UTF8.GetString(buf));
+            res = JsonConvert.DeserializeObject<LeaveRoomResponse>(Encoding.UTF8.GetString(buf));
 
             // Close this window and the rooms window
             new RoomsWindow().Show();
