@@ -69,7 +69,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(const Request & req) const
 	RequestResult res;
 
 	RoomData roomData;
-	GetRoomStateResponse getRoomStateResponse;
+	GetRoomStateResponse getRoomStateResponse = { 0 };
 	
 	try {
 		// Get the room data of the room
@@ -91,7 +91,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(const Request & req) const
 	}
 
 	// Set the new handler as the menu request handler and serialize the response
-	res.newHandler = nullptr;
+	res.newHandler = getRoomStateResponse.status ? m_handlerFactory->createMenuRequestHandler(m_user) : nullptr;
 	res.response = JsonResponsePacketSerializer::SerializePacket(getRoomStateResponse);
 
 	return res;

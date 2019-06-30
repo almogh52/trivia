@@ -23,9 +23,6 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 		}
     }
 
-	// Unlock the room mutex
-	roomsMutex.unlock();
-
     // Set the room's metadata
     roomMetadata.name = roomName;
     roomMetadata.maxPlayers = maxPlayers;
@@ -35,6 +32,12 @@ int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsign
 
     // Save the new room in the map of rooms
     m_rooms[roomMetadata.id] = Room(roomMetadata);
+
+	// Add the admin as a user in the room
+	m_rooms[roomMetadata.id].addUser(user);
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
 
 	return roomMetadata.id;
 }
@@ -179,11 +182,13 @@ std::vector<RoomData> RoomManager::getRooms()
 
 RoomData RoomManager::getRoomData(unsigned int roomId)
 {
+	RoomData roomData;
+
 	// Lock the rooms mutex
 	roomsMutex.lock();
 
 	try {
-		return m_rooms.at(roomId).getMetadata();
+		roomData = m_rooms.at(roomId).getMetadata();
 	}
 	catch (...) {
 		// Unlock the room mutex
@@ -194,4 +199,6 @@ RoomData RoomManager::getRoomData(unsigned int roomId)
 
 	// Unlock the room mutex
 	roomsMutex.unlock();
+
+	return roomData;
 }
