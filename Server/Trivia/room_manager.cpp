@@ -179,11 +179,13 @@ std::vector<RoomData> RoomManager::getRooms()
 
 RoomData RoomManager::getRoomData(unsigned int roomId)
 {
+	RoomData roomData;
+
 	// Lock the rooms mutex
 	roomsMutex.lock();
 
 	try {
-		return m_rooms.at(roomId).getMetadata();
+		roomData = m_rooms.at(roomId).getMetadata();
 	}
 	catch (...) {
 		// Unlock the room mutex
@@ -194,4 +196,6 @@ RoomData RoomManager::getRoomData(unsigned int roomId)
 
 	// Unlock the room mutex
 	roomsMutex.unlock();
+
+	return roomData;
 }
