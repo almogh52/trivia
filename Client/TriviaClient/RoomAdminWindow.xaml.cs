@@ -15,36 +15,36 @@ using System.Windows.Shapes;
 
 namespace TriviaClient
 {
+    public struct GetRoomStateRequest
+    {
+        public const int CODE = 10;
+    }
+
+    public struct GetRoomStateResponse
+    {
+        public int status;
+        public bool hasGameBegun;
+        public List<string> players;
+        public int questionCount;
+        public int answerTimeout;
+    }
+
+    public struct CloseRoomRequest
+    {
+        public const int CODE = 8;
+    }
+
+    public struct CloseRoomResponse
+    {
+        public int status;
+    }
+
     /// <summary>
     /// Interaction logic for RoomAdminWindow.xaml
     /// </summary>
     public partial class RoomAdminWindow : Window
     {
         public RoomData room { get; set; }
-
-        public struct GetRoomStateRequest
-        {
-            public const int CODE = 10;
-        }
-
-        public struct GetRoomStateResponse
-        {
-            public int status;
-            public bool hasGameBegun;
-            public List<string> players;
-            public int questionCount;
-            public int answerTimeout;
-        }
-
-        public struct CloseRoomRequest
-        {
-            public const int CODE = 8;
-        }
-
-        public struct CloseRoomResponse
-        {
-            public int status;
-        }
 
         public RoomAdminWindow()
         {
