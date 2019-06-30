@@ -71,6 +71,19 @@ namespace TriviaClient
                 // Deserialize the response
                 res = JsonConvert.DeserializeObject<GetRoomStateResponse>(Encoding.UTF8.GetString(buf));
 
+                // If an error occurred, return to menu
+                if (res.status == 1)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        // Close this window and the rooms window
+                        new RoomsWindow().Show();
+                        Close();
+                    });
+
+                    return;
+                }
+
                 // Set the room preview data
                 roomPreview.Data = new RoomPreviewData
                 {
