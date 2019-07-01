@@ -109,6 +109,47 @@ void GameManager::removePlayer(unsigned int gameId, const LoggedUser & player)
 	gamesMutex.unlock();
 }
 
+std::vector<PlayerResults> GameManager::getPlayersResults(unsigned int gameId)
+{
+	std::vector<PlayerResults> playersResults;
+	std::unordered_map<LoggedUser, GameData> playersData;
+
+	// Lock the games mutex
+	gamesMutex.lock();
+
+	// If the game cannot be deleted (Game is not over), throw exception
+	if (findGame(gameId)->canBeDeleted())
+	{
+		// Unlock the games mutex
+		gamesMutex.unlock();
+
+		throw Exception("Game isn't over yet!");
+	}
+
+	// Get the players data
+	playersData = findGame(gameId)->getPlayersData();
+
+	// Unlock the games mutex
+	gamesMutex.unlock();
+
+	// For each game data of player, create player results object
+	for (auto gameDataPair : playersData)
+	{
+		PlayerResults playerResults;
+
+		// Set the results of the player
+		playerResults.username = gameDataPair.first.getUsername();
+		playerResults.correctAnswerCount = gameDataPair.second.correctAnswerCount;
+		playerResults.wrongAnswerCount = gameDataPair.second.wrongAnswerCount;
+		playerResults.averageAnswerTime = gameDataPair.second.averageAnswerTime;
+
+		// Push the player results to the vector of results
+		playersResults.push_back(playerResults);
+	}
+
+	return playersResults;
+}
+
 std::vector<Question> GameManager::createQuestions(unsigned int amount)
 {
 	std::vector<Question> questions;

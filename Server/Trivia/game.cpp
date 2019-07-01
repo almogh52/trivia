@@ -69,4 +69,9 @@ unsigned int Game::getGameId()
 {
 	return m_id;
 }
+
+std::unordered_map<LoggedUser, GameData> Game::getPlayersData()
+{
+	return m_players;
+}
  

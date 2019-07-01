@@ -16,6 +16,7 @@ public:
 
 	bool canBeDeleted();
 	unsigned int getGameId();
+	std::unordered_map<LoggedUser, GameData> getPlayersData();
 
 private:
 	unsigned int m_id;

@@ -8,6 +8,7 @@
 #include "room.h"
 #include "question.h"
 #include "logged_user.h"
+#include "player_results.h"
 
 class GameManager
 {
@@ -20,6 +21,7 @@ public:
 	Question getQuestionForUser(unsigned int gameId, const LoggedUser& user);
 	void submitAnswer(unsigned int gameId, const LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
 	void removePlayer(unsigned int gameId, const LoggedUser& player);
+	std::vector<PlayerResults> getPlayersResults(unsigned int gameId);
 
 private:
 	std::shared_ptr<IDatabase> m_database;
