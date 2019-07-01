@@ -18,6 +18,7 @@ public:
     bool getRoomState(unsigned int roomId);
 	
 	std::vector<std::string> getPlayersInRoom(unsigned int roomId);
+	std::vector<LoggedUser> getLoggedPlayersInRoom(unsigned int roomId);
     std::vector<RoomData> getRooms();
 
 	RoomData getRoomData(unsigned int roomId);

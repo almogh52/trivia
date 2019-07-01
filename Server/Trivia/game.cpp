@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-Game::Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players)
-	: m_id(id), m_questions(questions)
+Game::Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players, unsigned int answerTimeout)
+	: m_id(id), m_questions(questions), m_answerTimeout(answerTimeout)
 {
 	GameData gameData = { m_questions[0], 0, 0, 0, false };
 
@@ -26,8 +26,8 @@ void Game::submitAnswer(LoggedUser & player, unsigned int answerId, unsigned int
 
 	unsigned int currentQuestionIdx = find(m_questions.begin(), m_questions.end(), gameData.currentQuestion) - m_questions.begin();
 
-	// Check if the user was correct
-	if (answerId == gameData.currentQuestion.getCorrectAnswer()) {
+	// Check if the user was correct and he didn't pass the answer timeout
+	if (answerId == gameData.currentQuestion.getCorrectAnswer() && timeToAnswer <= m_answerTimeout) {
 		gameData.correctAnswerCount++;
 	}
 	else {

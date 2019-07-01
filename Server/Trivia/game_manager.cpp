@@ -10,9 +10,27 @@ GameManager::GameManager(std::shared_ptr<IDatabase> database) : m_database(datab
 {
 }
 
-unsigned int GameManager::createGame(Room & room)
+unsigned int GameManager::createGame(RoomData & room, std::vector<LoggedUser> players)
 {
-	return 0;
+	// Create question for the room
+	std::vector<Question> questions = createQuestions(room.questionCount);
+
+	// Create a new game in the database
+	unsigned int gameId = m_database->createGame();
+
+	// Create a new game
+	Game game = Game(gameId, questions, players, room.timePerQuestion * 1000);
+
+	// Lock the games mutex
+	gamesMutex.lock();
+
+	// Add the game to the vector of games
+	m_games.push_back(game);
+
+	// Unlock the games mutex
+	gamesMutex.unlock();
+
+	return gameId;
 }
 
 std::vector<Question> GameManager::createQuestions(unsigned int amount)

@@ -160,6 +160,29 @@ std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId)
 	return players;
 }
 
+std::vector<LoggedUser> RoomManager::getLoggedPlayersInRoom(unsigned int roomId)
+{
+	std::vector<LoggedUser> users;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		users = m_rooms.at(roomId).getAllUsers();
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return users;
+}
+
 std::vector<RoomData> RoomManager::getRooms()
 {
     std::vector<RoomData> rooms;

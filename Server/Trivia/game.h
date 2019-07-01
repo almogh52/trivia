@@ -8,7 +8,7 @@
 class Game
 {
 public:
-	Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players);
+	Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players, unsigned int answerTimeout);
 
 	Question getQuestionForUser(LoggedUser& user);
 	void submitAnswer(LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
@@ -17,6 +17,7 @@ public:
 
 private:
 	unsigned int m_id;
+	unsigned int m_answerTimeout;
 	std::vector<Question> m_questions;
 	std::unordered_map<LoggedUser, GameData> m_players;
 };
