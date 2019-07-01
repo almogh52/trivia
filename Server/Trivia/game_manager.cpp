@@ -33,6 +33,30 @@ unsigned int GameManager::createGame(RoomData & room, std::vector<LoggedUser> pl
 	return gameId;
 }
 
+bool GameManager::deleteGame(unsigned int gameId)
+{
+	bool deleted = false;
+
+	// Lock the games mutex
+	gamesMutex.lock();
+
+	// Find the game
+	auto game = findGame(gameId);
+
+	// If the game can be deleted, delete it
+	if (game->canBeDeleted())
+	{
+		m_games.erase(game);
+
+		deleted = true;
+	}
+
+	// Unlock the games mutex
+	gamesMutex.unlock();
+
+	return deleted;
+}
+
 Question GameManager::getQuestionForUser(unsigned int gameId, LoggedUser& user)
 {
 	Question question;

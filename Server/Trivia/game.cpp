@@ -49,6 +49,22 @@ void Game::removePlayer(LoggedUser & player)
 	m_players[player].playerLeft = true;
 }
 
+bool Game::canBeDeleted()
+{
+	bool clear = true;
+
+	// Check if all the players have left
+	for (auto gamePair : m_players)
+	{
+		if (!gamePair.second.playerLeft)
+		{
+			clear = false;
+		}
+	}
+
+	return clear;
+}
+
 unsigned int Game::getGameId()
 {
 	return m_id;

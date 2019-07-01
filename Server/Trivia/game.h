@@ -14,6 +14,7 @@ public:
 	bool submitAnswer(LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
 	void removePlayer(LoggedUser& player);
 
+	bool canBeDeleted();
 	unsigned int getGameId();
 
 private:
