@@ -34,7 +34,7 @@
             SelectedItem="{Binding MaxPlayers, UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2"/>
         <ComboBox
             x:Name="timePerQuestionBox"
-            materialDesign:HintAssist.Hint="Time Per Question"
+            materialDesign:HintAssist.Hint="Time Per Question (Seconds)"
             Margin="0 6 0 0"
             FontSize="18" Grid.Row="2"
             Style="{StaticResource MaterialDesignFloatingHintComboBox}"

@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace TriviaClient
 {
@@ -62,13 +63,19 @@ namespace TriviaClient
     {
         public QuestionPreview CurrentQuestion { get; set; }
         public int SelectedAnswer { get; set; }
+        public int AmountOfQuestions { get; set; }
+        public int QuestionNumber { get; set; }
+        public int TimePerQuestion { get; set; }
+        public int RemainingTime { get; set; }
 
         private Random rnd = new Random();
         private RadioButton[] radioButtons { get; set; }
+        private DispatcherTimer timer { get; set; }
 
         public GameWindow()
         {
             SelectedAnswer = -1;
+            QuestionNumber = 1;
 
             InitializeComponent();
 
@@ -130,6 +137,21 @@ namespace TriviaClient
         {
             await GetQuestion();
 
+            // Set the initial remaining time
+            RemainingTime = TimePerQuestion;
+
+            // Start the timer
+            timer = new DispatcherTimer(DispatcherPriority.Normal, Application.Current.Dispatcher);
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += TimerTick;
+            timer.Start();
+
+            Update();
+        }
+
+        private void TimerTick(object sneder, EventArgs e)
+        {
+            RemainingTime -= 1;
             Update();
         }
 
@@ -249,6 +271,9 @@ namespace TriviaClient
             // Submit
             if ((string)btn.Content == "Submit")
             {
+                // Stop the timer
+                timer.Stop();
+
                 DisableRadioButtons();
 
                 try
@@ -271,9 +296,24 @@ namespace TriviaClient
             } else
             {
                 UnselectRadioButtons();
+                EnableRadioButtons();
 
                 // Get the next question
                 await GetQuestion();
+
+                // Increase the question number
+                QuestionNumber++;
+
+                // Reset remaining time
+                RemainingTime = TimePerQuestion;
+
+                // Start the timer
+                timer = new DispatcherTimer(DispatcherPriority.Normal, Application.Current.Dispatcher);
+                timer.Interval = TimeSpan.FromSeconds(1);
+                timer.Tick += TimerTick;
+                timer.Start();
+
+                // Update UI
                 Update();
 
                 // Enable the button
@@ -281,8 +321,6 @@ namespace TriviaClient
 
                 // Change the button to the next button
                 btn.Content = "Submit";
-
-                EnableRadioButtons();
             }
         }
     }

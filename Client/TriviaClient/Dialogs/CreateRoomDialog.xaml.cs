@@ -25,7 +25,7 @@ namespace TriviaClient.Dialogs
             InitializeComponent();
 
             maxPlayerBox.ItemsSource = Enumerable.Range(2, 99);
-            timePerQuestionBox.ItemsSource = Enumerable.Range(1, 60);
+            timePerQuestionBox.ItemsSource = Enumerable.Range(10, 60);
             questionCountBox.ItemsSource = Enumerable.Range(1, 10);
         }
     }

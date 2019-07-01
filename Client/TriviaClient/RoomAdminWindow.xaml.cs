@@ -176,7 +176,11 @@ namespace TriviaClient
                     Dispatcher.Invoke(new Action(() =>
                     {
                         // Show the game window
-                        new GameWindow().Show();
+                        new GameWindow()
+                        {
+                            AmountOfQuestions = room.questionCount,
+                            TimePerQuestion = room.timePerQuestion
+                        }.Show();
                         Close();
                     }));
                 }
