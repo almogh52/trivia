@@ -84,6 +84,23 @@ namespace TriviaClient
                     return;
                 }
 
+                // If a game has begun
+                if (res.hasGameBegun)
+                {
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        // Show the game window
+                        new GameWindow()
+                        {
+                            AmountOfQuestions = room.questionCount,
+                            TimePerQuestion = room.timePerQuestion
+                        }.Show();
+                        Close();
+                    }));
+
+                    return;
+                }
+
                 // Set the room preview data
                 roomPreview.Data = new RoomPreviewData
                 {
