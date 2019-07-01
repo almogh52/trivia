@@ -5,7 +5,12 @@
 #include "request_handler_factory.h"
 
 #include "get_question_response.h"
+#include "submit_answer_request.h"
+#include "submit_answer_response.h"
+#include "leave_room_response.h"
 #include "response_status.h"
+
+std::time_t lastQuestionSendTime;
 
 GameRequestHandler::GameRequestHandler(unsigned int gameId, const LoggedUser& user, std::shared_ptr<RequestHandlerFactory> handlerFactory, std::shared_ptr<GameManager> gameManager)
 	: m_game(gameId), m_user(user), m_handlerFactory(handlerFactory), m_gameManager(gameManager)
@@ -25,6 +30,15 @@ RequestResult GameRequestHandler::handleRequest(const Request & req) const
 	{
 	case GET_QUESTION_REQUEST:
 		res = getQuestion(req);
+		break;
+
+	case SUBMIT_ANSWER_REQUEST:
+		res = submitAnswer(req);
+		break;
+
+	case LEAVE_GAME_REQUEST:
+		res = leaveGame(req);
+		break;
 	}
 
 	return res;
@@ -64,6 +78,59 @@ RequestResult GameRequestHandler::getQuestion(const Request & req) const
 	// Serialize the response
 	res.newHandler = nullptr;
 	res.response = JsonResponsePacketSerializer::SerializePacket(getQuestionResponse);
+
+	// Set the time the last question was sent
+	lastQuestionSendTime = req.receivalTime;
+
+	return res;
+}
+
+RequestResult GameRequestHandler::submitAnswer(const Request & req) const
+{
+	RequestResult res;
+
+	SubmitAnswerRequest submitAnswerRequest = JsonRequestPacketDeserializer::DeserializePacket<SubmitAnswerRequest>(req.buffer);
+	SubmitAnswerResponse submitAnswerResponse;
+
+	try {
+		// Try to get the answer id for the current question of the user
+		submitAnswerResponse.correctAnswerId = m_gameManager->getQuestionForUser(m_game, m_user).getCorrectAnswer();
+
+		// Submit the answer to the game manager
+		m_gameManager->submitAnswer(m_game, m_user, submitAnswerRequest.answerId, req.receivalTime - lastQuestionSendTime);
+
+		submitAnswerResponse.status = SUCCESS;
+	}
+	catch (...) {
+		submitAnswerResponse.status = ERROR;
+	}
+
+	// Serialize the response
+	res.newHandler = nullptr;
+	res.response = JsonResponsePacketSerializer::SerializePacket(submitAnswerResponse);
+
+	return res;
+}
+
+RequestResult GameRequestHandler::leaveGame(const Request & req) const
+{
+	RequestResult res;
+
+	LeaveRoomResponse leaveRoomResponse;
+
+	try {
+		// Try to remove the player
+		m_gameManager->removePlayer(m_game, m_user);
+
+		leaveRoomResponse.status = SUCCESS;
+	}
+	catch (...) {
+		leaveRoomResponse.status = ERROR;
+	}
+
+	// Serialize the response and set the next handler as the menu request handler
+	res.newHandler = m_handlerFactory->createMenuRequestHandler(m_user);
+	res.response = JsonResponsePacketSerializer::SerializePacket(leaveRoomResponse);
 
 	return res;
 }
