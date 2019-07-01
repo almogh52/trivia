@@ -33,6 +33,58 @@ unsigned int GameManager::createGame(RoomData & room, std::vector<LoggedUser> pl
 	return gameId;
 }
 
+Question GameManager::getQuestionForUser(unsigned int gameId, LoggedUser& user)
+{
+	Question question;
+
+	// Lock the games mutex
+	gamesMutex.lock();
+
+	// Add the game to the vector of games
+	question = findGame(gameId)->getQuestionForUser(user);
+
+	// Unlock the games mutex
+	gamesMutex.unlock();
+
+	return question;
+}
+
+void GameManager::submitAnswer(unsigned int gameId, LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
+{
+	bool correct = false;
+	unsigned int questionId = -1;
+
+	// Lock the games mutex
+	gamesMutex.lock();
+
+	// Find the game
+	auto game = findGame(gameId);
+
+	// Submit the answer and get if it was correct or not
+	correct = game->submitAnswer(player, answerId, timeToAnswer);
+
+	// Get the question id of the current question of the user
+	questionId = game->getQuestionForUser(player).getQuestionId();
+
+	// Unlock the games mutex
+	gamesMutex.unlock();
+
+	// Submit the answer to the database
+	m_database->submitAnswer(gameId, questionId, player.getUsername(), answerId, correct);
+}
+
+void GameManager::removePlayer(unsigned int gameId, LoggedUser & player)
+{
+	// Lock the games mutex
+	gamesMutex.lock();
+
+	// Remove the player
+	findGame(gameId)->removePlayer(player);
+
+	// Unlock the games mutex
+	gamesMutex.unlock();
+}
+
 std::vector<Question> GameManager::createQuestions(unsigned int amount)
 {
 	std::vector<Question> questions;
@@ -106,4 +158,19 @@ std::string GameManager::decodeURLEncodedString(std::string encoded)
 	}
 
 	return escaped.str();
+}
+
+std::vector<Game>::iterator GameManager::findGame(unsigned int gameId)
+{
+	// Search for the game
+	for (auto iterator = m_games.begin(); iterator != m_games.end(); iterator++)
+	{
+		// If found the game return it
+		if (iterator->getGameId() == gameId)
+		{
+			return iterator;
+		}
+	}
+
+	throw Exception("Game not found!");
 }

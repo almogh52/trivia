@@ -16,6 +16,10 @@ public:
 
 	unsigned int createGame(RoomData& room, std::vector<LoggedUser> players);
 
+	Question getQuestionForUser(unsigned int gameId, LoggedUser& user);
+	void submitAnswer(unsigned int gameId, LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
+	void removePlayer(unsigned int gameId, LoggedUser& player);
+
 private:
 	std::shared_ptr<IDatabase> m_database;
 	std::vector<Game> m_games;
@@ -23,5 +27,7 @@ private:
 
 	std::vector<Question> createQuestions(unsigned int amount);
 	std::string decodeURLEncodedString(std::string encoded);
+
+	std::vector<Game>::iterator findGame(unsigned int gameId);
 };
 

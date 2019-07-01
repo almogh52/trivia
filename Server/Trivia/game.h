@@ -11,8 +11,9 @@ public:
 	Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players, unsigned int answerTimeout);
 
 	Question getQuestionForUser(LoggedUser& user);
-	void submitAnswer(LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
+	bool submitAnswer(LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
 	void removePlayer(LoggedUser& player);
+
 	unsigned int getGameId();
 
 private:

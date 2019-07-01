@@ -19,15 +19,16 @@ Question Game::getQuestionForUser(LoggedUser & user)
 	return m_players[user].currentQuestion;
 }
 
-void Game::submitAnswer(LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
+bool Game::submitAnswer(LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
 {
 	GameData gameData = m_players[player];
 	unsigned int amountOfAnswers = gameData.correctAnswerCount + gameData.wrongAnswerCount + 1;
+	bool correct = answerId == gameData.currentQuestion.getCorrectAnswer() && timeToAnswer <= m_answerTimeout;
 
 	unsigned int currentQuestionIdx = find(m_questions.begin(), m_questions.end(), gameData.currentQuestion) - m_questions.begin();
 
 	// Check if the user was correct and he didn't pass the answer timeout
-	if (answerId == gameData.currentQuestion.getCorrectAnswer() && timeToAnswer <= m_answerTimeout) {
+	if (correct) {
 		gameData.correctAnswerCount++;
 	}
 	else {
@@ -39,6 +40,8 @@ void Game::submitAnswer(LoggedUser & player, unsigned int answerId, unsigned int
 
 	// Set the next question if not reached the end
 	gameData.currentQuestion = (currentQuestionIdx == m_questions.size() - 1) ? Question() : m_questions[currentQuestionIdx + 1];
+
+	return correct;
 }
 
 void Game::removePlayer(LoggedUser & player)
