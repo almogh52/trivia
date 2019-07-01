@@ -133,6 +133,7 @@
     <ClInclude Include="exception.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="game_data.h" />
+    <ClInclude Include="game_manager.h" />
     <ClInclude Include="get_game_results_response.h" />
     <ClInclude Include="get_players_in_room_request.h" />
     <ClInclude Include="get_players_in_room_response.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="highscore.h" />
     <ClInclude Include="highscore_response.h" />
     <ClInclude Include="highscore_table.h" />
+    <ClInclude Include="HTTPRequest.hpp" />
     <ClInclude Include="join_room_request.h" />
     <ClInclude Include="join_room_response.h" />
     <ClInclude Include="json.hpp" />
@@ -182,6 +184,7 @@
     <ClCompile Include="communicator.cpp" />
     <ClCompile Include="database.cpp" />
     <ClCompile Include="game.cpp" />
+    <ClCompile Include="game_manager.cpp" />
     <ClCompile Include="highscore_table.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="main.cpp" />
