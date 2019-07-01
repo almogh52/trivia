@@ -8,6 +8,7 @@
 #include "submit_answer_request.h"
 #include "submit_answer_response.h"
 #include "leave_room_response.h"
+#include "get_game_results_response.h"
 #include "response_status.h"
 
 std::time_t lastQuestionSendTime;
@@ -38,6 +39,10 @@ RequestResult GameRequestHandler::handleRequest(const Request & req) const
 
 	case LEAVE_GAME_REQUEST:
 		res = leaveGame(req);
+		break;
+
+	case GET_GAME_RESULTS_REQUEST:
+		res = getGameResults(req);
 		break;
 	}
 
@@ -143,6 +148,29 @@ RequestResult GameRequestHandler::leaveGame(const Request & req) const
 	// Serialize the response and set the next handler as the menu request handler
 	res.newHandler = m_handlerFactory->createMenuRequestHandler(m_user);
 	res.response = JsonResponsePacketSerializer::SerializePacket(leaveRoomResponse);
+
+	return res;
+}
+
+RequestResult GameRequestHandler::getGameResults(const Request & req) const
+{
+	RequestResult res;
+
+	GetGameResultsResponse getGameResultsResponse;
+
+	try {
+		// Try to get the results of the game
+		getGameResultsResponse.results = m_gameManager->getPlayersResults(m_game);
+
+		getGameResultsResponse.status = SUCCESS;
+	}
+	catch (...) {
+		getGameResultsResponse.status = ERROR;
+	}
+
+	// Serialize the response and set the next handler as the menu request handler
+	res.newHandler = getGameResultsResponse.status ? nullptr : m_handlerFactory->createMenuRequestHandler(m_user);
+	res.response = JsonResponsePacketSerializer::SerializePacket(getGameResultsResponse);
 
 	return res;
 }

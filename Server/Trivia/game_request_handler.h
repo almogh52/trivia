@@ -21,6 +21,7 @@ private:
 	RequestResult getQuestion(const Request& req) const;
 	RequestResult submitAnswer(const Request& req) const;
 	RequestResult leaveGame(const Request& req) const;
+	RequestResult getGameResults(const Request& req) const;
 
 	unsigned int m_game;
 	LoggedUser m_user;
