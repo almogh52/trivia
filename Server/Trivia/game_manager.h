@@ -17,9 +17,9 @@ public:
 	unsigned int createGame(RoomData& room, std::vector<LoggedUser> players);
 	bool deleteGame(unsigned int gameId);
 
-	Question getQuestionForUser(unsigned int gameId, LoggedUser& user);
-	void submitAnswer(unsigned int gameId, LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
-	void removePlayer(unsigned int gameId, LoggedUser& player);
+	Question getQuestionForUser(unsigned int gameId, const LoggedUser& user);
+	void submitAnswer(unsigned int gameId, const LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
+	void removePlayer(unsigned int gameId, const LoggedUser& player);
 
 private:
 	std::shared_ptr<IDatabase> m_database;

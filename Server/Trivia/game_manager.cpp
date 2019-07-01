@@ -57,7 +57,7 @@ bool GameManager::deleteGame(unsigned int gameId)
 	return deleted;
 }
 
-Question GameManager::getQuestionForUser(unsigned int gameId, LoggedUser& user)
+Question GameManager::getQuestionForUser(unsigned int gameId, const LoggedUser& user)
 {
 	Question question;
 
@@ -73,7 +73,7 @@ Question GameManager::getQuestionForUser(unsigned int gameId, LoggedUser& user)
 	return question;
 }
 
-void GameManager::submitAnswer(unsigned int gameId, LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
+void GameManager::submitAnswer(unsigned int gameId, const LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
 {
 	bool correct = false;
 	unsigned int questionId = -1;
@@ -97,7 +97,7 @@ void GameManager::submitAnswer(unsigned int gameId, LoggedUser & player, unsigne
 	m_database->submitAnswer(gameId, questionId, player.getUsername(), answerId, correct);
 }
 
-void GameManager::removePlayer(unsigned int gameId, LoggedUser & player)
+void GameManager::removePlayer(unsigned int gameId, const LoggedUser & player)
 {
 	// Lock the games mutex
 	gamesMutex.lock();

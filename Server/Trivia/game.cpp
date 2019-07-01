@@ -14,12 +14,12 @@ Game::Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedU
 	}
 }
 
-Question Game::getQuestionForUser(LoggedUser & user)
+Question Game::getQuestionForUser(const LoggedUser & user)
 {
 	return m_players[user].currentQuestion;
 }
 
-bool Game::submitAnswer(LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
+bool Game::submitAnswer(const LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
 {
 	GameData gameData = m_players[player];
 	unsigned int amountOfAnswers = gameData.correctAnswerCount + gameData.wrongAnswerCount + 1;
@@ -44,7 +44,7 @@ bool Game::submitAnswer(LoggedUser & player, unsigned int answerId, unsigned int
 	return correct;
 }
 
-void Game::removePlayer(LoggedUser & player)
+void Game::removePlayer(const LoggedUser & player)
 {
 	m_players[player].playerLeft = true;
 }

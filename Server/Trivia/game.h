@@ -10,9 +10,9 @@ class Game
 public:
 	Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players, unsigned int answerTimeout);
 
-	Question getQuestionForUser(LoggedUser& user);
-	bool submitAnswer(LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
-	void removePlayer(LoggedUser& player);
+	Question getQuestionForUser(const LoggedUser& user);
+	bool submitAnswer(const LoggedUser& player, unsigned int answerId, unsigned int timeToAnswer);
+	void removePlayer(const LoggedUser& player);
 
 	bool canBeDeleted();
 	unsigned int getGameId();
