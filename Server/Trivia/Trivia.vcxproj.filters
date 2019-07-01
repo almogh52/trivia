@@ -183,11 +183,11 @@
     <ClInclude Include="game_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HTTPRequest.hpp">
-      <Filter>Libraries</Filter>
-    </ClInclude>
     <ClInclude Include="game_request_handler.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="httplib.h">
+      <Filter>Libraries</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

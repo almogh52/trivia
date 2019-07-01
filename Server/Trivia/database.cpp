@@ -20,9 +20,9 @@ Database::~Database()
 void Database::initDatabase()
 {
 	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY UNIQUE, password TEXT NOT NULL, email TEXT NOT NULL UNIQUE);";
-	const char* questionsTableQuery = "CREATE TABLE questions (question_id INTEGER NOT NULL PRIMARY KEY, question TEXT NOT NULL UNIQUE, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);";
+	const char* questionsTableQuery = "CREATE TABLE questions (question_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, question TEXT NOT NULL UNIQUE, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);";
 	const char* answersTableQuery = "CREATE TABLE answers (username TEXT NOT NULL REFERENCES users(username), game_id INTEGER NOT NULL REFERENCES games(game_id), question_id INTEGER NOT NULL REFERENCES questions(question_id), answer INTEGER NOT NULL, correct_ans INTEGER NOT NULL, PRIMARY KEY(username, game_id, question_id));";
-	const char* gamesTableQuery = "CREATE TABLE games (game_id INTEGER NOT NULL PRIMARY KEY, start_time DATETIME NOT NULL, end_time DATETIME);";
+	const char* gamesTableQuery = "CREATE TABLE games (game_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, start_time DATETIME NOT NULL, end_time DATETIME);";
 
 	int res = 0;
 
@@ -232,8 +232,8 @@ unsigned int Database::createQuestion(std::string question, std::string correctA
 	unsigned int questionId = 0;
 
 	int res = 0;
-	std::string insertQuestionQuery("INSERT INTO questions(question, correct_ans, ans2, ans3, ans4) VALUES(:question, :correct_ans, :ans2, :ans3, :ans4)");
-	std::string getQuestionIdQuery("SELECT question_id FROM questions WHERE question = :question");
+	std::string insertQuestionQuery("INSERT INTO questions(question, correct_ans, ans2, ans3, ans4) VALUES(':question', ':correct_ans', ':ans2', ':ans3', ':ans4')");
+	std::string getQuestionIdQuery("SELECT question_id FROM questions WHERE question = ':question'");
 
 	// Bind parameters
 	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":question"), question);
@@ -304,7 +304,7 @@ void Database::endGame(unsigned int gameId)
 void Database::submitAnswer(unsigned int gameId, unsigned int questionId, std::string username, unsigned int answer, bool correctAns)
 {
 	int res = 0;
-	std::string submitAnswerQuery("INSERT INTO games(username, game_id, question_id, answer, correct_answer) VALUES(:username, :game_id, :question_id, :answer, :correct_answer)");
+	std::string submitAnswerQuery("INSERT INTO games(username, game_id, question_id, answer, correct_answer) VALUES(':username', :game_id, :question_id, :answer, :correct_answer)");
 
 	// Bind parameters
 	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":username"), username);

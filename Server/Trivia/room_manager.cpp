@@ -136,8 +136,8 @@ void RoomManager::startGame(unsigned int roomId, unsigned int gameId)
 	roomsMutex.lock();
 
 	try {
-		// Set the room state as active
-		m_rooms.at(roomId).setRoomState(true);
+		// Set the room state as not active
+		m_rooms.at(roomId).setRoomState(false);
 	}
 	catch (...) {
 		// Unlock the room mutex

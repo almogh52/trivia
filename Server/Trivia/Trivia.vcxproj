@@ -87,6 +87,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <PreprocessorDefinitions>_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,7 +145,7 @@
     <ClInclude Include="highscore.h" />
     <ClInclude Include="highscore_response.h" />
     <ClInclude Include="highscore_table.h" />
-    <ClInclude Include="HTTPRequest.hpp" />
+    <ClInclude Include="httplib.h" />
     <ClInclude Include="join_room_request.h" />
     <ClInclude Include="join_room_response.h" />
     <ClInclude Include="json.hpp" />

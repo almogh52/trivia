@@ -1,6 +1,7 @@
 #include "request_handler_factory.h"
 
-RequestHandlerFactory::RequestHandlerFactory(std::shared_ptr<IDatabase> database) : m_loginManager(new LoginManager(database)), m_roomManager(new RoomManager()), m_highscoreTable(new HighscoreTable(database))
+RequestHandlerFactory::RequestHandlerFactory(std::shared_ptr<IDatabase> database) 
+	: m_loginManager(new LoginManager(database)), m_roomManager(new RoomManager()), m_highscoreTable(new HighscoreTable(database)), m_gameManager(new GameManager(database))
 {
 }
 
