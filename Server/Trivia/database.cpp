@@ -300,3 +300,23 @@ void Database::endGame(unsigned int gameId)
 		throw Exception("Unable to end the game!");
 	}
 }
+
+void Database::submitAnswer(unsigned int gameId, unsigned int questionId, std::string username, unsigned int answer, bool correctAns)
+{
+	int res = 0;
+	std::string submitAnswerQuery("INSERT INTO games(username, game_id, question_id, answer, correct_answer) VALUES(:username, :game_id, :question_id, :answer, :correct_answer)");
+
+	// Bind parameters
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":username"), username);
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":game_id"), std::to_string(gameId));
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":question_id"), std::to_string(questionId));
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":answer"), std::to_string(answer));
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":correct_ans"), std::to_string(correctAns));
+
+	// Try to submit the answer
+	res = sqlite3_exec(m_db, submitAnswerQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to submit the answer!");
+	}
+}

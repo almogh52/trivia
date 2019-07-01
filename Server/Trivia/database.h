@@ -24,6 +24,7 @@ public:
 	virtual unsigned int createQuestion(std::string question, std::string correctAns, std::string ans2, std::string ans3, std::string ans4);
 	virtual unsigned int createGame();
 	virtual void endGame(unsigned int gameId);
+	virtual void submitAnswer(unsigned int gameId, unsigned int questionId, std::string username, unsigned int answer, bool correctAns);
 
 private:
 	sqlite3* m_db;
