@@ -44,6 +44,11 @@ bool Room::removeUser(const LoggedUser & user)
     return true;
 }
 
+void Room::setRoomState(bool state)
+{
+	m_metadata.isActive = state;
+}
+
 RoomData Room::getMetadata() const
 {
     return m_metadata;

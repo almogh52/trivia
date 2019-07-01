@@ -17,6 +17,9 @@ public:
 
     bool getRoomState(unsigned int roomId);
 	
+	void startGame(unsigned int roomId, unsigned int gameId);
+	unsigned int getGameIdOfRoom(unsigned int roomId);
+
 	std::vector<std::string> getPlayersInRoom(unsigned int roomId);
 	std::vector<LoggedUser> getLoggedPlayersInRoom(unsigned int roomId);
     std::vector<RoomData> getRooms();
@@ -24,6 +27,7 @@ public:
 	RoomData getRoomData(unsigned int roomId);
 
 private:
+	std::unordered_map<unsigned int, unsigned int> m_roomsGames;
     std::unordered_map<unsigned int, Room> m_rooms;
 	std::mutex roomsMutex;
 };

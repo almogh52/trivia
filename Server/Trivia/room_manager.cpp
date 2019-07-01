@@ -130,6 +130,53 @@ bool RoomManager::getRoomState(unsigned int roomId)
 	return isActive;
 }
 
+void RoomManager::startGame(unsigned int roomId, unsigned int gameId)
+{
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		// Set the room state as active
+		m_rooms.at(roomId).setRoomState(true);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Attach the game to the room
+	m_roomsGames[roomId] = gameId;
+
+	// Lock the rooms mutex
+	roomsMutex.unlock();
+}
+
+unsigned int RoomManager::getGameIdOfRoom(unsigned int roomId)
+{
+	unsigned int gameId = -1;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		// Try to get the game id of the room
+		gameId = m_roomsGames.at(roomId);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No game attached to the room!");
+	}
+
+	// Lock the rooms mutex
+	roomsMutex.unlock();
+
+	return gameId;
+}
+
 std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId)
 {
 	std::vector<std::string> players;

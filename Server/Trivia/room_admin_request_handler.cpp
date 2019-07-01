@@ -5,6 +5,7 @@
 #include "close_room_response.h"
 #include "get_room_state_response.h"
 #include "response_status.h"
+#include "start_game_response.h"
 
 #include "request_handler_factory.h"
 
@@ -30,6 +31,10 @@ RequestResult RoomAdminRequestHandler::handleRequest(const Request & req) const
 
 	case GET_ROOM_STATE_REQUEST:
 		res = getRoomState(req);
+		break;
+
+	case START_GAME_REQUEST:
+		res = startGame(req);
 		break;
 	}
 
@@ -93,9 +98,45 @@ RequestResult RoomAdminRequestHandler::getRoomState(const Request & req) const
 		getRoomStateResponse.status = ERROR;
 	}
 
-	// Set the new handler as the menu request handler and serialize the response
+	// Serialize the response
 	res.newHandler = nullptr;
 	res.response = JsonResponsePacketSerializer::SerializePacket(getRoomStateResponse);
+
+	return res;
+}
+
+RequestResult RoomAdminRequestHandler::startGame(const Request & req) const
+{
+	RequestResult res;
+
+	unsigned int gameId = -1;
+	RoomData roomData;
+	std::vector<LoggedUser> players;
+
+	StartGameResponse startGameResponse;
+
+	try {
+		// Get the details of the room
+		roomData = m_roomManager->getRoomData(m_roomId);
+
+		// Get the logged players in the room
+		players = m_roomManager->getLoggedPlayersInRoom(m_roomId);
+
+		// Create the game
+		gameId = m_handlerFactory->getGameManager()->createGame(roomData, players);
+
+		// Start the game
+		m_roomManager->startGame(m_roomId, gameId);
+
+		startGameResponse.status = SUCCESS;
+	}
+	catch (...) {
+		startGameResponse.status = ERROR;
+	}
+
+	// Set the new handler as the game request handler and serialize the response
+	res.newHandler = startGameResponse.status ? nullptr : m_handlerFactory->createGameRequestHandler(m_user, gameId);
+	res.response = JsonResponsePacketSerializer::SerializePacket(startGameResponse);
 
 	return res;
 }
