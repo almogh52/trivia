@@ -29,3 +29,8 @@ int Question::getQuestionId()
 {
 	return m_id;
 }
+
+bool Question::operator==(const Question & other) const
+{
+	return other.m_id == m_id;
+}

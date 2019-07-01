@@ -25,7 +25,7 @@ bool Game::submitAnswer(const LoggedUser & player, unsigned int answerId, unsign
 	unsigned int amountOfAnswers = gameData.correctAnswerCount + gameData.wrongAnswerCount + 1;
 	bool correct = answerId == gameData.currentQuestion.getCorrectAnswer() && timeToAnswer <= m_answerTimeout;
 
-	unsigned int currentQuestionIdx = find(m_questions.begin(), m_questions.end(), gameData.currentQuestion) - m_questions.begin();
+	unsigned int currentQuestionIdx = (unsigned int)(find(m_questions.begin(), m_questions.end(), gameData.currentQuestion) - m_questions.begin());
 
 	// Check if the user was correct and he didn't pass the answer timeout
 	if (correct) {

@@ -232,7 +232,7 @@ std::string GameManager::decodeURLEncodedString(std::string encoded)
 	std::ostringstream escaped;
 	escaped.fill('0');
 
-	std::function<char(char)> from_hex = [](char ch) -> {
+	std::function<char(char)> from_hex = [](char ch) -> char {
 		return isdigit(ch) ? ch - '0' : tolower(ch) - 'a' + 10;
 	};
 

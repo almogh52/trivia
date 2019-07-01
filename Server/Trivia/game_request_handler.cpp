@@ -86,7 +86,7 @@ RequestResult GameRequestHandler::getQuestion(const Request & req) const
 		// For each answer insert it to the map using the index of the answer
 		for (auto iterator = answers.begin(); iterator != answers.end(); iterator++)
 		{
-			getQuestionResponse.answers[iterator - answers.begin()] = *iterator;
+			getQuestionResponse.answers[(unsigned int)(iterator - answers.begin())] = *iterator;
 		}
 
 		getQuestionResponse.status = SUCCESS;
@@ -117,7 +117,7 @@ RequestResult GameRequestHandler::submitAnswer(const Request & req) const
 		submitAnswerResponse.correctAnswerId = m_gameManager->getQuestionForUser(m_game, m_user).getCorrectAnswer();
 
 		// Submit the answer to the game manager
-		m_gameManager->submitAnswer(m_game, m_user, submitAnswerRequest.answerId, req.receivalTime - lastQuestionSendTime);
+		m_gameManager->submitAnswer(m_game, m_user, submitAnswerRequest.answerId, (unsigned int)(req.receivalTime - lastQuestionSendTime));
 
 		submitAnswerResponse.status = SUCCESS;
 	}

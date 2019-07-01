@@ -13,6 +13,8 @@ public:
 	unsigned int getCorrectAnswer();
 	int getQuestionId();
 
+	bool operator==(const Question &other) const;
+
 private:
 	int m_id;
 	std::string m_question;
