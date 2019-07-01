@@ -22,6 +22,8 @@ public:
 	virtual bool authUser(std::string username, std::string password);
 	virtual std::unordered_map<std::string, std::unordered_map<int, int>> getAllScores();
 	virtual unsigned int createQuestion(std::string question, std::string correctAns, std::string ans2, std::string ans3, std::string ans4);
+	virtual unsigned int createGame();
+	virtual void endGame(unsigned int gameId);
 
 private:
 	sqlite3* m_db;

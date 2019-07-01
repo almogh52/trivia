@@ -15,4 +15,6 @@ public:
 	virtual bool authUser(std::string username, std::string password) = 0;
 	virtual std::unordered_map<std::string, std::unordered_map<int, int>> getAllScores() = 0;
 	virtual unsigned int createQuestion(std::string question, std::string correctAns, std::string ans2, std::string ans3, std::string ans4) = 0;
+	virtual unsigned int createGame() = 0;
+	virtual void endGame(unsigned int gameId) = 0;
 };

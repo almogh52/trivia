@@ -232,7 +232,7 @@ unsigned int Database::createQuestion(std::string question, std::string correctA
 	unsigned int questionId = 0;
 
 	int res = 0;
-	std::string insertQuestionQuery("INSERT INTO questions(question, correct_ans, ans2, ans3, ans4) VALUES(:question, :correct_ans, :ans2, :ans3, :ans4");
+	std::string insertQuestionQuery("INSERT INTO questions(question, correct_ans, ans2, ans3, ans4) VALUES(:question, :correct_ans, :ans2, :ans3, :ans4)");
 	std::string getQuestionIdQuery("SELECT question_id FROM questions WHERE question = :question");
 
 	// Bind parameters
@@ -254,4 +254,49 @@ unsigned int Database::createQuestion(std::string question, std::string correctA
 	}
 
 	return questionId;
+}
+
+unsigned int Database::createGame()
+{
+	unsigned int gameId = 0;
+
+	int res = 0;
+	std::string insertGameQuery("INSERT INTO games(start_time) VALUES(:start_time)");
+	std::string getGameIdQuery("SELECT seq FROM sqlite_sequence WHERE name = 'games'");
+
+	// Bind parameters
+	insertGameQuery = std::regex_replace(insertGameQuery, std::regex(":start_time"), std::to_string(std::time(nullptr)));
+
+	// Try to insert the game to the database
+	res = sqlite3_exec(m_db, insertGameQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to create a new game!");
+	}
+
+	// Try to get the id of the game
+	res = sqlite3_exec(m_db, getGameIdQuery.c_str(), int_callback, &gameId, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to get the id of the game!");
+	}
+
+	return gameId;
+}
+
+void Database::endGame(unsigned int gameId)
+{
+	int res = 0;
+	std::string endGameQuery("UPDATE games WHERE game_id = :game_id SET end_time = :end_time");
+
+	// Bind parameters
+	endGameQuery = std::regex_replace(endGameQuery, std::regex(":game_id"), std::to_string(gameId));
+	endGameQuery = std::regex_replace(endGameQuery, std::regex(":end_time"), std::to_string(std::time(nullptr)));
+
+	// Try to end the game
+	res = sqlite3_exec(m_db, endGameQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to end the game!");
+	}
 }
