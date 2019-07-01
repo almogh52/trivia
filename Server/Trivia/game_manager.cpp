@@ -93,11 +93,11 @@ void GameManager::submitAnswer(unsigned int gameId, const LoggedUser & player, u
 	try {
 		auto game = findGame(gameId);
 
-		// Submit the answer and get if it was correct or not
-		correct = game->submitAnswer(player, answerId, timeToAnswer);
-
 		// Get the question id of the current question of the user
 		questionId = game->getQuestionForUser(player).getQuestionId();
+
+		// Submit the answer and get if it was correct or not
+		correct = game->submitAnswer(player, answerId, timeToAnswer);
 	}
 	catch (...) {
 		// Unlock the games mutex

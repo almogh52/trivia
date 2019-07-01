@@ -322,7 +322,7 @@ void Database::endGame(unsigned int gameId)
 void Database::submitAnswer(unsigned int gameId, unsigned int questionId, std::string username, unsigned int answer, bool correctAns)
 {
 	int res = 0;
-	std::string submitAnswerQuery("INSERT INTO games(username, game_id, question_id, answer, correct_answer) VALUES(':username', :game_id, :question_id, :answer, :correct_answer)");
+	std::string submitAnswerQuery("INSERT INTO answers(username, game_id, question_id, answer, correct_ans) VALUES(':username', :game_id, :question_id, :answer, :correct_ans)");
 
 	// Bind parameters
 	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":username"), username);

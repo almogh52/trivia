@@ -39,7 +39,10 @@ bool Game::submitAnswer(const LoggedUser & player, unsigned int answerId, unsign
 	gameData.averageAnswerTime = (gameData.averageAnswerTime * (amountOfAnswers - 1) + timeToAnswer) / amountOfAnswers;
 
 	// Set the next question if not reached the end
-	gameData.currentQuestion = (currentQuestionIdx == m_questions.size() - 1) ? Question() : m_questions[currentQuestionIdx + 1];
+	gameData.currentQuestion = (currentQuestionIdx >= m_questions.size() - 1) ? Question() : m_questions[currentQuestionIdx + 1];
+
+	// Save game data
+	m_players[player] = gameData;
 
 	return correct;
 }
