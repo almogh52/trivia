@@ -227,6 +227,24 @@ std::unordered_map<std::string, std::unordered_map<int, int>> Database::getAllSc
 	return playersGamesScores;
 }
 
+std::string escapeString(std::string str)
+{
+	size_t index = 0;
+	while (true) {
+		/* Locate the substring to replace. */
+		index = str.find("'", index);
+		if (index == std::string::npos) break;
+
+		/* Make the replacement. */
+		str.replace(index, 3, "''");
+
+		/* Advance index forward so the next iteration doesn't pick it up as well. */
+		index += 3;
+	}
+
+	return str;
+}
+
 unsigned int Database::createQuestion(std::string question, std::string correctAns, std::string ans2, std::string ans3, std::string ans4)
 {
 	unsigned int questionId = 0;
@@ -236,12 +254,12 @@ unsigned int Database::createQuestion(std::string question, std::string correctA
 	std::string getQuestionIdQuery("SELECT question_id FROM questions WHERE question = ':question'");
 
 	// Bind parameters
-	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":question"), question);
-	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":correct_ans"), correctAns);
-	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans2"), ans2);
-	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans3"), ans3);
-	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans4"), ans4);
-	getQuestionIdQuery = std::regex_replace(getQuestionIdQuery, std::regex(":question"), question);
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":question"), escapeString(question));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":correct_ans"), escapeString(correctAns));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans2"), escapeString(ans2));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans3"), escapeString(ans3));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans4"), escapeString(ans4));
+	getQuestionIdQuery = std::regex_replace(getQuestionIdQuery, std::regex(":question"), escapeString(question));
 
 	// Try to insert the question to the database
 	sqlite3_exec(m_db, insertQuestionQuery.c_str(), nullptr, nullptr, nullptr);

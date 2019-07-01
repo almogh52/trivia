@@ -1,5 +1,5 @@
 #pragma once
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #include "json.hpp"
@@ -8,11 +8,16 @@ using nlohmann::json;
 struct GetQuestionResponse {
 	unsigned int status;
 	std::string question;
-	std::map<unsigned int, std::string> answers;
+	std::unordered_map<unsigned int, std::string> answers;
 };
 
 inline void to_json(json& j, const GetQuestionResponse& res) {
-	j = json{ {"status", res.status}, {"question", res.question}, {"answers", res.answers} };
+	j = json{ {"status", res.status}, {"question", res.question}, {"answers", nlohmann::json{}} };
+
+	for (auto pair : res.answers)
+	{
+		j["answers"][std::to_string(pair.first)] = pair.second;
+	}
 }
 
 inline void from_json(const json& j, GetQuestionResponse& res) {

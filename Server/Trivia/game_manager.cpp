@@ -12,12 +12,8 @@ GameManager::GameManager(std::shared_ptr<IDatabase> database) : m_database(datab
 
 unsigned int GameManager::createGame(RoomData & room, std::vector<LoggedUser> players)
 {
-	std::cout << 0;
-
 	// Create question for the room
 	std::vector<Question> questions = createQuestions(room.questionCount);
-
-	std::cout << 1;
 
 	// Create a new game in the database
 	unsigned int gameId = m_database->createGame();
@@ -270,22 +266,7 @@ std::string GameManager::decodeURLEncodedString(std::string encoded)
 		}
 	}
 
-	std::string escapedStr = escaped.str();
-	
-	size_t index = 0;
-	while (true) {
-		/* Locate the substring to replace. */
-		index = escapedStr.find("'", index);
-		if (index == std::string::npos) break;
-
-		/* Make the replacement. */
-		escapedStr.replace(index, 3, "''");
-
-		/* Advance index forward so the next iteration doesn't pick it up as well. */
-		index += 3;
-	}
-
-	return escapedStr;
+	return escaped.str();
 }
 
 std::vector<Game>::iterator GameManager::findGame(unsigned int gameId)
