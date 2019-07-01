@@ -64,8 +64,16 @@ Question GameManager::getQuestionForUser(unsigned int gameId, const LoggedUser& 
 	// Lock the games mutex
 	gamesMutex.lock();
 
-	// Add the game to the vector of games
-	question = findGame(gameId)->getQuestionForUser(user);
+	try {
+		// Get the question for the user
+		question = findGame(gameId)->getQuestionForUser(user);
+	}
+	catch (...) {
+		// Unlock the games mutex
+		gamesMutex.unlock();
+
+		throw Exception("Unable to get question for user!");
+	}
 
 	// Unlock the games mutex
 	gamesMutex.unlock();
@@ -82,13 +90,21 @@ void GameManager::submitAnswer(unsigned int gameId, const LoggedUser & player, u
 	gamesMutex.lock();
 
 	// Find the game
-	auto game = findGame(gameId);
+	try {
+		auto game = findGame(gameId);
 
-	// Submit the answer and get if it was correct or not
-	correct = game->submitAnswer(player, answerId, timeToAnswer);
+		// Submit the answer and get if it was correct or not
+		correct = game->submitAnswer(player, answerId, timeToAnswer);
 
-	// Get the question id of the current question of the user
-	questionId = game->getQuestionForUser(player).getQuestionId();
+		// Get the question id of the current question of the user
+		questionId = game->getQuestionForUser(player).getQuestionId();
+	}
+	catch (...) {
+		// Unlock the games mutex
+		gamesMutex.unlock();
+
+		throw Exception("Unable to submit answer!");
+	}
 
 	// Unlock the games mutex
 	gamesMutex.unlock();
@@ -102,8 +118,16 @@ void GameManager::removePlayer(unsigned int gameId, const LoggedUser & player)
 	// Lock the games mutex
 	gamesMutex.lock();
 
-	// Remove the player
-	findGame(gameId)->removePlayer(player);
+	try {
+		// Remove the player
+		findGame(gameId)->removePlayer(player);
+	}
+	catch (...) {
+		// Unlock the games mutex
+		gamesMutex.unlock();
+
+		throw Exception("Unable to remove player!");
+	}
 
 	// Unlock the games mutex
 	gamesMutex.unlock();
@@ -126,8 +150,16 @@ std::vector<PlayerResults> GameManager::getPlayersResults(unsigned int gameId)
 		throw Exception("Game isn't over yet!");
 	}
 
-	// Get the players data
-	playersData = findGame(gameId)->getPlayersData();
+	try {
+		// Get the players data
+		playersData = findGame(gameId)->getPlayersData();
+	}
+	catch (...) {
+		// Unlock the games mutex
+		gamesMutex.unlock();
+
+		throw Exception("Unable to get players data!");
+	}
 
 	// Unlock the games mutex
 	gamesMutex.unlock();
