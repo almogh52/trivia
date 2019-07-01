@@ -44,6 +44,18 @@ RequestResult GameRequestHandler::handleRequest(const Request & req) const
 	return res;
 }
 
+void GameRequestHandler::disconnect() const
+{
+	try {
+		// Remove the player from the game
+		m_gameManager->removePlayer(m_game, m_user);
+
+		// Logout the user
+		m_handlerFactory->getLoginManager()->logout(m_user);
+	}
+	catch (...) {}
+}
+
 RequestResult GameRequestHandler::getQuestion(const Request & req) const
 {
 	RequestResult res;
