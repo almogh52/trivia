@@ -92,7 +92,7 @@ namespace TriviaClient
                     MaxPlayers = room.maxPlayers,
                     TimePerQuestion = res.answerTimeout,
                     QuestionCount = res.questionCount,
-                    IsActive = res.hasGameBegun,
+                    IsActive = !res.hasGameBegun,
                     ActionButtonText = "Leave Room",
                     ActionButtonEnabled = true,
                     Players = res.players

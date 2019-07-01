@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,16 @@ namespace TriviaClient
     }
 
     public struct CloseRoomResponse
+    {
+        public int status;
+    }
+
+    public struct StartGameRequest
+    {
+        public const int CODE = 9;
+    }
+
+    public struct StartGameResponse
     {
         public int status;
     }
@@ -93,7 +104,7 @@ namespace TriviaClient
                     MaxPlayers = room.maxPlayers,
                     TimePerQuestion = res.answerTimeout,
                     QuestionCount = res.questionCount,
-                    IsActive = res.hasGameBegun,
+                    IsActive = !res.hasGameBegun,
                     ActionButtonText = "Close Room",
                     ActionButtonEnabled = true,
                     Players = res.players
@@ -127,6 +138,49 @@ namespace TriviaClient
             // Close this window and the rooms window
             new RoomsWindow().Show();
             Close();
+        }
+
+        private async void startGameButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Cancel the background action
+            tokenSource.Cancel();
+
+            // Show the loading dialog
+            await DialogHost.Show(new Dialogs.LoadingDialog(), async delegate (object s, DialogOpenedEventArgs eventArgs)
+            {
+                StartGameResponse res;
+                byte[] buf;
+
+                // Send the start game request
+                await Client.Send(StartGameRequest.CODE, new byte[0]);
+
+                // Get from the server the response
+                buf = await Client.Recv();
+
+                // Deserialize the response
+                res = JsonConvert.DeserializeObject<StartGameResponse>(Encoding.UTF8.GetString(buf));
+
+                // If an error occurred
+                if (res.status == 1)
+                {
+                    // Show an error dialog
+                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "Unable to start the game!" });
+
+                    // Start the background action again
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        Task.Run(new Action(RefreshRoomData));
+                    }));
+                } else
+                {
+                    Dispatcher.Invoke(new Action(() =>
+                    {
+                        // Show the game window
+                        new GameWindow().Show();
+                        Close();
+                    }));
+                }
+            });
         }
     }
 }
