@@ -55,6 +55,9 @@ void GameRequestHandler::disconnect() const
 		// Remove the player from the game
 		m_gameManager->removePlayer(m_game, m_user);
 
+		// Try to delete the game if no one is playing it
+		m_gameManager->deleteGame(m_game);
+
 		// Logout the user
 		m_handlerFactory->getLoginManager()->logout(m_user);
 	}
@@ -145,6 +148,12 @@ RequestResult GameRequestHandler::leaveGame(const Request & req) const
 		leaveRoomResponse.status = ERROR;
 	}
 
+	// Try to delete the game if no one is playing it
+	try {
+		m_gameManager->deleteGame(m_game);
+	} catch (...) {}
+	
+
 	// Serialize the response and set the next handler as the menu request handler
 	res.newHandler = m_handlerFactory->createMenuRequestHandler(m_user);
 	res.response = JsonResponsePacketSerializer::SerializePacket(leaveRoomResponse);
@@ -161,6 +170,9 @@ RequestResult GameRequestHandler::getGameResults(const Request & req) const
 	try {
 		// Try to get the results of the game
 		getGameResultsResponse.results = m_gameManager->getPlayersResults(m_game);
+
+		// Try to delete the game if no one is playing it
+		m_gameManager->deleteGame(m_game);
 
 		getGameResultsResponse.status = SUCCESS;
 	}
