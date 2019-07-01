@@ -295,6 +295,15 @@ namespace TriviaClient
                 btn.Content = "Next";
             } else
             {
+                // If finished the last question, show the game results window
+                if (QuestionNumber == AmountOfQuestions)
+                {
+                    new GameResultsWindow().Show();
+                    Close();
+
+                    return;
+                }
+
                 UnselectRadioButtons();
                 EnableRadioButtons();
 
