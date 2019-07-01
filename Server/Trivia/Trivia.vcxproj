@@ -134,6 +134,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="game_data.h" />
     <ClInclude Include="game_manager.h" />
+    <ClInclude Include="game_request_handler.h" />
     <ClInclude Include="get_game_results_response.h" />
     <ClInclude Include="get_players_in_room_request.h" />
     <ClInclude Include="get_players_in_room_response.h" />
@@ -185,6 +186,7 @@
     <ClCompile Include="database.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_manager.cpp" />
+    <ClCompile Include="game_request_handler.cpp" />
     <ClCompile Include="highscore_table.cpp" />
     <ClCompile Include="login_request_handler.cpp" />
     <ClCompile Include="main.cpp" />

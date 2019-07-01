@@ -186,6 +186,9 @@
     <ClInclude Include="HTTPRequest.hpp">
       <Filter>Libraries</Filter>
     </ClInclude>
+    <ClInclude Include="game_request_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="login_manager.cpp">
@@ -243,6 +246,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="game_request_handler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
