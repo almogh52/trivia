@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MaterialDesignThemes.Wpf;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,6 +30,24 @@ namespace TriviaClient
         public SortedDictionary<int, string> answers;
     }
 
+    public struct LeaveGameRequest
+    {
+        public const int CODE = 15;
+    }
+
+    public struct SubmitAnswerRequest
+    {
+        public const int CODE = 13;
+
+        public int answerId;
+    }
+
+    public struct SubmitAnswerResponse
+    {
+        public int status;
+        public int correctAnswerId;
+    }
+
     public struct QuestionPreview
     {
         public string Question { get; set; }
@@ -45,16 +64,20 @@ namespace TriviaClient
         public int SelectedAnswer { get; set; }
 
         private Random rnd = new Random();
+        private RadioButton[] radioButtons { get; set; }
 
         public GameWindow()
         {
             SelectedAnswer = -1;
 
             InitializeComponent();
+
+            radioButtons = new[] { radioBtn0, radioBtn1, radioBtn2, radioBtn3 };
         }
 
         private void Update()
         {
+            DataContext = null;
             DataContext = this;
         }
 
@@ -105,7 +128,7 @@ namespace TriviaClient
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            await Task.Run(GetQuestion);
+            await GetQuestion();
 
             Update();
         }
@@ -116,6 +139,151 @@ namespace TriviaClient
 
             // Set the new selected answer and update
             SelectedAnswer = int.Parse((string)btn.Tag);
+        }
+
+        private async void leaveGameBtn_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] buf;
+
+            // Send the leave game request
+            await Client.Send(LeaveGameRequest.CODE, new byte[0]);
+
+            // Get from the server the response
+            buf = await Client.Recv();
+
+            // Show the rooms window
+            new RoomsWindow().Show();
+            Close();
+        }
+
+        private RadioButton GetRadioButtonForAnswer(int answerId)
+        {
+            int realIndex = Array.IndexOf(CurrentQuestion.AnswerIndices, answerId);
+
+            return radioButtons[realIndex];
+        }
+
+        private async Task SubmitAnswer()
+        {
+            SubmitAnswerRequest req = new SubmitAnswerRequest
+            {
+                answerId = CurrentQuestion.AnswerIndices[SelectedAnswer]
+            };
+            SubmitAnswerResponse res;
+            byte[] buf;
+
+            int[] answerIndices = RandomAnswerIndices();
+
+            // Send the submit answer request
+            await Client.Send(SubmitAnswerRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
+
+            // Get from the server the response
+            buf = await Client.Recv();
+
+            // Deserialize the response
+            res = JsonConvert.DeserializeObject<SubmitAnswerResponse>(Encoding.UTF8.GetString(buf));
+
+            // If an error occurred
+            if (res.status == 1)
+            {
+                // Show error
+                await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to submit answer!" });
+
+                throw new Exception();
+            } else
+            {
+                // Highlight the correct answer
+                GetRadioButtonForAnswer(res.correctAnswerId).Foreground = Brushes.LightGreen;
+
+                // If was wrong, highlight in red the wrong answer
+                if (res.correctAnswerId != CurrentQuestion.AnswerIndices[SelectedAnswer])
+                {
+                    radioButtons[SelectedAnswer].Foreground = Brushes.Red;
+                }
+            }
+        }
+
+        private void UnselectRadioButtons()
+        {
+            SelectedAnswer = -1;
+
+            // Unselect all buttons
+            foreach (RadioButton btn in radioButtons)
+            {
+                btn.IsChecked = false;
+                btn.Foreground = Brushes.White;
+            }
+        }
+
+        private void DisableRadioButtons()
+        {
+            // Disable all buttons
+            foreach (RadioButton btn in radioButtons)
+            {
+                btn.IsHitTestVisible = false;
+            }
+        }
+
+        private void EnableRadioButtons()
+        {
+            // Enable all buttons
+            foreach (RadioButton btn in radioButtons)
+            {
+                btn.IsHitTestVisible = true;
+            }
+        }
+
+        private async void submitNextBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+
+            // If nothing selected, return
+            if (SelectedAnswer == -1)
+            {
+                return;
+            }
+
+            // Disable the button
+            btn.IsEnabled = false;
+
+            // Submit
+            if ((string)btn.Content == "Submit")
+            {
+                DisableRadioButtons();
+
+                try
+                {
+                    await SubmitAnswer();
+                } catch {
+                    // Enable the button
+                    btn.IsEnabled = true;
+
+                    EnableRadioButtons();
+
+                    return;
+                }
+
+                // Enable the button
+                btn.IsEnabled = true;
+
+                // Change the button to the next button
+                btn.Content = "Next";
+            } else
+            {
+                UnselectRadioButtons();
+
+                // Get the next question
+                await GetQuestion();
+                Update();
+
+                // Enable the button
+                btn.IsEnabled = true;
+
+                // Change the button to the next button
+                btn.Content = "Submit";
+
+                EnableRadioButtons();
+            }
         }
     }
 }

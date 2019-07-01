@@ -203,5 +203,8 @@
   <ItemGroup>
     <Resource Include="trivia-icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="trivia-open-db.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
