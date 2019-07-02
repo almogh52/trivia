@@ -149,9 +149,64 @@ namespace TriviaClient
             Update();
         }
 
-        private void TimerTick(object sneder, EventArgs e)
+        private async void TimerTick(object sneder, EventArgs e)
         {
-            RemainingTime -= 1;
+            // If the time ran out, send an empty answer
+            if (RemainingTime == 0)
+            {
+                // Stop the timer
+                timer.Stop();
+
+                DisableRadioButtons();
+
+                SubmitAnswerRequest req = new SubmitAnswerRequest
+                {
+                    answerId = 5
+                };
+                SubmitAnswerResponse res;
+                byte[] buf;
+
+                int[] answerIndices = RandomAnswerIndices();
+
+                // Send the submit answer request
+                await Client.Send(SubmitAnswerRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
+
+                // Get from the server the response
+                buf = await Client.Recv();
+
+                // Deserialize the response
+                res = JsonConvert.DeserializeObject<SubmitAnswerResponse>(Encoding.UTF8.GetString(buf));
+
+                // If an error occurred
+                if (res.status == 1)
+                {
+                    // Show error
+                    await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to submit answer!" });
+
+                    throw new Exception();
+                }
+                else
+                {
+                    // Highlight the correct answer
+                    GetRadioButtonForAnswer(res.correctAnswerId).Foreground = Brushes.LightGreen;
+
+                    // If was wrong, highlight in red the wrong answer
+                    if (SelectedAnswer != -1 && res.correctAnswerId != CurrentQuestion.AnswerIndices[SelectedAnswer])
+                    {
+                        radioButtons[SelectedAnswer].Foreground = Brushes.Red;
+                    }
+                }
+
+                // Enable the button
+                submitNextBtn.IsEnabled = true;
+
+                // Change the button to the next button
+                submitNextBtn.Content = "Next";
+            } else
+            {
+                RemainingTime -= 1;
+            }
+
             Update();
         }
 
@@ -260,7 +315,7 @@ namespace TriviaClient
             Button btn = sender as Button;
 
             // If nothing selected, return
-            if (SelectedAnswer == -1)
+            if ((string)btn.Content == "Submit" && SelectedAnswer == -1)
             {
                 return;
             }
