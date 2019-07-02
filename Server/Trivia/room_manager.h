@@ -19,6 +19,7 @@ public:
 	
 	void startGame(unsigned int roomId, unsigned int gameId);
 	unsigned int getGameIdOfRoom(unsigned int roomId);
+	void deleteRoomWithGameId(unsigned int gameId);
 
 	std::vector<std::string> getPlayersInRoom(unsigned int roomId);
 	std::vector<LoggedUser> getLoggedPlayersInRoom(unsigned int roomId);

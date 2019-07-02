@@ -28,6 +28,7 @@ public:
     
     std::shared_ptr<LoginManager> getLoginManager();
 	std::shared_ptr<GameManager> getGameManager();
+	std::shared_ptr<RoomManager> getRoomManager();
 
     std::shared_ptr<RequestHandlerFactory> getPtr();
 private:

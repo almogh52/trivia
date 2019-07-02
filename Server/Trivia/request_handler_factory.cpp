@@ -40,6 +40,11 @@ std::shared_ptr<GameManager> RequestHandlerFactory::getGameManager()
 	return m_gameManager;
 }
 
+std::shared_ptr<RoomManager> RequestHandlerFactory::getRoomManager()
+{
+	return m_roomManager;
+}
+
 std::shared_ptr<RequestHandlerFactory> RequestHandlerFactory::getPtr()
 {
     return shared_from_this();
