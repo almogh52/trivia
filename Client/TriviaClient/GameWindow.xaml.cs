@@ -115,22 +115,33 @@ namespace TriviaClient
 
             int[] answerIndices = RandomAnswerIndices();
 
-            // Send the get question request
-            await Client.Send(GetQuestionRequest.CODE, new byte[0]);
-
-            // Get from the server the response
-            buf = await Client.Recv();
-
-            // Deserialize the response
-            res = JsonConvert.DeserializeObject<GetQuestionResponse>(Encoding.UTF8.GetString(buf));
-
-            // Set the current question
-            CurrentQuestion = new QuestionPreview
+            try
             {
-                Question = res.question,
-                AnswerIndices = answerIndices,
-                Answers = GetAnswersByIndices(res.answers, answerIndices)
-            };
+                // Send the get question request
+                await Client.Send(GetQuestionRequest.CODE, new byte[0]);
+
+                // Get from the server the response
+                buf = await Client.Recv();
+
+                // Deserialize the response
+                res = JsonConvert.DeserializeObject<GetQuestionResponse>(Encoding.UTF8.GetString(buf));
+
+                // Set the current question
+                CurrentQuestion = new QuestionPreview
+                {
+                    Question = res.question,
+                    AnswerIndices = answerIndices,
+                    Answers = GetAnswersByIndices(res.answers, answerIndices)
+                };
+            } catch
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    // Close this window and re-show the auth window to connect to the server
+                    new AuthWindow().Show();
+                    Close();
+                });
+            }
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -168,35 +179,48 @@ namespace TriviaClient
 
                 int[] answerIndices = RandomAnswerIndices();
 
-                // Send the submit answer request
-                await Client.Send(SubmitAnswerRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
-
-                // Get from the server the response
-                buf = await Client.Recv();
-
-                // Deserialize the response
-                res = JsonConvert.DeserializeObject<SubmitAnswerResponse>(Encoding.UTF8.GetString(buf));
-
-                // If an error occurred
-                if (res.status == 1)
+                try
                 {
-                    // Show error
-                    await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to submit answer!" });
+                    // Send the submit answer request
+                    await Client.Send(SubmitAnswerRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
 
-                    throw new Exception();
-                }
-                else
-                {
-                    // Highlight the correct answer
-                    GetRadioButtonForAnswer(res.correctAnswerId).Foreground = Brushes.LightGreen;
+                    // Get from the server the response
+                    buf = await Client.Recv();
 
-                    // If was wrong, highlight in red the wrong answer
-                    if (SelectedAnswer != -1 && res.correctAnswerId != CurrentQuestion.AnswerIndices[SelectedAnswer])
+                    // Deserialize the response
+                    res = JsonConvert.DeserializeObject<SubmitAnswerResponse>(Encoding.UTF8.GetString(buf));
+
+                    // If an error occurred
+                    if (res.status == 1)
                     {
-                        radioButtons[SelectedAnswer].Foreground = Brushes.Red;
-                    }
-                }
+                        // Show error
+                        await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to submit answer!" });
 
+                        throw new Exception();
+                    }
+                    else
+                    {
+                        // Highlight the correct answer
+                        GetRadioButtonForAnswer(res.correctAnswerId).Foreground = Brushes.LightGreen;
+
+                        // If was wrong, highlight in red the wrong answer
+                        if (SelectedAnswer != -1 && res.correctAnswerId != CurrentQuestion.AnswerIndices[SelectedAnswer])
+                        {
+                            radioButtons[SelectedAnswer].Foreground = Brushes.Red;
+                        }
+                    }
+                } catch
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        // Close this window and re-show the auth window to connect to the server
+                        new AuthWindow().Show();
+                        Close();
+                    });
+
+                    return;
+                }
+                
                 // Enable the button
                 submitNextBtn.IsEnabled = true;
 
@@ -222,15 +246,24 @@ namespace TriviaClient
         {
             byte[] buf;
 
-            // Send the leave game request
-            await Client.Send(LeaveGameRequest.CODE, new byte[0]);
+            try
+            {
+                // Send the leave game request
+                await Client.Send(LeaveGameRequest.CODE, new byte[0]);
 
-            // Get from the server the response
-            buf = await Client.Recv();
+                // Get from the server the response
+                buf = await Client.Recv();
 
-            // Show the rooms window
-            new RoomsWindow().Show();
-            Close();
+                // Show the rooms window
+                new RoomsWindow().Show();
+                Close();
+            } catch
+            {
+                // Close this window and re-show the auth window to connect to the server
+                new AuthWindow().Show();
+                Close();
+            }
+            
         }
 
         private RadioButton GetRadioButtonForAnswer(int answerId)
@@ -251,32 +284,44 @@ namespace TriviaClient
 
             int[] answerIndices = RandomAnswerIndices();
 
-            // Send the submit answer request
-            await Client.Send(SubmitAnswerRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
-
-            // Get from the server the response
-            buf = await Client.Recv();
-
-            // Deserialize the response
-            res = JsonConvert.DeserializeObject<SubmitAnswerResponse>(Encoding.UTF8.GetString(buf));
-
-            // If an error occurred
-            if (res.status == 1)
+            try
             {
-                // Show error
-                await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to submit answer!" });
+                // Send the submit answer request
+                await Client.Send(SubmitAnswerRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
 
-                throw new Exception();
-            } else
-            {
-                // Highlight the correct answer
-                GetRadioButtonForAnswer(res.correctAnswerId).Foreground = Brushes.LightGreen;
+                // Get from the server the response
+                buf = await Client.Recv();
 
-                // If was wrong, highlight in red the wrong answer
-                if (res.correctAnswerId != CurrentQuestion.AnswerIndices[SelectedAnswer])
+                // Deserialize the response
+                res = JsonConvert.DeserializeObject<SubmitAnswerResponse>(Encoding.UTF8.GetString(buf));
+
+                // If an error occurred
+                if (res.status == 1)
                 {
-                    radioButtons[SelectedAnswer].Foreground = Brushes.Red;
+                    // Show error
+                    await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to submit answer!" });
+
+                    throw new Exception();
                 }
+                else
+                {
+                    // Highlight the correct answer
+                    GetRadioButtonForAnswer(res.correctAnswerId).Foreground = Brushes.LightGreen;
+
+                    // If was wrong, highlight in red the wrong answer
+                    if (res.correctAnswerId != CurrentQuestion.AnswerIndices[SelectedAnswer])
+                    {
+                        radioButtons[SelectedAnswer].Foreground = Brushes.Red;
+                    }
+                }
+            } catch
+            {
+                Dispatcher.Invoke(() =>
+                {
+                    // Close this window and re-show the auth window to connect to the server
+                    new AuthWindow().Show();
+                    Close();
+                });
             }
         }
 

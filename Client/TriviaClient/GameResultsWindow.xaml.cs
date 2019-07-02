@@ -68,23 +68,35 @@ namespace TriviaClient
                 {
                     byte[] buf;
 
-                    // Send the get game results request
-                    await Client.Send(GetGameResultsRequest.CODE, new byte[0]);
-
-                    // Get from the server the response
-                    buf = await Client.Recv();
-
-                    // Deserialize the response
-                    res = JsonConvert.DeserializeObject<GetGameResultsResponse>(Encoding.UTF8.GetString(buf));
-
-                    // If got result SUCCESS, break the loop
-                    if (res.status == 0)
+                    try
                     {
-                        break;
-                    }
+                        // Send the get game results request
+                        await Client.Send(GetGameResultsRequest.CODE, new byte[0]);
 
-                    // Sleep 1 second
-                    await Task.Delay(1000);
+                        // Get from the server the response
+                        buf = await Client.Recv();
+
+                        // Deserialize the response
+                        res = JsonConvert.DeserializeObject<GetGameResultsResponse>(Encoding.UTF8.GetString(buf));
+
+                        // If got result SUCCESS, break the loop
+                        if (res.status == 0)
+                        {
+                            break;
+                        }
+
+                        // Sleep 1 second
+                        await Task.Delay(1000);
+                    }
+                    catch
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            // Close this window and re-show the auth window to connect to the server
+                            new AuthWindow().Show();
+                            Close();
+                        });
+                    }
                 }
 
                 // Parse the results

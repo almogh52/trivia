@@ -14,7 +14,7 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Trivia" Height="600" Width="1000">
-    <materialDesign:DialogHost x:Name="RootDialog" Loaded="RootDialog_Loaded">
+    <materialDesign:DialogHost Identifier="RootDialog" Loaded="RootDialog_Loaded">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="58*"/>
