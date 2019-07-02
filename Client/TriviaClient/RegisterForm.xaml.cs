@@ -72,27 +72,35 @@ namespace TriviaClient
                     email = email
                 };
 
-                // Send the register request
-                await Client.Send(RegisterRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req)));
-
-                // Get the register response
-                resBytes = await Client.Recv();
-
-                // Deserialize the register response
-                res = JsonConvert.DeserializeObject<RegisterResponse>(Encoding.UTF8.GetString(resBytes));
-
-                // If register failed, show error
-                if (res.status == 1)
+                try
                 {
-                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "One of the values entered is invalid or already in use!" });
-                } else
-                {
-                    // Close the dialog
-                    eventArgs.Session.Close();
+                    // Send the register request
+                    await Client.Send(RegisterRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req)));
 
-                    // Show the rooms window
-                    this.showRoomsWindow();
+                    // Get the register response
+                    resBytes = await Client.Recv();
+
+                    // Deserialize the register response
+                    res = JsonConvert.DeserializeObject<RegisterResponse>(Encoding.UTF8.GetString(resBytes));
+
+                    // If register failed, show error
+                    if (res.status == 1)
+                    {
+                        eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "One of the values entered is invalid or already in use!" });
+                    }
+                    else
+                    {
+                        // Close the dialog
+                        eventArgs.Session.Close();
+
+                        // Show the rooms window
+                        this.showRoomsWindow();
+                    }
+                } catch
+                {
+                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "An unknown error occurred!" });
                 }
+
             }, null);
         }
 

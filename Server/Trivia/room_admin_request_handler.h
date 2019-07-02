@@ -21,6 +21,7 @@ public:
 private:
 	RequestResult closeRoom(const Request& req) const;
 	RequestResult getRoomState(const Request& req) const;
+	RequestResult startGame(const Request& req) const;
 
 	int m_roomId;
 	LoggedUser m_user;

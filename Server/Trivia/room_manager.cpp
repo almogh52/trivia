@@ -2,6 +2,8 @@
 
 #include "exception.h"
 
+#include <algorithm>
+
 int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion, unsigned int questionCount)
 {
     RoomData roomMetadata;
@@ -52,6 +54,9 @@ bool RoomManager::deleteRoom(unsigned int roomId)
     {
 		return false;
     }
+
+	// Remove the game that is linked to it
+	m_roomsGames.erase(roomId);
 
 	// Unlock the room mutex
 	roomsMutex.unlock();
@@ -130,6 +135,68 @@ bool RoomManager::getRoomState(unsigned int roomId)
 	return isActive;
 }
 
+void RoomManager::startGame(unsigned int roomId, unsigned int gameId)
+{
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		// Set the room state as not active
+		m_rooms.at(roomId).setRoomState(false);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Attach the game to the room
+	m_roomsGames[roomId] = gameId;
+
+	// Lock the rooms mutex
+	roomsMutex.unlock();
+}
+
+unsigned int RoomManager::getGameIdOfRoom(unsigned int roomId)
+{
+	unsigned int gameId = -1;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		// Try to get the game id of the room
+		gameId = m_roomsGames.at(roomId);
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No game attached to the room!");
+	}
+
+	// Lock the rooms mutex
+	roomsMutex.unlock();
+
+	return gameId;
+}
+
+void RoomManager::deleteRoomWithGameId(unsigned int gameId)
+{
+	// Try to find the room iterator
+	auto it = std::find_if(m_roomsGames.begin(), m_roomsGames.end(),
+		[gameId](const auto& p) { return p.second == gameId; });
+
+	// If iterator found, delete the room
+	if (it != m_roomsGames.end())
+	{
+		try {
+			deleteRoom(it->first);
+		} catch (...) {}
+	}
+}
+
 std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId)
 {
 	std::vector<std::string> players;
@@ -158,6 +225,29 @@ std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId)
 	}
 
 	return players;
+}
+
+std::vector<LoggedUser> RoomManager::getLoggedPlayersInRoom(unsigned int roomId)
+{
+	std::vector<LoggedUser> users;
+
+	// Lock the rooms mutex
+	roomsMutex.lock();
+
+	try {
+		users = m_rooms.at(roomId).getAllUsers();
+	}
+	catch (...) {
+		// Unlock the room mutex
+		roomsMutex.unlock();
+
+		throw Exception("No room with the id " + std::to_string(roomId));
+	}
+
+	// Unlock the room mutex
+	roomsMutex.unlock();
+
+	return users;
 }
 
 std::vector<RoomData> RoomManager::getRooms()

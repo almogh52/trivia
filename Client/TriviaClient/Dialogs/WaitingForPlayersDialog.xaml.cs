@@ -16,17 +16,13 @@ using System.Windows.Shapes;
 namespace TriviaClient.Dialogs
 {
     /// <summary>
-    /// Interaction logic for CreateRoomDialog.xaml
+    /// Interaction logic for WaitingForPlayersDialog.xaml
     /// </summary>
-    public partial class CreateRoomDialog : UserControl
+    public partial class WaitingForPlayersDialog : UserControl
     {
-        public CreateRoomDialog()
+        public WaitingForPlayersDialog()
         {
             InitializeComponent();
-
-            maxPlayerBox.ItemsSource = Enumerable.Range(2, 99);
-            timePerQuestionBox.ItemsSource = Enumerable.Range(10, 51);
-            questionCountBox.ItemsSource = Enumerable.Range(1, 15);
         }
     }
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <ctime>
 
 #include "request.h"
 #include "request_result.h"
@@ -145,6 +146,9 @@ void Communicator::clientHandler(SOCKET clientSocket)
 
 			// Copy buffer contents to the request vector buffer
 			req.buffer.assign(buffer.get(), buffer.get() + bufferSize + 1);
+
+			// Set the time of arrival of the request
+			req.receivalTime = std::time(nullptr);
 
 			// Lock the clients mutex
 			clientsMutex.lock();

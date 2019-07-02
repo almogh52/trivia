@@ -59,7 +59,7 @@ namespace TriviaClient
             {
                 DataContext = connectDataContext;
             };
-            await DialogHost.Show(dialog, async delegate(object s1, DialogClosingEventArgs eventArgs)
+            await DialogHost.Show(dialog, "RootDialog", async delegate(object s1, DialogClosingEventArgs eventArgs)
             {
                 string serverIP = connectDataContext.ServerIP;
 

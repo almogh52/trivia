@@ -19,10 +19,10 @@ Database::~Database()
 
 void Database::initDatabase()
 {
-	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY, password TEXT NOT NULL, email TEXT NOT NULL);";
-	const char* questionsTableQuery = "CREATE TABLE questions (question_id INTEGER NOT NULL PRIMARY KEY, question TEXT NOT NULL, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);";
+	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY UNIQUE, password TEXT NOT NULL, email TEXT NOT NULL UNIQUE);";
+	const char* questionsTableQuery = "CREATE TABLE questions (question_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, question TEXT NOT NULL UNIQUE, correct_ans TEXT NOT NULL, ans2 TEXT NOT NULL, ans3 TEXT NOT NULL, ans4 TEXT NOT NULL);";
 	const char* answersTableQuery = "CREATE TABLE answers (username TEXT NOT NULL REFERENCES users(username), game_id INTEGER NOT NULL REFERENCES games(game_id), question_id INTEGER NOT NULL REFERENCES questions(question_id), answer INTEGER NOT NULL, correct_ans INTEGER NOT NULL, PRIMARY KEY(username, game_id, question_id));";
-	const char* gamesTableQuery = "CREATE TABLE games (game_id INTEGER NOT NULL PRIMARY KEY, start_time DATETIME NOT NULL, end_time DATETIME);";
+	const char* gamesTableQuery = "CREATE TABLE games (game_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, start_time DATETIME NOT NULL, end_time DATETIME);";
 
 	int res = 0;
 
@@ -106,6 +106,16 @@ int string_callback(void *data, int argc, char **argv, char **colNames)
     *str = argv[0];
 
     return 0;
+}
+
+int int_callback(void *data, int argc, char **argv, char **colNames)
+{
+	int *integer = (int *)data;
+
+	// Get the int value of the first res
+	*integer = std::stoi(argv[0]);
+
+	return 0;
 }
 
 bool Database::doesUserExist(std::string username)
@@ -215,4 +225,116 @@ std::unordered_map<std::string, std::unordered_map<int, int>> Database::getAllSc
 	}
 
 	return playersGamesScores;
+}
+
+std::string escapeString(std::string str)
+{
+	size_t index = 0;
+	while (true) {
+		/* Locate the substring to replace. */
+		index = str.find("'", index);
+		if (index == std::string::npos) break;
+
+		/* Make the replacement. */
+		str.replace(index, 3, "''");
+
+		/* Advance index forward so the next iteration doesn't pick it up as well. */
+		index += 3;
+	}
+
+	return str;
+}
+
+unsigned int Database::createQuestion(std::string question, std::string correctAns, std::string ans2, std::string ans3, std::string ans4)
+{
+	unsigned int questionId = 0;
+
+	int res = 0;
+	std::string insertQuestionQuery("INSERT INTO questions(question, correct_ans, ans2, ans3, ans4) VALUES(':question', ':correct_ans', ':ans2', ':ans3', ':ans4')");
+	std::string getQuestionIdQuery("SELECT question_id FROM questions WHERE question = ':question'");
+
+	// Bind parameters
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":question"), escapeString(question));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":correct_ans"), escapeString(correctAns));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans2"), escapeString(ans2));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans3"), escapeString(ans3));
+	insertQuestionQuery = std::regex_replace(insertQuestionQuery, std::regex(":ans4"), escapeString(ans4));
+	getQuestionIdQuery = std::regex_replace(getQuestionIdQuery, std::regex(":question"), escapeString(question));
+
+	// Try to insert the question to the database
+	sqlite3_exec(m_db, insertQuestionQuery.c_str(), nullptr, nullptr, nullptr);
+
+	// Try to get the id of the question
+	res = sqlite3_exec(m_db, getQuestionIdQuery.c_str(), int_callback, &questionId, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to get the id of the question!");
+	}
+
+	return questionId;
+}
+
+unsigned int Database::createGame()
+{
+	unsigned int gameId = 0;
+
+	int res = 0;
+	std::string insertGameQuery("INSERT INTO games(start_time) VALUES(:start_time)");
+	std::string getGameIdQuery("SELECT seq FROM sqlite_sequence WHERE name = 'games'");
+
+	// Bind parameters
+	insertGameQuery = std::regex_replace(insertGameQuery, std::regex(":start_time"), std::to_string(std::time(nullptr)));
+
+	// Try to insert the game to the database
+	res = sqlite3_exec(m_db, insertGameQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to create a new game!");
+	}
+
+	// Try to get the id of the game
+	res = sqlite3_exec(m_db, getGameIdQuery.c_str(), int_callback, &gameId, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to get the id of the game!");
+	}
+
+	return gameId;
+}
+
+void Database::endGame(unsigned int gameId)
+{
+	int res = 0;
+	std::string endGameQuery("UPDATE games WHERE game_id = :game_id SET end_time = :end_time");
+
+	// Bind parameters
+	endGameQuery = std::regex_replace(endGameQuery, std::regex(":game_id"), std::to_string(gameId));
+	endGameQuery = std::regex_replace(endGameQuery, std::regex(":end_time"), std::to_string(std::time(nullptr)));
+
+	// Try to end the game
+	res = sqlite3_exec(m_db, endGameQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to end the game!");
+	}
+}
+
+void Database::submitAnswer(unsigned int gameId, unsigned int questionId, std::string username, unsigned int answer, bool correctAns)
+{
+	int res = 0;
+	std::string submitAnswerQuery("INSERT INTO answers(username, game_id, question_id, answer, correct_ans) VALUES(':username', :game_id, :question_id, :answer, :correct_ans)");
+
+	// Bind parameters
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":username"), username);
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":game_id"), std::to_string(gameId));
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":question_id"), std::to_string(questionId));
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":answer"), std::to_string(answer));
+	submitAnswerQuery = std::regex_replace(submitAnswerQuery, std::regex(":correct_ans"), std::to_string(correctAns));
+
+	// Try to submit the answer
+	res = sqlite3_exec(m_db, submitAnswerQuery.c_str(), nullptr, nullptr, nullptr);
+	if (res != SQLITE_OK)
+	{
+		throw Exception("Unable to submit the answer!");
+	}
 }

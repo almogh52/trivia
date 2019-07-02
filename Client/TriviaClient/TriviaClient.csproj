@@ -69,12 +69,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dialogs\WaitingForPlayersDialog.xaml.cs">
+      <DependentUpon>WaitingForPlayersDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameResultsWindow.xaml.cs">
+      <DependentUpon>GameResultsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RadioBoolToIntConverter.cs" />
     <Compile Include="Dialogs\CreateRoomDialog.xaml.cs">
       <DependentUpon>CreateRoomDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\CreateRoomDialogViewModel.cs" />
     <Compile Include="Dialogs\HighscoresDialog.xaml.cs">
       <DependentUpon>HighscoresDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameWindow.xaml.cs">
+      <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="RoomMemberWindow.xaml.cs">
       <DependentUpon>RoomMemberWindow.xaml</DependentUpon>
@@ -117,6 +127,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Dialogs\MessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\WaitingForPlayersDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameResultsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,6 +216,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="trivia-icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="trivia-open-db.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

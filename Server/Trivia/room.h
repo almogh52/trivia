@@ -13,6 +13,7 @@ public:
     std::vector<LoggedUser> getAllUsers() const;
     bool addUser(const LoggedUser &user);
     bool removeUser(const LoggedUser &user);
+	void setRoomState(bool state);
 
     RoomData getMetadata() const;
 

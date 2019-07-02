@@ -39,7 +39,9 @@ RequestResult RoomMemberRequestHandler::handleRequest(const Request & req) const
 void RoomMemberRequestHandler::disconnect() const
 {
 	// Leave the room
-	m_roomManager->leaveRoom(m_user, m_roomId);
+	try {
+		m_roomManager->leaveRoom(m_user, m_roomId);
+	} catch (...) {}
 }
 
 RequestResult RoomMemberRequestHandler::leaveRoom(const Request & req) const
@@ -70,6 +72,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(const Request & req) const
 
 	RoomData roomData;
 	GetRoomStateResponse getRoomStateResponse = { 0 };
+	unsigned int gameId;
 	
 	try {
 		// Get the room data of the room
@@ -83,7 +86,13 @@ RequestResult RoomMemberRequestHandler::getRoomState(const Request & req) const
 		getRoomStateResponse.players = m_roomManager->getPlayersInRoom(m_roomId);
 
 		// Check if the game in the room has begun
-		getRoomStateResponse.hasGameBegun = m_roomManager->getRoomState(m_roomId);
+		getRoomStateResponse.hasGameBegun = !m_roomManager->getRoomState(m_roomId);
+		if (getRoomStateResponse.hasGameBegun)
+		{
+			// Get the game id
+			gameId = m_roomManager->getGameIdOfRoom(m_roomId);
+		}
+
 		getRoomStateResponse.status = SUCCESS;
 	}
 	catch (...) {
@@ -91,7 +100,15 @@ RequestResult RoomMemberRequestHandler::getRoomState(const Request & req) const
 	}
 
 	// Set the new handler as the menu request handler and serialize the response
-	res.newHandler = getRoomStateResponse.status ? m_handlerFactory->createMenuRequestHandler(m_user) : nullptr;
+	if (getRoomStateResponse.status)
+	{
+		res.newHandler = m_handlerFactory->createMenuRequestHandler(m_user);
+	}
+	else {
+		// If the game has begun, create a new game request handler
+		res.newHandler = getRoomStateResponse.hasGameBegun ? m_handlerFactory->createGameRequestHandler(m_user, gameId) : nullptr;
+	}
+
 	res.response = JsonResponsePacketSerializer::SerializePacket(getRoomStateResponse);
 
 	return res;
