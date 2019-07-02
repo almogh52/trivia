@@ -113,6 +113,13 @@ namespace TriviaClient
             });
         }
 
+        /// <summary>
+        /// Parses the player results list
+        /// </summary>
+        /// <returns>
+        /// None
+        /// </returns>
+        /// <param name="results">The array of results</param>
         private void ParseResults(List<PlayerResults> results)
         {
             // Init list

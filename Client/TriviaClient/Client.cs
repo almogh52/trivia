@@ -26,6 +26,13 @@ namespace TriviaClient
             socket.Close();
         }
 
+        /// <summary>
+        /// Connects to the server
+        /// </summary>
+        /// <returns>
+        /// Task
+        /// </returns>
+        /// <param name="serverIP">The ip of the server to connect to</param>
         public async static Task Connect(string serverIP)
         {
             // Create the tcp client to the server
@@ -36,6 +43,14 @@ namespace TriviaClient
             stream = socket.GetStream();
         }
 
+        /// <summary>
+        /// Sends a message to the server
+        /// </summary>
+        /// <returns>
+        /// Task
+        /// </returns>
+        /// <param name="messageId">The id of the message</param>
+        /// <param name="message">The bytes of the message</param>
         public static async Task Send(byte messageId, byte[] message)
         {
             byte[] buf = new byte[message.Length + HEADER_LEN];
@@ -53,6 +68,12 @@ namespace TriviaClient
             await stream.WriteAsync(buf, 0, buf.Length);
         }
 
+        /// <summary>
+        /// Recv a message from the server
+        /// </summary>
+        /// <returns>
+        /// A byte array containing the response
+        /// </returns>
         public static async Task<byte[]> Recv()
         {
             byte[] messageSizeBuf = new byte[4];

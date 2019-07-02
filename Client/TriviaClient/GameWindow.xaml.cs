@@ -88,6 +88,12 @@ namespace TriviaClient
             DataContext = this;
         }
 
+        /// <summary>
+        /// Gets random answer idices
+        /// </summary>
+        /// <returns>
+        /// Array with random answer indices
+        /// </returns>
         private int[] RandomAnswerIndices()
         {
             int[] indices = { 0, 1, 2, 3 };
@@ -95,6 +101,14 @@ namespace TriviaClient
             return indices.OrderBy(x => rnd.Next()).ToArray();
         }
 
+        /// <summary>
+        /// Gets the answers sorted by their indices
+        /// </summary>
+        /// <returns>
+        /// The list of answers
+        /// </returns>
+        /// <param name="answers">The dict of answers</param>
+        /// <param name="answerIndices">The indices of the answers</param>
         private List<string> GetAnswersByIndices(SortedDictionary<int, string> answers, int[] answerIndices)
         {
             List<string> answersList = new List<string>();
@@ -108,6 +122,12 @@ namespace TriviaClient
             return answersList;
         }
 
+        /// <summary>
+        /// Gets the current question
+        /// </summary>
+        /// <returns>
+        /// Task
+        /// </returns>
         private async Task GetQuestion()
         {
             GetQuestionResponse res;
@@ -266,6 +286,13 @@ namespace TriviaClient
             
         }
 
+        /// <summary>
+        /// Gets the radio button for an answer
+        /// </summary>
+        /// <returns>
+        /// The wanted radio button
+        /// </returns>
+        /// <param name="answerId">The id of the answer</param>
         private RadioButton GetRadioButtonForAnswer(int answerId)
         {
             int realIndex = Array.IndexOf(CurrentQuestion.AnswerIndices, answerId);
@@ -273,6 +300,12 @@ namespace TriviaClient
             return radioButtons[realIndex];
         }
 
+        /// <summary>
+        /// Submits the answer
+        /// </summary>
+        /// <returns>
+        /// Task
+        /// </returns>
         private async Task SubmitAnswer()
         {
             SubmitAnswerRequest req = new SubmitAnswerRequest

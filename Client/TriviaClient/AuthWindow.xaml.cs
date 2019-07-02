@@ -35,6 +35,12 @@ namespace TriviaClient
             registerForm.showRoomsWindow = showRoomsWindow;
         }
 
+        /// <summary>
+        /// Shows the rooms window
+        /// </summary>
+        /// <returns>
+        /// None
+        /// </returns>
         private void showRoomsWindow()
         {
             RoomsWindow roomsWindow = new RoomsWindow();
