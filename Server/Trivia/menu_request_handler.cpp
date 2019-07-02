@@ -20,11 +20,23 @@ MenuRequestHandler::MenuRequestHandler(const LoggedUser& user, std::shared_ptr<R
 {
 }
 
+/**
+ * Checks if the request is relevant
+ *
+ * @param req The request
+ * @return Is the request relevant
+ */
 bool MenuRequestHandler::isRequestRelevant(const Request & req) const
 {
     return req.id == LOGOUT_REQUEST || req.id == GET_ROOMS_REQUEST || req.id == GET_PLAYERS_IN_ROOM_REQUEST || req.id == JOIN_ROOM_REQUEST || req.id == CREATE_ROOM_REQUEST || req.id == GET_HIGHSCORES_REQUEST;
 }
 
+/**
+ * Handles a request
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::handleRequest(const Request & req) const
 {
     RequestResult res;
@@ -59,12 +71,23 @@ RequestResult MenuRequestHandler::handleRequest(const Request & req) const
     return res;
 }
 
+/**
+ * Disconnect handler
+ *
+ * @return None
+ */
 void MenuRequestHandler::disconnect() const
 {
 	// Try to logout the user
 	m_handlerFactory->getLoginManager()->logout(m_user);
 }
 
+/**
+ * Logout handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::logout(const Request & req) const
 {
     LogoutResponse logoutRes;
@@ -86,6 +109,12 @@ RequestResult MenuRequestHandler::logout(const Request & req) const
     return res;
 }
 
+/**
+ * Get Rooms handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::getRooms(const Request & req) const
 {
 	GetRoomsResponse roomsRes;
@@ -102,6 +131,12 @@ RequestResult MenuRequestHandler::getRooms(const Request & req) const
 	return res;
 }
 
+/**
+ * Get Players In Room handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::getPlayersInRoom(const Request & req) const
 {
 	GetPlayersInRoomRequest playersReq = JsonRequestPacketDeserializer::DeserializePacket<GetPlayersInRoomRequest>(req.buffer);
@@ -125,6 +160,12 @@ RequestResult MenuRequestHandler::getPlayersInRoom(const Request & req) const
 	return res;
 }
 
+/**
+ * Get Players In Room handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 {
 	JoinRoomRequest joinReq = JsonRequestPacketDeserializer::DeserializePacket<JoinRoomRequest>(req.buffer);
@@ -148,6 +189,12 @@ RequestResult MenuRequestHandler::joinRoom(const Request & req) const
 	return res;
 }
 
+/**
+ * Create Room handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::createRoom(const Request & req) const
 {
 	CreateRoomRequest createReq = JsonRequestPacketDeserializer::DeserializePacket<CreateRoomRequest>(req.buffer);
@@ -171,6 +218,12 @@ RequestResult MenuRequestHandler::createRoom(const Request & req) const
 	return res;
 }
 
+/**
+ * Get Highscores handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult MenuRequestHandler::getHighscores(const Request & req) const
 {
 	HighscoreResponse highscoreRes;

@@ -2,6 +2,15 @@
 
 #include <algorithm>
 
+/**
+ * Game's c'tor
+ *
+ * @param id The id of the game
+ * @param question The list of questions
+ * @param players The players in the game
+ * @param answerTimeout The time per question
+ * @return None
+ */
 Game::Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedUser> players, unsigned int answerTimeout)
 	: m_id(id), m_questions(questions), m_answerTimeout(answerTimeout)
 {
@@ -14,11 +23,25 @@ Game::Game(unsigned int id, std::vector<Question> questions, std::vector<LoggedU
 	}
 }
 
+/**
+ * Gets the current question for a user
+ *
+ * @param user The user
+ * @return The question for the user
+ */
 Question Game::getQuestionForUser(const LoggedUser & user)
 {
 	return m_players[user].currentQuestion;
 }
 
+/**
+ * Submits a user answer
+ *
+ * @param player The user
+ * @param answerId The id of the answer
+ * @param timeToAnswer The time it took the player to answer
+ * @return Is the answer was correct or not
+ */
 bool Game::submitAnswer(const LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
 {
 	GameData gameData = m_players[player];
@@ -47,11 +70,22 @@ bool Game::submitAnswer(const LoggedUser & player, unsigned int answerId, unsign
 	return correct;
 }
 
+/**
+ * Removes a player from the game
+ *
+ * @param player The user
+ * @return None
+ */
 void Game::removePlayer(const LoggedUser & player)
 {
 	m_players[player].playerLeft = true;
 }
 
+/**
+ * Checks if the game can be deleted
+ *
+ * @return Can the game be deleted
+ */
 bool Game::canBeDeleted()
 {
 	bool clear = true;
@@ -68,6 +102,11 @@ bool Game::canBeDeleted()
 	return clear;
 }
 
+/**
+ * Checks if the game is over
+ *
+ * @return Is the game over
+ */
 bool Game::gameOver()
 {
 	bool clear = true;
@@ -84,11 +123,21 @@ bool Game::gameOver()
 	return clear;
 }
 
+/**
+ * Gets the game id
+ *
+ * @return The game id
+ */
 unsigned int Game::getGameId()
 {
 	return m_id;
 }
 
+/**
+ * Gets the players data
+ *
+ * @return The players data
+ */
 std::unordered_map<LoggedUser, GameData> Game::getPlayersData()
 {
 	return m_players;

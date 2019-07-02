@@ -6,10 +6,23 @@
 
 #include "exception.h"
 
+/**
+ * GameManager' c'tor
+ *
+ * @param database The database ptr
+ * @return None
+ */
 GameManager::GameManager(std::shared_ptr<IDatabase> database) : m_database(database)
 {
 }
 
+/**
+ * Creates a new game
+ *
+ * @param room The room that has started the game
+ * @param players The players of the game
+ * @return The id of the game
+ */
 unsigned int GameManager::createGame(RoomData & room, std::vector<LoggedUser> players)
 {
 	// Create question for the room
@@ -33,6 +46,12 @@ unsigned int GameManager::createGame(RoomData & room, std::vector<LoggedUser> pl
 	return gameId;
 }
 
+/**
+ * Delets a new game
+ *
+ * @param gameId the id of the game
+ * @return Is the game deleted
+ */
 bool GameManager::deleteGame(unsigned int gameId)
 {
 	bool deleted = false;
@@ -57,6 +76,13 @@ bool GameManager::deleteGame(unsigned int gameId)
 	return deleted;
 }
 
+/**
+ * Gets a question for a user
+ *
+ * @param gameId the id of the game
+ * @param user The user
+ * @return The question of the user
+ */
 Question GameManager::getQuestionForUser(unsigned int gameId, const LoggedUser& user)
 {
 	Question question;
@@ -81,6 +107,15 @@ Question GameManager::getQuestionForUser(unsigned int gameId, const LoggedUser& 
 	return question;
 }
 
+/**
+ * Submits an answer
+ *
+ * @param gameId The id of the game
+ * @param player The user
+ * @param answerId The id of the answer
+ * @param timeToAnswer The time it took the user to answer
+ * @return None
+ */
 void GameManager::submitAnswer(unsigned int gameId, const LoggedUser & player, unsigned int answerId, unsigned int timeToAnswer)
 {
 	bool correct = false;
@@ -113,6 +148,13 @@ void GameManager::submitAnswer(unsigned int gameId, const LoggedUser & player, u
 	m_database->submitAnswer(gameId, questionId, player.getUsername(), answerId, correct);
 }
 
+/**
+ * Removes the player
+ *
+ * @param gameId The id of the game
+ * @param player The user
+ * @return None
+ */
 void GameManager::removePlayer(unsigned int gameId, const LoggedUser & player)
 {
 	// Lock the games mutex
@@ -133,6 +175,12 @@ void GameManager::removePlayer(unsigned int gameId, const LoggedUser & player)
 	gamesMutex.unlock();
 }
 
+/**
+ * Get the players results
+ *
+ * @param gameId The id of the game
+ * @return The players results
+ */
 std::vector<PlayerResults> GameManager::getPlayersResults(unsigned int gameId)
 {
 	std::vector<PlayerResults> playersResults;
@@ -182,6 +230,12 @@ std::vector<PlayerResults> GameManager::getPlayersResults(unsigned int gameId)
 	return playersResults;
 }
 
+/**
+ * Creates a list of question
+ *
+ * @param amount The amount of questions
+ * @return The list of questions
+ */
 std::vector<Question> GameManager::createQuestions(unsigned int amount)
 {
 	std::vector<Question> questions;
@@ -238,6 +292,12 @@ std::vector<Question> GameManager::createQuestions(unsigned int amount)
 	return questions;
 }
 
+/**
+ * Decode a URL Encoded string
+ *
+ * @param encoded The encoded string
+ * @return The decoded string
+ */
 std::string GameManager::decodeURLEncodedString(std::string encoded)
 {
 	char h;
@@ -269,6 +329,12 @@ std::string GameManager::decodeURLEncodedString(std::string encoded)
 	return escaped.str();
 }
 
+/**
+ * Find a game
+ *
+ * @param gameId The id of the game
+ * @return The ptr to the game
+ */
 std::vector<Game>::iterator GameManager::findGame(unsigned int gameId)
 {
 	// Search for the game

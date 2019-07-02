@@ -9,10 +9,18 @@
 #include "request.h"
 #include "request_result.h"
 
+/**
+ * Communicator' c'tor
+ *
+ * @param handlerFactory The request handler factory
+ */
 Communicator::Communicator(std::shared_ptr<RequestHandlerFactory> handlerFactory) : m_handleFactory(handlerFactory)
 {
 }
 
+/**
+ * Communicator' d'tor
+ */
 Communicator::~Communicator()
 {
     try
@@ -24,6 +32,11 @@ Communicator::~Communicator()
     catch (...) {}
 }
 
+/**
+ * Binds the socket to the port and starts listening for incoming connections
+ *
+ * @return None
+ */
 void Communicator::bindAndListen()
 {
     struct sockaddr_in sa = { 0 };
@@ -57,6 +70,11 @@ void Communicator::bindAndListen()
     std::cout << "Listening on port " << LISTEN_PORT << std::endl;
 }
 
+/**
+ * Waiting for connections from clients and handling them
+ *
+ * @return None
+ */
 void Communicator::handleRequests()
 {
     while (true)
@@ -89,6 +107,12 @@ void Communicator::handleRequests()
     }
 }
 
+/**
+ * Starts a new thread for a client
+ *
+ * @param clientSocket The socket of the client
+ * @return None
+ */
 void Communicator::startThreadForNewClient(SOCKET clientSocket)
 {
     // Create the client's thread and detach it
@@ -96,6 +120,12 @@ void Communicator::startThreadForNewClient(SOCKET clientSocket)
     clientThread.detach();
 }
 
+/**
+ * Handles the client and responds to his requests
+ *
+ * @param clientSocket The socket of the client
+ * @return None
+ */
 void Communicator::clientHandler(SOCKET clientSocket)
 {
     uint32_t bytesRecv = 0;

@@ -7,16 +7,31 @@
 
 #include "exception.h"
 
+/**
+ * Database's c'tor
+ *
+ * @return None
+ */
 Database::Database() : m_db(nullptr)
 {
 }
 
+/**
+ * Database's d'tor
+ *
+ * @return None
+ */
 Database::~Database()
 {
 	// Close the database
 	closeDatabase();
 }
 
+/**
+ * Initiates the database
+ *
+ * @return None
+ */
 void Database::initDatabase()
 {
 	const char* usersTableQuery = "CREATE TABLE users (username TEXT NOT NULL PRIMARY KEY UNIQUE, password TEXT NOT NULL, email TEXT NOT NULL UNIQUE);";
@@ -81,6 +96,11 @@ void Database::initDatabase()
 	}
 }
 
+/**
+ * Closes the database
+ *
+ * @return None
+ */
 void Database::closeDatabase()
 {
 	// Close the SQLite DB
@@ -88,6 +108,15 @@ void Database::closeDatabase()
 	m_db = nullptr;
 }
 
+/**
+ * Is a row exists callback
+ *
+ * @param data The pointer to the bool
+ * @param argc The amount of arguments
+ * @param argv The arguments
+ * @param colNames The columns names
+ * @return Exit code
+ */
 int exist_callback(void *data, int argc, char **argv, char **colNames)
 {
 	bool *exists = (bool *)data;
@@ -98,6 +127,15 @@ int exist_callback(void *data, int argc, char **argv, char **colNames)
 	return 0;
 }
 
+/**
+ * String extract callback
+ *
+ * @param data The pointer to the string
+ * @param argc The amount of arguments
+ * @param argv The arguments
+ * @param colNames The columns names
+ * @return Exit code
+ */
 int string_callback(void *data, int argc, char **argv, char **colNames)
 {
     std::string *str = (std::string *)data;
@@ -108,6 +146,15 @@ int string_callback(void *data, int argc, char **argv, char **colNames)
     return 0;
 }
 
+/**
+ * Int extract callback
+ *
+ * @param data The pointer to the int
+ * @param argc The amount of arguments
+ * @param argv The arguments
+ * @param colNames The columns names
+ * @return Exit code
+ */
 int int_callback(void *data, int argc, char **argv, char **colNames)
 {
 	int *integer = (int *)data;
@@ -118,6 +165,12 @@ int int_callback(void *data, int argc, char **argv, char **colNames)
 	return 0;
 }
 
+/**
+ * Checks if a user exists
+ *
+ * @param username The username of the user
+ * @return Is the user exists
+ */
 bool Database::doesUserExist(std::string username)
 {
 	int res = 0;
@@ -137,6 +190,14 @@ bool Database::doesUserExist(std::string username)
 	return exists;
 }
 
+/**
+ * Signs up a user
+ *
+ * @param username The username of the user
+ * @param password The password of the user
+ * @param email The email of the user
+ * @return None
+ */
 void Database::signUpUser(std::string username, std::string password, std::string email)
 {
 	std::string userInsertQuery = "INSERT INTO users(username, password, email) VALUES(':username', ':password', ':email');";
@@ -162,6 +223,13 @@ void Database::signUpUser(std::string username, std::string password, std::strin
 	}
 }
 
+/**
+ * Authenticates a user
+ *
+ * @param username The username of the user
+ * @param password The password of the user
+ * @return Did the authentication was successful or a failure
+ */
 bool Database::authUser(std::string username, std::string password)
 {
     std::string userPasswordQuery = "SELECT password FROM users WHERE username = ':username';";
@@ -189,6 +257,15 @@ bool Database::authUser(std::string username, std::string password)
     return password == userPassword;
 }
 
+/**
+ * Extract Score callback
+ *
+ * @param data The pointer to the players games scores
+ * @param argc The amount of arguments
+ * @param argv The arguments
+ * @param colNames The columns names
+ * @return Exit code
+ */
 int score_callback(void *data, int argc, char **argv, char **colNames)
 {
 	auto playersGamesScores = (std::unordered_map<std::string, std::unordered_map<int, int>> *)data;
@@ -210,6 +287,11 @@ int score_callback(void *data, int argc, char **argv, char **colNames)
 	return 0;
 }
 
+/**
+ * Get all players' scores
+ *
+ * @return A map with the user that each row contains a map of it's games and scores
+ */
 std::unordered_map<std::string, std::unordered_map<int, int>> Database::getAllScores()
 {
 	std::unordered_map<std::string, std::unordered_map<int, int>> playersGamesScores;
@@ -227,6 +309,12 @@ std::unordered_map<std::string, std::unordered_map<int, int>> Database::getAllSc
 	return playersGamesScores;
 }
 
+/**
+ * Escapes a string
+ *
+ * @param str The string to be escaped
+ * @return The string escaped
+ */
 std::string escapeString(std::string str)
 {
 	size_t index = 0;
@@ -245,6 +333,16 @@ std::string escapeString(std::string str)
 	return str;
 }
 
+/**
+ * Creates a new question in the database
+ *
+ * @param question The question
+ * @param correctAns The correct answer
+ * @param ans2 Other answer
+ * @param ans3 Other answer
+ * @param ans4 Other answer
+ * @return The id of the question
+ */
 unsigned int Database::createQuestion(std::string question, std::string correctAns, std::string ans2, std::string ans3, std::string ans4)
 {
 	unsigned int questionId = 0;
@@ -274,6 +372,11 @@ unsigned int Database::createQuestion(std::string question, std::string correctA
 	return questionId;
 }
 
+/**
+ * Creates a new game in the database
+ *
+ * @return The id of the game
+ */
 unsigned int Database::createGame()
 {
 	unsigned int gameId = 0;
@@ -302,6 +405,12 @@ unsigned int Database::createGame()
 	return gameId;
 }
 
+/**
+ * Ends game in the database
+ *
+ * @param gameId The id of the game
+ * @return None
+ */
 void Database::endGame(unsigned int gameId)
 {
 	int res = 0;
@@ -319,6 +428,16 @@ void Database::endGame(unsigned int gameId)
 	}
 }
 
+/**
+ * Submits an answer to the database
+ *
+ * @param gameId The id of the game
+ * @param questionId The id of the question
+ * @param username The username
+ * @param answer The answer id
+ * @param correctAns Is the ans was correct
+ * @return None
+ */
 void Database::submitAnswer(unsigned int gameId, unsigned int questionId, std::string username, unsigned int answer, bool correctAns)
 {
 	int res = 0;

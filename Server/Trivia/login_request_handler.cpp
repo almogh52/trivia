@@ -16,11 +16,23 @@ LoginRequestHandler::LoginRequestHandler(std::shared_ptr<RequestHandlerFactory> 
 {
 }
 
+/**
+ * Checks if the request is relevant
+ *
+ * @param req The request
+ * @return Is the request relevant
+ */
 bool LoginRequestHandler::isRequestRelevant(const Request & req) const
 {
     return req.id == LOGIN_REQUEST || req.id == SIGNUP_REQUEST;
 }
 
+/**
+ * Handles a request
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult LoginRequestHandler::handleRequest(const Request & req) const
 {
     RequestResult res;
@@ -37,10 +49,21 @@ RequestResult LoginRequestHandler::handleRequest(const Request & req) const
     return res;
 }
 
+/**
+ * Disconnect handler
+ *
+ * @return None
+ */
 void LoginRequestHandler::disconnect() const
 {
 }
 
+/**
+ * Login handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult LoginRequestHandler::login(const Request & req) const
 {
     std::shared_ptr<LoggedUser> user;
@@ -64,6 +87,12 @@ RequestResult LoginRequestHandler::login(const Request & req) const
     return res;
 }
 
+/**
+ * Signup handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult LoginRequestHandler::signup(const Request & req) const
 {
     std::shared_ptr<LoggedUser> user;

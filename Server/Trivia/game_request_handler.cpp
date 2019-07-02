@@ -18,11 +18,23 @@ GameRequestHandler::GameRequestHandler(unsigned int gameId, const LoggedUser& us
 {
 }
 
+/**
+ * Checks if the request is relevant
+ *
+ * @param req The request
+ * @return Is the request relevant
+ */
 bool GameRequestHandler::isRequestRelevant(const Request & req) const
 {
 	return req.id == GET_QUESTION_REQUEST || req.id == SUBMIT_ANSWER_REQUEST || req.id == GET_GAME_RESULTS_REQUEST || req.id == LEAVE_GAME_REQUEST;
 }
 
+/**
+ * Handles a request
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult GameRequestHandler::handleRequest(const Request & req) const
 {
 	RequestResult res;
@@ -49,6 +61,11 @@ RequestResult GameRequestHandler::handleRequest(const Request & req) const
 	return res;
 }
 
+/**
+ * Disconnect handler
+ *
+ * @return None
+ */
 void GameRequestHandler::disconnect() const
 {
 	try {
@@ -68,6 +85,12 @@ void GameRequestHandler::disconnect() const
 	catch (...) {}
 }
 
+/**
+ * Get a question handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult GameRequestHandler::getQuestion(const Request & req) const
 {
 	RequestResult res;
@@ -109,6 +132,12 @@ RequestResult GameRequestHandler::getQuestion(const Request & req) const
 	return res;
 }
 
+/**
+ * Submit an answer handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult GameRequestHandler::submitAnswer(const Request & req) const
 {
 	RequestResult res;
@@ -136,6 +165,12 @@ RequestResult GameRequestHandler::submitAnswer(const Request & req) const
 	return res;
 }
 
+/**
+ * Leave game handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult GameRequestHandler::leaveGame(const Request & req) const
 {
 	RequestResult res;
@@ -170,6 +205,12 @@ RequestResult GameRequestHandler::leaveGame(const Request & req) const
 	return res;
 }
 
+/**
+ * Get game results handler
+ *
+ * @param req The request
+ * @return The request result
+ */
 RequestResult GameRequestHandler::getGameResults(const Request & req) const
 {
 	RequestResult res;

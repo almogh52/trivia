@@ -6,6 +6,12 @@ LoginManager::LoginManager(std::shared_ptr<IDatabase> database) : m_database(dat
 {
 }
 
+/**
+ * Checks if the email is valid
+ *
+ * @param email The email
+ * @return Is the email valid
+ */
 bool LoginManager::isValidEmail(std::string email) const
 {
     const std::regex emailPattern("(\\w+)(\\.|_)?(\\w*)@(\\w+)(\\.(\\w+))+");
@@ -14,6 +20,14 @@ bool LoginManager::isValidEmail(std::string email) const
     return std::regex_match(email, emailPattern);
 }
 
+/**
+ * Signup handler
+ *
+ * @param username The username
+ * @param password The password of the user
+ * @param email The email of the user
+ * @return A ptr for the user
+ */
 std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::string password, std::string email)
 {
     LoggedUser user(username);
@@ -44,6 +58,13 @@ std::shared_ptr<LoggedUser> LoginManager::signup(std::string username, std::stri
     return std::shared_ptr<LoggedUser>(new LoggedUser(user));
 }
 
+/**
+ * Login handler
+ *
+ * @param username The username
+ * @param password The password of the user
+ * @return A ptr for the user
+ */
 std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::string password)
 {
     LoggedUser user(username);
@@ -77,6 +98,12 @@ std::shared_ptr<LoggedUser> LoginManager::login(std::string username, std::strin
     return std::shared_ptr<LoggedUser>(new LoggedUser(user));
 }
 
+/**
+ * Logout handler
+ *
+ * @param user The user
+ * @return Is the user logged out or not
+ */
 bool LoginManager::logout(LoggedUser user)
 {
     // Try to find the user in the logged users vector

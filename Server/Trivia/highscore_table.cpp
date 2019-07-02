@@ -6,6 +6,11 @@ HighscoreTable::HighscoreTable(std::shared_ptr<IDatabase> database) : m_database
 {
 }
 
+/**
+ * Gets the highscores
+ *
+ * @return The list of questions
+ */
 std::vector<Highscore> HighscoreTable::getHighscores()
 {
 	std::vector<Highscore> allScores = getAllScores();
@@ -23,11 +28,21 @@ std::vector<Highscore> HighscoreTable::getHighscores()
 	return highscores;
 }
 
+/**
+ * Compares 2 highscores
+ *
+ * @return
+ */
 bool compareHighscores(Highscore &s1, Highscore &s2)
 {
 	return (s1.score > s2.score);
 }
 
+/**
+ * Gets all scores
+ *
+ * @return The list of highscores
+ */
 std::vector<Highscore> HighscoreTable::getAllScores()
 {
 	std::vector<Highscore> highscores;
