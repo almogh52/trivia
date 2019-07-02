@@ -2,6 +2,8 @@
 
 #include "exception.h"
 
+#include <algorithm>
+
 int RoomManager::createRoom(const LoggedUser& user, std::string roomName, unsigned int maxPlayers, unsigned int timePerQuestion, unsigned int questionCount)
 {
     RoomData roomMetadata;
@@ -52,6 +54,9 @@ bool RoomManager::deleteRoom(unsigned int roomId)
     {
 		return false;
     }
+
+	// Remove the game that is linked to it
+	m_roomsGames.erase(roomId);
 
 	// Unlock the room mutex
 	roomsMutex.unlock();
@@ -136,8 +141,8 @@ void RoomManager::startGame(unsigned int roomId, unsigned int gameId)
 	roomsMutex.lock();
 
 	try {
-		// Set the room state as active
-		m_rooms.at(roomId).setRoomState(true);
+		// Set the room state as not active
+		m_rooms.at(roomId).setRoomState(false);
 	}
 	catch (...) {
 		// Unlock the room mutex
@@ -175,6 +180,21 @@ unsigned int RoomManager::getGameIdOfRoom(unsigned int roomId)
 	roomsMutex.unlock();
 
 	return gameId;
+}
+
+void RoomManager::deleteRoomWithGameId(unsigned int gameId)
+{
+	// Try to find the room iterator
+	auto it = std::find_if(m_roomsGames.begin(), m_roomsGames.end(),
+		[gameId](const auto& p) { return p.second == gameId; });
+
+	// If iterator found, delete the room
+	if (it != m_roomsGames.end())
+	{
+		try {
+			deleteRoom(it->first);
+		} catch (...) {}
+	}
 }
 
 std::vector<std::string> RoomManager::getPlayersInRoom(unsigned int roomId)

@@ -177,18 +177,27 @@ namespace TriviaClient
             GetRoomsResponse res;
             byte[] buf;
 
-            // Send the get rooms request to the server
-            await Client.Send(GetRoomsRequest.CODE, new byte[0]);
+            try
+            {
+                // Send the get rooms request to the server
+                await Client.Send(GetRoomsRequest.CODE, new byte[0]);
 
-            // Get from the server the rooms available
-            buf = await Client.Recv();
+                // Get from the server the rooms available
+                buf = await Client.Recv();
 
-            // Deserialize the response
-            res = JsonConvert.DeserializeObject<GetRoomsResponse>(Encoding.UTF8.GetString(buf));
+                // Deserialize the response
+                res = JsonConvert.DeserializeObject<GetRoomsResponse>(Encoding.UTF8.GetString(buf));
 
-            // Set the rooms
-            Rooms = res.rooms == null ? new List<RoomData>() : res.rooms;
-            roomsList.ItemsSource = Rooms;
+                // Set the rooms
+                Rooms = res.rooms == null ? new List<RoomData>() : res.rooms;
+                roomsList.ItemsSource = Rooms;
+            } catch
+            {
+                // Close this window and re-show the auth window to connect to the server
+                new AuthWindow().Show();
+                Close();
+            }
+
         }
 
         private async void createButton_Click(object sender, RoutedEventArgs e)
@@ -253,37 +262,46 @@ namespace TriviaClient
                 createRoomRequest.questionCount = viewModel.QuestionCount;
                 createRoomRequest.answerTimeout = viewModel.TimePerQuestion;
 
-                // Send the create room request to the server
-                await Client.Send(CreateRoomRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(createRoomRequest)));
-
-                // Get the response from the server and deserialize it
-                buf = await Client.Recv();
-                createRoomResponse = JsonConvert.DeserializeObject<CreateRoomResponse>(Encoding.UTF8.GetString(buf));
-
-                // If the room creation failed, print message
-                if (createRoomResponse.status == 1)
+                try
                 {
-                    // Prevent from the dialog to close
-                    eventArgs.Cancel();
+                    // Send the create room request to the server
+                    await Client.Send(CreateRoomRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(createRoomRequest)));
 
-                    // Set the current dialog as an error dialog
-                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "An error occurred during creating the room!\nPlease try again later." });
-                    return;
-                } else
-                {
-                    RoomData room = new RoomData
+                    // Get the response from the server and deserialize it
+                    buf = await Client.Recv();
+                    createRoomResponse = JsonConvert.DeserializeObject<CreateRoomResponse>(Encoding.UTF8.GetString(buf));
+
+                    // If the room creation failed, print message
+                    if (createRoomResponse.status == 1)
                     {
-                        id = createRoomResponse.roomId,
-                        name = viewModel.Name,
-                        maxPlayers = viewModel.MaxPlayers,
-                        questionCount = viewModel.QuestionCount,
-                        timePerQuestion = viewModel.TimePerQuestion
-                    };
+                        // Prevent from the dialog to close
+                        eventArgs.Cancel();
 
-                    // Show the room admin window
-                    new RoomAdminWindow { room = room }.Show();
+                        // Set the current dialog as an error dialog
+                        eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "An error occurred during creating the room!\nPlease try again later." });
+                        return;
+                    }
+                    else
+                    {
+                        RoomData room = new RoomData
+                        {
+                            id = createRoomResponse.roomId,
+                            name = viewModel.Name,
+                            maxPlayers = viewModel.MaxPlayers,
+                            questionCount = viewModel.QuestionCount,
+                            timePerQuestion = viewModel.TimePerQuestion
+                        };
 
-                    // Close this window
+                        // Show the room admin window
+                        new RoomAdminWindow { room = room }.Show();
+
+                        // Close this window
+                        Close();
+                    }
+                } catch
+                {
+                    // Close this window and re-show the auth window to connect to the server
+                    new AuthWindow().Show();
                     Close();
                 }
             });
@@ -299,21 +317,29 @@ namespace TriviaClient
             byte[] buf;
             LogoutResponse res;
 
-            // Set the logout request to the server
-            await Client.Send(LogoutRequest.CODE, new byte[0]);
-
-            // Get the response from the server and deserialize it
-            buf = await Client.Recv();
-            res = JsonConvert.DeserializeObject<LogoutResponse>(Encoding.UTF8.GetString(buf));
-
-            // Create an auth window and show it
-            new AuthWindow()
+            try
             {
-                Connected = true
-            }.Show();
+                // Set the logout request to the server
+                await Client.Send(LogoutRequest.CODE, new byte[0]);
 
-            // Close the rooms window
-            this.Close();
+                // Get the response from the server and deserialize it
+                buf = await Client.Recv();
+                res = JsonConvert.DeserializeObject<LogoutResponse>(Encoding.UTF8.GetString(buf));
+
+                // Create an auth window and show it
+                new AuthWindow()
+                {
+                    Connected = true
+                }.Show();
+
+                // Close the rooms window
+                this.Close();
+            } catch {
+                // Close this window and re-show the auth window to connect to the server
+                new AuthWindow().Show();
+                Close();
+            }
+            
         }
 
         private async void roomsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -343,30 +369,40 @@ namespace TriviaClient
             GetPlayersInRoomRequest req = new GetPlayersInRoomRequest { roomId = roomData.id };
             GetPlayersInRoomResponse res;
 
-            // Set the get players in room request to the server
-            await Client.Send(GetPlayersInRoomRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
-
-            // Get the response from the server and deserialize it
-            buf = await Client.Recv();
-            res = JsonConvert.DeserializeObject<GetPlayersInRoomResponse>(Encoding.UTF8.GetString(buf));
-
-            // If an error occurred, show error
-            if (res.status == 1)
+            try
             {
-                // Show dialog error
-                await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to get the players in the requested roon" });
-            } else
+                // Set the get players in room request to the server
+                await Client.Send(GetPlayersInRoomRequest.CODE, Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(req)));
+
+                // Get the response from the server and deserialize it
+                buf = await Client.Recv();
+                res = JsonConvert.DeserializeObject<GetPlayersInRoomResponse>(Encoding.UTF8.GetString(buf));
+
+                // If an error occurred, show error
+                if (res.status == 1)
+                {
+                    // Show dialog error
+                    await DialogHost.Show(new Dialogs.MessageDialog { Message = "Unable to get the players in the requested roon" });
+                }
+                else
+                {
+                    // Set the players in the room
+                    previewData.Players = res.players;
+
+                    // Check if the room is joinable
+                    previewData.ActionButtonEnabled = (previewData.IsActive && res.players.Count < previewData.MaxPlayers);
+
+                    // Set the new data of the room preview
+                    roomPreview.Data = previewData;
+                    roomPreview.Update();
+                }
+            } catch
             {
-                // Set the players in the room
-                previewData.Players = res.players;
-
-                // Check if the room is joinable
-                previewData.ActionButtonEnabled = (previewData.IsActive && res.players.Count < previewData.MaxPlayers);
-
-                // Set the new data of the room preview
-                roomPreview.Data = previewData;
-                roomPreview.Update();
+                // Close this window and re-show the auth window to connect to the server
+                new AuthWindow().Show();
+                Close();
             }
+            
         }
 
         private async void highscoresButton_Click(object sender, RoutedEventArgs e)
@@ -378,32 +414,40 @@ namespace TriviaClient
 
             await DialogHost.Show(new Dialogs.LoadingDialog(), async delegate (object s, DialogOpenedEventArgs eventArgs)
             {
-                // Send the join room request to the server
-                await Client.Send(HighscoreRequest.CODE, new byte[0]);
-
-                // Get the response from the server and deserialize it
-                buf = await Client.Recv();
-                res = JsonConvert.DeserializeObject<HighscoreResponse>(Encoding.UTF8.GetString(buf));
-
-                // If joined room successfully, show it
-                if (res.status == 0)
+                try
                 {
-                    if (res.highscores != null)
+                    // Send the join room request to the server
+                    await Client.Send(HighscoreRequest.CODE, new byte[0]);
+
+                    // Get the response from the server and deserialize it
+                    buf = await Client.Recv();
+                    res = JsonConvert.DeserializeObject<HighscoreResponse>(Encoding.UTF8.GetString(buf));
+
+                    // If joined room successfully, show it
+                    if (res.status == 0)
                     {
-                        // For each highscore create a highscore preview
-                        foreach (Highscore score in res.highscores)
+                        if (res.highscores != null)
                         {
-                            dialog.Highscores.Add(new Dialogs.HighscorePreview { Name = score.name, Score = score.score });
+                            // For each highscore create a highscore preview
+                            foreach (Highscore score in res.highscores)
+                            {
+                                dialog.Highscores.Add(new Dialogs.HighscorePreview { Name = score.name, Score = score.score });
+                            }
                         }
-                    }
 
-                    // Show the highscores dialog
-                    eventArgs.Session.UpdateContent(dialog);
-                }
-                else
+                        // Show the highscores dialog
+                        eventArgs.Session.UpdateContent(dialog);
+                    }
+                    else
+                    {
+                        // Show the error dialog
+                        eventArgs.Session.UpdateContent((new Dialogs.MessageDialog { Message = "Unable to get the highscores table!" }));
+                    }
+                } catch
                 {
-                    // Show the error dialog
-                    eventArgs.Session.UpdateContent((new Dialogs.MessageDialog { Message = "Unable to get the highscores table!" }));
+                    // Close this window and re-show the auth window to connect to the server
+                    new AuthWindow().Show();
+                    Close();
                 }
             });
         }

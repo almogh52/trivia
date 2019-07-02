@@ -55,11 +55,15 @@ void GameRequestHandler::disconnect() const
 		// Remove the player from the game
 		m_gameManager->removePlayer(m_game, m_user);
 
-		// Try to delete the game if no one is playing it
-		m_gameManager->deleteGame(m_game);
-
 		// Logout the user
 		m_handlerFactory->getLoginManager()->logout(m_user);
+
+		// Try to delete the game if no one is playing it
+		if (m_gameManager->deleteGame(m_game))
+		{
+			// Try to delete the room of the game
+			m_handlerFactory->getRoomManager()->deleteRoomWithGameId(m_game);
+		}
 	}
 	catch (...) {}
 }
@@ -150,7 +154,12 @@ RequestResult GameRequestHandler::leaveGame(const Request & req) const
 
 	// Try to delete the game if no one is playing it
 	try {
-		m_gameManager->deleteGame(m_game);
+		// Try to delete the game if no one is playing it
+		if (m_gameManager->deleteGame(m_game))
+		{
+			// Try to delete the room of the game
+			m_handlerFactory->getRoomManager()->deleteRoomWithGameId(m_game);
+		}
 	} catch (...) {}
 	
 
@@ -171,14 +180,23 @@ RequestResult GameRequestHandler::getGameResults(const Request & req) const
 		// Try to get the results of the game
 		getGameResultsResponse.results = m_gameManager->getPlayersResults(m_game);
 
-		// Try to delete the game if no one is playing it
-		m_gameManager->deleteGame(m_game);
+		// Remove the player from the game
+		m_gameManager->removePlayer(m_game, m_user);
 
 		getGameResultsResponse.status = SUCCESS;
 	}
 	catch (...) {
 		getGameResultsResponse.status = ERROR;
 	}
+
+	try {
+		// Try to delete the game if no one is playing it
+		if (m_gameManager->deleteGame(m_game))
+		{
+			// Try to delete the room of the game
+			m_handlerFactory->getRoomManager()->deleteRoomWithGameId(m_game);
+		}
+	} catch (...) {}
 
 	// Serialize the response and set the next handler as the menu request handler
 	res.newHandler = getGameResultsResponse.status ? nullptr : m_handlerFactory->createMenuRequestHandler(m_user);

@@ -69,26 +69,32 @@ namespace TriviaClient
                     password = password
                 };
 
-                // Send the login request
-                await Client.Send(LoginRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req)));
-
-                // Get the login response
-                resBytes = await Client.Recv();
-
-                // Deserialize the login response
-                res = JsonConvert.DeserializeObject<LoginResponse>(Encoding.UTF8.GetString(resBytes));
-
-                // If login failed, show error
-                if (res.status == 1)
+                try
                 {
-                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "Incorrect username and password entered!" });
-                } else
-                {
-                    // Close the dialog
-                    eventArgs.Session.Close();
+                    // Send the login request
+                    await Client.Send(LoginRequest.CODE, Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(req)));
 
-                    // Show the rooms window
-                    this.showRoomsWindow();
+                    // Get the login response
+                    resBytes = await Client.Recv();
+
+                    // Deserialize the login response
+                    res = JsonConvert.DeserializeObject<LoginResponse>(Encoding.UTF8.GetString(resBytes));
+
+                    // If login failed, show error
+                    if (res.status == 1)
+                    {
+                        eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "Incorrect username and password entered!" });
+                    }
+                    else
+                    {
+                        // Close the dialog
+                        eventArgs.Session.Close();
+
+                        // Show the rooms window
+                        this.showRoomsWindow();
+                    }
+                } catch {
+                    eventArgs.Session.UpdateContent(new Dialogs.MessageDialog { Message = "An unknown error occurred!" });
                 }
             }, null);
         }

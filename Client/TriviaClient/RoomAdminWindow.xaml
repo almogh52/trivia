@@ -14,19 +14,21 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Title="Trivia" Height="700" Width="800" Loaded="Window_Loaded">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200*"/>
-            <ColumnDefinition Width="326*"/>
-            <ColumnDefinition Width="200*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="570*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="50*"/>
-            <RowDefinition Height="15*"/>
-        </Grid.RowDefinitions>
-        <local:RoomPreview x:Name="roomPreview" Grid.ColumnSpan="4" />
-        <Button x:Name="startGameButton" Grid.Row="2" Grid.Column="1" Content="Start Game"/>
-    </Grid>
+    <materialDesign:DialogHost x:Name="RootDialog">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200*"/>
+                <ColumnDefinition Width="326*"/>
+                <ColumnDefinition Width="200*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="570*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="50*"/>
+                <RowDefinition Height="15*"/>
+            </Grid.RowDefinitions>
+            <local:RoomPreview x:Name="roomPreview" Grid.ColumnSpan="4" />
+            <Button x:Name="startGameButton" Grid.Row="2" Grid.Column="1" Content="Start Game" Click="startGameButton_Click"/>
+        </Grid>
+    </materialDesign:DialogHost>
 </Window>

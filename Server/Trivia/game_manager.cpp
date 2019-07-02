@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "HTTPRequest.hpp"
+#include "httplib.h"
 
 #include "exception.h"
 
@@ -93,11 +93,11 @@ void GameManager::submitAnswer(unsigned int gameId, const LoggedUser & player, u
 	try {
 		auto game = findGame(gameId);
 
-		// Submit the answer and get if it was correct or not
-		correct = game->submitAnswer(player, answerId, timeToAnswer);
-
 		// Get the question id of the current question of the user
 		questionId = game->getQuestionForUser(player).getQuestionId();
+
+		// Submit the answer and get if it was correct or not
+		correct = game->submitAnswer(player, answerId, timeToAnswer);
 	}
 	catch (...) {
 		// Unlock the games mutex
@@ -141,8 +141,8 @@ std::vector<PlayerResults> GameManager::getPlayersResults(unsigned int gameId)
 	// Lock the games mutex
 	gamesMutex.lock();
 
-	// If the game cannot be deleted (Game is not over), throw exception
-	if (findGame(gameId)->canBeDeleted())
+	// If the game isn't over, throw exception
+	if (!findGame(gameId)->gameOver())
 	{
 		// Unlock the games mutex
 		gamesMutex.unlock();
@@ -189,11 +189,23 @@ std::vector<Question> GameManager::createQuestions(unsigned int amount)
 
 	// Create a request to the trivia API
 	try {
-		http::Request req("https://opentdb.com/api.php?amount=" + std::to_string(amount) + "&difficulty=easy&encode=url3986");
+		httplib::Client cli("webproxy.to");
 
-		// Get a response from the server and parse it
-		http::Response res = req.send();
-		questionsRes = nlohmann::json::parse(res.body.data());
+		// Send POST Request to the proxy
+		auto res = cli.Post("/includes/process.php?action=update", "u=https://opentdb.com/api.php?amount=" + std::to_string(amount) + "%26difficulty=easy%26encode=url3986%26type=multiple", "application/x-www-form-urlencoded");
+
+		// If got a redirect, redirect
+		if (res && res->status == 302)
+		{
+			// Get the cookie
+			std::string cookie = res->get_header_value("Set-Cookie");
+
+			// Get the API res
+			res = cli.Get(res->get_header_value("Location").substr(18).c_str(), httplib::Headers{ {"Cookie", cookie} });
+		}
+
+		// Parse the response
+		questionsRes = nlohmann::json::parse(res->body);
 	}
 	catch (...) {
 		std::cout << "This server requires an active internet connection in order to fetch question!" << std::endl;
@@ -202,7 +214,7 @@ std::vector<Question> GameManager::createQuestions(unsigned int amount)
 	}
 
 	// If an error occurred
-	if (questionsRes["response_code"])
+	if (questionsRes["response_code"].get<int>())
 	{
 		throw Exception("Unable to fetch question from the API!");
 	}
@@ -212,9 +224,9 @@ std::vector<Question> GameManager::createQuestions(unsigned int amount)
 	{
 		std::string question = decodeURLEncodedString(questionJson["question"]);
 		std::string correctAns = decodeURLEncodedString(questionJson["correct_answer"]);
-		std::string ans2 = decodeURLEncodedString(questionJson["incorrect_answers"][1]);
-		std::string ans3 = decodeURLEncodedString(questionJson["incorrect_answers"][2]);
-		std::string ans4 = decodeURLEncodedString(questionJson["incorrect_answers"][3]);
+		std::string ans2 = decodeURLEncodedString(questionJson["incorrect_answers"][0]);
+		std::string ans3 = decodeURLEncodedString(questionJson["incorrect_answers"][1]);
+		std::string ans4 = decodeURLEncodedString(questionJson["incorrect_answers"][2]);
 
 		// Create the question in the database
 		unsigned int questionId = m_database->createQuestion(question, correctAns, ans2, ans3, ans4);

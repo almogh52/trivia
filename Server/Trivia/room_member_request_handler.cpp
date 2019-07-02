@@ -39,7 +39,9 @@ RequestResult RoomMemberRequestHandler::handleRequest(const Request & req) const
 void RoomMemberRequestHandler::disconnect() const
 {
 	// Leave the room
-	m_roomManager->leaveRoom(m_user, m_roomId);
+	try {
+		m_roomManager->leaveRoom(m_user, m_roomId);
+	} catch (...) {}
 }
 
 RequestResult RoomMemberRequestHandler::leaveRoom(const Request & req) const
@@ -84,7 +86,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(const Request & req) const
 		getRoomStateResponse.players = m_roomManager->getPlayersInRoom(m_roomId);
 
 		// Check if the game in the room has begun
-		getRoomStateResponse.hasGameBegun = m_roomManager->getRoomState(m_roomId);
+		getRoomStateResponse.hasGameBegun = !m_roomManager->getRoomState(m_roomId);
 		if (getRoomStateResponse.hasGameBegun)
 		{
 			// Get the game id

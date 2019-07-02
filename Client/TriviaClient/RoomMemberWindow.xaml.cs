@@ -62,47 +62,75 @@ namespace TriviaClient
                 // Exit if requested
                 if (tokenSource.IsCancellationRequested) return;
 
-                // Send the get room state request
-                await Client.Send(GetRoomStateRequest.CODE, new byte[0]);
-
-                // Get from the server the room state
-                buf = await Client.Recv();
-
-                // Deserialize the response
-                res = JsonConvert.DeserializeObject<GetRoomStateResponse>(Encoding.UTF8.GetString(buf));
-
-                // If an error occurred, return to menu
-                if (res.status == 1)
+                try
                 {
-                    Dispatcher.Invoke(() =>
+                    // Send the get room state request
+                    await Client.Send(GetRoomStateRequest.CODE, new byte[0]);
+
+                    // Get from the server the room state
+                    buf = await Client.Recv();
+
+                    // Deserialize the response
+                    res = JsonConvert.DeserializeObject<GetRoomStateResponse>(Encoding.UTF8.GetString(buf));
+
+                    // If an error occurred, return to menu
+                    if (res.status == 1)
                     {
-                        // Close this window and the rooms window
-                        new RoomsWindow().Show();
-                        Close();
-                    });
+                        Dispatcher.Invoke(() =>
+                        {
+                            // Close this window and the rooms window
+                            new RoomsWindow().Show();
+                            Close();
+                        });
+
+                        return;
+                    }
+
+                    // If a game has begun
+                    if (res.hasGameBegun)
+                    {
+                        Dispatcher.Invoke(new Action(() =>
+                        {
+                            // Show the game window
+                            new GameWindow()
+                            {
+                                AmountOfQuestions = room.questionCount,
+                                TimePerQuestion = room.timePerQuestion
+                            }.Show();
+                            Close();
+                        }));
+
+                        return;
+                    }
+
+                    // Set the room preview data
+                    roomPreview.Data = new RoomPreviewData
+                    {
+                        Id = room.id,
+                        Name = room.name,
+                        MaxPlayers = room.maxPlayers,
+                        TimePerQuestion = res.answerTimeout,
+                        QuestionCount = res.questionCount,
+                        IsActive = !res.hasGameBegun,
+                        ActionButtonText = "Leave Room",
+                        ActionButtonEnabled = true,
+                        Players = res.players
+                    };
+
+                    // Update the room preview in the main thread
+                    roomPreview.Dispatcher.Invoke(new Action(() => { roomPreview.Update(); }));
+
+                    // Wait 1 second
+                    await Task.Delay(1000);
+                }
+                catch
+                {
+                    // Close this window and re-show the auth window to connect to the server
+                    new AuthWindow().Show();
+                    Close();
 
                     return;
                 }
-
-                // Set the room preview data
-                roomPreview.Data = new RoomPreviewData
-                {
-                    Id = room.id,
-                    Name = room.name,
-                    MaxPlayers = room.maxPlayers,
-                    TimePerQuestion = res.answerTimeout,
-                    QuestionCount = res.questionCount,
-                    IsActive = res.hasGameBegun,
-                    ActionButtonText = "Leave Room",
-                    ActionButtonEnabled = true,
-                    Players = res.players
-                };
-
-                // Update the room preview in the main thread
-                roomPreview.Dispatcher.Invoke(new Action(() => { roomPreview.Update(); }));
-
-                // Wait 1 second
-                await Task.Delay(1000);
             }
         }
 
@@ -111,21 +139,32 @@ namespace TriviaClient
             LeaveRoomResponse res;
             byte[] buf;
 
-            // Send the leave room request
-            await Client.Send(LeaveRoomRequest.CODE, new byte[0]);
+            try
+            {
+                // Send the leave room request
+                await Client.Send(LeaveRoomRequest.CODE, new byte[0]);
 
-            // Get from the server the response
-            buf = await Client.Recv();
+                // Get from the server the response
+                buf = await Client.Recv();
 
-            // Deserialize the response
-            res = JsonConvert.DeserializeObject<LeaveRoomResponse>(Encoding.UTF8.GetString(buf));
+                // Deserialize the response
+                res = JsonConvert.DeserializeObject<LeaveRoomResponse>(Encoding.UTF8.GetString(buf));
 
-            // Cancel the background action
-            tokenSource.Cancel();
+                // Cancel the background action
+                tokenSource.Cancel();
 
-            // Close this window and the rooms window
-            new RoomsWindow().Show();
-            Close();
+                // Close this window and the rooms window
+                new RoomsWindow().Show();
+                Close();
+            } catch
+            {
+                // Cancel the background action
+                tokenSource.Cancel();
+
+                // Close this window and re-show the auth window to connect to the server
+                new AuthWindow().Show();
+                Close();
+            }
         }
     }
 }

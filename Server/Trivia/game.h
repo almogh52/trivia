@@ -15,6 +15,7 @@ public:
 	void removePlayer(const LoggedUser& player);
 
 	bool canBeDeleted();
+	bool gameOver();
 	unsigned int getGameId();
 	std::unordered_map<LoggedUser, GameData> getPlayersData();
 
