@@ -1,0 +1,75 @@
+﻿<Window x:Class="TriviaClient.GameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TriviaClient"
+        mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        Title="Trivia" Height="600" Width="1000" Loaded="Window_Loaded">
+    <Window.Resources>
+        <local:RadioBoolToIntConverter x:Key="radioBoolToIntConverter" />
+    </Window.Resources>
+    <materialDesign:DialogHost>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="76*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="460"/>
+                <ColumnDefinition Width="27*"/>
+                <ColumnDefinition Width="76*"/>
+                <ColumnDefinition Width="31*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="39"/>
+                <RowDefinition Height="44.5"/>
+                <RowDefinition Height="39"/>
+                <RowDefinition/>
+                <RowDefinition Height="241.5"/>
+                <RowDefinition Height="69.5"/>
+                <RowDefinition Height="39"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Image Grid.Column="1" Grid.Row="1" Source="trivia-title.png" Grid.ColumnSpan="5" Grid.RowSpan="3"/>
+            <Grid Grid.Column="3" Grid.Row="5" Grid.RowSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70*"/>
+                    <RowDefinition Height="15*"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="50*"/>
+                </Grid.RowDefinitions>
+                <Viewbox>
+                    <TextBlock
+                        Style="{StaticResource MaterialDesignDisplay1TextBlock}" Text="{Binding CurrentQuestion.Question}" Width="400" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24"/>
+                </Viewbox>
+                <RadioButton x:Name="radioBtn0" Tag="0" Style="{StaticResource MaterialDesignRadioButton}" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Content="{Binding CurrentQuestion.Answers[0]}" FontSize="22" IsChecked="{Binding Path=SelectedAnswer, Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=0, Mode=OneWay}" Checked="RadioButton_Checked"/>
+                <RadioButton x:Name="radioBtn1" Tag="1" Style="{StaticResource MaterialDesignRadioButton}" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center" Content="{Binding CurrentQuestion.Answers[1]}" FontSize="22" IsChecked="{Binding Path=SelectedAnswer, Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=1, Mode=OneWay}" Checked="RadioButton_Checked"/>
+                <RadioButton x:Name="radioBtn2" Tag="2" Style="{StaticResource MaterialDesignRadioButton}" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" Content="{Binding CurrentQuestion.Answers[2]}" FontSize="22" IsChecked="{Binding Path=SelectedAnswer, Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=2, Mode=OneWay}" Checked="RadioButton_Checked"/>
+                <RadioButton x:Name="radioBtn3" Tag="3" Style="{StaticResource MaterialDesignRadioButton}" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center" Content="{Binding CurrentQuestion.Answers[3]}" FontSize="22" IsChecked="{Binding Path=SelectedAnswer, Converter={StaticResource radioBoolToIntConverter}, ConverterParameter=3, Mode=OneWay}" Checked="RadioButton_Checked"/>
+            </Grid>
+            <Button x:Name="submitNextBtn" Content="Submit" Grid.Column="5" Grid.Row="7" Height="Auto" Click="submitNextBtn_Click"/>
+            <Button x:Name="leaveGameBtn" Content="Leave Game" Grid.Column="1" Grid.Row="1" Height="Auto" Click="leaveGameBtn_Click"/>
+            <Image Grid.Column="1" Grid.Row="6" Grid.RowSpan="2" Source="trivia-open-db.png" Grid.ColumnSpan="2" Margin="0,0,35,0"/>
+            <TextBlock Style="{StaticResource MaterialDesignHeadlineTextBlock}" Grid.Column="5" Grid.Row="1" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} / {1}">
+                        <Binding Path="QuestionNumber" />
+                        <Binding Path="AmountOfQuestions" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Style="{StaticResource MaterialDesignTitleTextBlock}" Grid.Column="5" Grid.Row="3" TextWrapping="Wrap" Text="{Binding RemainingTime, StringFormat='{}{0} Seconds Left'}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </materialDesign:DialogHost>
+</Window>
