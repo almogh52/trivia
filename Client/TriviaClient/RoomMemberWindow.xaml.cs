@@ -52,6 +52,12 @@ namespace TriviaClient
             Task.Run(new Action(RefreshRoomData));
         }
 
+        /// <summary>
+        /// Refresh the room data
+        /// </summary>
+        /// <returns>
+        /// None
+        /// </returns>
         private async void RefreshRoomData()
         {
             GetRoomStateResponse res;
@@ -134,6 +140,13 @@ namespace TriviaClient
             }
         }
 
+        /// <summary>
+        /// Leaves the room
+        /// </summary>
+        /// <returns>
+        /// None
+        /// </returns>
+        /// <param name="roomId">The id of the room</param>
         private async void LeaveRoom(int roomId)
         {
             LeaveRoomResponse res;

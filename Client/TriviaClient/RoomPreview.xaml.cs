@@ -43,6 +43,12 @@ namespace TriviaClient
             Update();
         }
 
+        /// <summary>
+        /// Updates the bindings in the UI
+        /// </summary>
+        /// <returns>
+        /// None
+        /// </returns>
         public void Update()
         {
             DataContext = Data;

@@ -120,6 +120,13 @@ namespace TriviaClient
             roomPreview.Action = JoinRoom;
         }
 
+        /// <summary>
+        /// Joins a room
+        /// </summary>
+        /// <returns>
+        /// None
+        /// </returns>
+        /// <param name="roomId">The id of the room</param>
         private async void JoinRoom(int roomId)
         {
             JoinRoomRequest req = new JoinRoomRequest
