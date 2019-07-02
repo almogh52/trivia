@@ -69,6 +69,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Dialogs\WaitingForPlayersDialog.xaml.cs">
+      <DependentUpon>WaitingForPlayersDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameResultsWindow.xaml.cs">
       <DependentUpon>GameResultsWindow.xaml</DependentUpon>
     </Compile>

@@ -68,6 +68,22 @@ bool Game::canBeDeleted()
 	return clear;
 }
 
+bool Game::gameOver()
+{
+	bool clear = true;
+
+	// Check if all the players have left or finished
+	for (auto gamePair : m_players)
+	{
+		if (!gamePair.second.playerLeft && (gamePair.second.correctAnswerCount + gamePair.second.wrongAnswerCount) != m_questions.size())
+		{
+			clear = false;
+		}
+	}
+
+	return clear;
+}
+
 unsigned int Game::getGameId()
 {
 	return m_id;

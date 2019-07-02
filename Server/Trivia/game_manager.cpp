@@ -141,8 +141,8 @@ std::vector<PlayerResults> GameManager::getPlayersResults(unsigned int gameId)
 	// Lock the games mutex
 	gamesMutex.lock();
 
-	// If the game cannot be deleted (Game is not over), throw exception
-	if (findGame(gameId)->canBeDeleted())
+	// If the game isn't over, throw exception
+	if (!findGame(gameId)->gameOver())
 	{
 		// Unlock the games mutex
 		gamesMutex.unlock();

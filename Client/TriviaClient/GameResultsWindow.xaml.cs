@@ -56,18 +56,15 @@ namespace TriviaClient
             InitializeComponent();
         }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void RootDialog_Loaded(object sender, RoutedEventArgs e)
         {
             // Show the waiting for players dialog
-            await DialogHost.Show(new Dialogs.WaitingForPlayersDialog(), async delegate (object s, DialogOpenedEventArgs eventArgs)
+            await DialogHost.Show(new Dialogs.WaitingForPlayersDialog(), "RootDialog", async delegate (object s, DialogOpenedEventArgs eventArgs)
             {
-                GetGameResultsResponse res = new GetGameResultsResponse()
-                {
-                    status = -1
-                };
+                GetGameResultsResponse res;
 
                 // While we are still waiting for players
-                while (res.status != 0)
+                while (true)
                 {
                     byte[] buf;
 
